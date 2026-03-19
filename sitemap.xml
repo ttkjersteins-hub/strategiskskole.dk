@@ -161,4 +161,36 @@
     <changefreq>monthly</changefreq>
   </url>
 
+  <!-- SEO Landingpages: Ny leder -->
+  <url>
+    <loc>https://strategiskskole.dk/lp-ny-leder-100-dage.html</loc>
+    <lastmod>2026-03-19</lastmod>
+    <priority>0.9</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://strategiskskole.dk/lp-ny-leder-friskole.html</loc>
+    <lastmod>2026-03-19</lastmod>
+    <priority>0.9</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://strategiskskole.dk/lp-ny-leder-efterskole.html</loc>
+    <lastmod>2026-03-19</lastmod>
+    <priority>0.9</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://strategiskskole.dk/lp-lederskifte-skole.html</loc>
+    <lastmod>2026-03-19</lastmod>
+    <priority>0.9</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://strategiskskole.dk/lp-ny-leder-sparring.html</loc>
+    <lastmod>2026-03-19</lastmod>
+    <priority>0.9</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+
 </urlset>
