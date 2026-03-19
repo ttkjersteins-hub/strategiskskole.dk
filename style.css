@@ -277,6 +277,12 @@ footer { background:#111c2d; color:rgba(255,255,255,.6); padding:56px 24px 32px;
 .thomas-photo { border-radius:4px; overflow:hidden; margin-bottom:24px; }
 .thomas-photo img { width:100%; max-width:360px; display:block; border-radius:4px; box-shadow:0 8px 24px rgba(0,0,0,.12); }
 
+/* INTRO SECTION (tirsdag-kl10 m.fl.) */
+.intro { padding:56px 24px 48px; background:var(--white); }
+.intro-inner { max-width:1200px; margin:0 auto; }
+.intro-inner h2 { font-family:'Merriweather',serif; font-size:1.65rem; color:var(--navy); margin-bottom:18px; max-width:760px; }
+.intro-inner p { color:var(--muted); margin-bottom:16px; font-size:1rem; max-width:760px; }
+
 /* OM OS PAGE */
 .om-os-hero-text {
   max-width:1200px; margin:0 auto;
