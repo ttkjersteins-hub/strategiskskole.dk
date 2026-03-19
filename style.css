@@ -332,6 +332,25 @@ footer { background:#111c2d; color:rgba(255,255,255,.6); padding:56px 24px 32px;
 .focus-item ul li:last-child { border-bottom:none; }
 .focus-item ul li::before { content:'–'; position:absolute; left:0; color:var(--teal); }
 
+/* SALGSAFSNIT (delt mellem sider) */
+.pain-section { background:var(--light); padding:72px 24px; border-top:3px solid var(--teal); }
+.pain-inner { max-width:1200px; margin:0 auto; display:grid; grid-template-columns:1fr 400px; gap:56px; align-items:start; }
+.pain-text h2 { font-family:'Merriweather',serif; font-size:1.5rem; color:var(--navy); margin-bottom:28px; max-width:560px; }
+.pain-items { margin-bottom:24px; }
+.pain-item { display:flex; gap:14px; margin-bottom:18px; align-items:flex-start; }
+.pain-check { color:var(--teal); font-weight:700; font-size:1.1rem; flex-shrink:0; margin-top:2px; }
+.pain-item p { color:var(--muted); font-size:.97rem; margin:0; line-height:1.65; }
+.pain-conclusion { font-weight:700; color:var(--navy); font-size:.97rem; border-top:1px solid var(--border); padding-top:18px; margin-top:8px; }
+.pain-cta-box { background:var(--navy); border-radius:8px; padding:36px 32px; }
+.pain-cta-label { font-size:.65rem; font-weight:700; letter-spacing:2px; text-transform:uppercase; color:var(--teal2); margin-bottom:24px; }
+.pain-steps { list-style:none; margin-bottom:32px; }
+.pain-steps li { display:flex; gap:16px; margin-bottom:24px; align-items:flex-start; }
+.pain-step-num { background:var(--teal); color:#fff; font-size:.7rem; font-weight:700; width:28px; height:28px; border-radius:50%; display:flex; align-items:center; justify-content:center; flex-shrink:0; margin-top:2px; }
+.pain-steps strong { color:#fff; font-size:.95rem; display:block; margin-bottom:4px; }
+.pain-steps p { color:rgba(255,255,255,.65); font-size:.85rem; margin:0; line-height:1.6; }
+.btn-teal-outline { background:transparent; color:rgba(255,255,255,.8); border:2px solid rgba(255,255,255,.3); border-radius:4px; padding:13px 28px; font-weight:700; font-size:.9rem; text-decoration:none; transition:.2s; display:inline-block; }
+.btn-teal-outline:hover { border-color:#fff; color:#fff; }
+
 /* RESPONSIVE */
 @media(max-width:960px){
   .two-col { grid-template-columns:1fr; }
@@ -341,6 +360,7 @@ footer { background:#111c2d; color:rgba(255,255,255,.6); padding:56px 24px 32px;
   .kontakt-inner { grid-template-columns:1fr; }
   .om-os-thomas-inner { grid-template-columns:1fr; }
   .om-os-intro-grid { grid-template-columns:1fr; }
+  .pain-inner { grid-template-columns:1fr; }
   .values-grid { grid-template-columns:1fr 1fr; }
   .felter-grid { grid-template-columns:1fr 1fr; }
   .focus-grid { grid-template-columns:1fr; }

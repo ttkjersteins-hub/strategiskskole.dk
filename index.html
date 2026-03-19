@@ -166,6 +166,26 @@
     .phase-label { font-size:.73rem; font-weight:700; color:var(--teal); text-transform:uppercase; letter-spacing:1px; }
     .phase p { color:var(--muted); font-size:.87rem; margin-top:8px; }
 
+    /* SALGSAFSNIT */
+    .pain-section { background:var(--light); padding:72px 24px; border-top:3px solid var(--teal); }
+    .pain-inner { max-width:1200px; margin:0 auto; display:grid; grid-template-columns:1fr 400px; gap:56px; align-items:start; }
+    .pain-text h2 { font-family:'Merriweather',serif; font-size:1.5rem; color:var(--navy); margin-bottom:28px; max-width:560px; }
+    .pain-items { margin-bottom:24px; }
+    .pain-item { display:flex; gap:14px; margin-bottom:18px; align-items:flex-start; }
+    .pain-check { color:var(--teal); font-weight:700; font-size:1.1rem; flex-shrink:0; margin-top:2px; }
+    .pain-item p { color:var(--muted); font-size:.97rem; margin:0; line-height:1.65; }
+    .pain-conclusion { font-weight:700; color:var(--navy); font-size:.97rem; border-top:1px solid var(--border); padding-top:18px; margin-top:8px; }
+    .pain-cta-box { background:var(--navy); border-radius:8px; padding:36px 32px; }
+    .pain-cta-label { font-size:.65rem; font-weight:700; letter-spacing:2px; text-transform:uppercase; color:var(--teal2); margin-bottom:24px; }
+    .pain-steps { list-style:none; margin-bottom:32px; }
+    .pain-steps li { display:flex; gap:16px; margin-bottom:24px; align-items:flex-start; }
+    .pain-step-num { background:var(--teal); color:#fff; font-size:.7rem; font-weight:700; width:28px; height:28px; border-radius:50%; display:flex; align-items:center; justify-content:center; flex-shrink:0; margin-top:2px; }
+    .pain-steps strong { color:#fff; font-size:.95rem; display:block; margin-bottom:4px; }
+    .pain-steps p { color:rgba(255,255,255,.65); font-size:.85rem; margin:0; line-height:1.6; }
+    .btn-teal-outline { background:transparent; color:rgba(255,255,255,.8); border:2px solid rgba(255,255,255,.3); border-radius:4px; padding:13px 28px; font-weight:700; font-size:.9rem; text-decoration:none; transition:.2s; }
+    .btn-teal-outline:hover { border-color:#fff; color:#fff; }
+    @media(max-width:960px){ .pain-inner { grid-template-columns:1fr; } }
+
     /* QUOTE */
     .quote-section { background:var(--light); padding:72px 24px; border-top:1px solid var(--border); }
     .quote-inner { max-width:760px; margin:0 auto; text-align:center; }
@@ -425,6 +445,63 @@
     <p>De fleste skoler har en strategi. Færre har en strategi, der faktisk ændrer noget i hverdagen. Det er ikke et spørgsmål om vilje — det er et spørgsmål om, hvordan man bygger broen fra ord til handling.</p>
     <p>Tirsdag kl. 10-modellen® er den broen. Med seks trin fra spejling til forankring hjælper den skoleledere, lederteams og bestyrelser med at skabe en retning, der ikke stopper i dokumentet — men mærkes i møder, beslutninger og daglig praksis.</p>
     <p>Strategiskskole.dk arbejder med frie grundskoler, efterskoler og friskoler — og vi kobler altid strategi direkte til det, der sker i virkeligheden.</p>
+  </div>
+</section>
+
+<!-- SALGSAFSNIT: KENDER I DET HER -->
+<section class="pain-section">
+  <div class="pain-inner">
+    <div class="pain-text">
+      <span class="section-eyebrow">Kender I det her?</span>
+      <h2>Det er ikke mangel på vilje. Det er mangel på en struktur, der virker.</h2>
+      <div class="pain-items">
+        <div class="pain-item">
+          <span class="pain-check">→</span>
+          <p>I har haft strategidag og lavet planer — men til næste møde taler I stadig om de samme ting som før.</p>
+        </div>
+        <div class="pain-item">
+          <span class="pain-check">→</span>
+          <p>Lederteamet arbejder hårdt, men ikke nødvendigvis i samme retning. Koordineringen koster mere energi, end den giver.</p>
+        </div>
+        <div class="pain-item">
+          <span class="pain-check">→</span>
+          <p>Bestyrelsen og ledelsen taler ikke helt samme sprog om skolens retning — og det skaber usikkerhed begge steder.</p>
+        </div>
+        <div class="pain-item">
+          <span class="pain-check">→</span>
+          <p>Som skoleleder ved du godt, hvad der burde prioriteres — men hverdagen giver sjældent plads til det strategiske blik.</p>
+        </div>
+      </div>
+      <p class="pain-conclusion">Hvis I kan genkende bare ét af disse punkter, er det præcis der, vi starter.</p>
+    </div>
+    <div class="pain-cta-box">
+      <div class="pain-cta-label">Sådan kommer vi hurtigt i gang</div>
+      <ol class="pain-steps">
+        <li>
+          <span class="pain-step-num">01</span>
+          <div>
+            <strong>Første samtale — gratis, 20 min</strong>
+            <p>Ring eller skriv. Vi taler om, hvor I er henne lige nu — ingen forpligtelse, ingen salgstal.</p>
+          </div>
+        </li>
+        <li>
+          <span class="pain-step-num">02</span>
+          <div>
+            <strong>Thomas sender et kort oplæg</strong>
+            <p>Inden for få dage: hvad vi foreslår at starte med, og hvad det konkret indebærer.</p>
+          </div>
+        </li>
+        <li>
+          <span class="pain-step-num">03</span>
+          <div>
+            <strong>Vi starter inden for to uger</strong>
+            <p>Ingen lang opstartsfase. Første møde, første greb — og strategien begynder at mærkes i praksis.</p>
+          </div>
+        </li>
+      </ol>
+      <a href="tel:+4561657365" class="btn btn-primary" style="width:100%;text-align:center;display:block;margin-bottom:10px;">Ring: 61 65 73 65</a>
+      <a href="mailto:thomas@strategiskskole.dk" class="btn btn-teal-outline" style="width:100%;text-align:center;display:block;">Skriv en mail</a>
+    </div>
   </div>
 </section>
 
