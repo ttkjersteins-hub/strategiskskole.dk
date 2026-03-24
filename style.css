@@ -444,3 +444,6 @@ footer { background:#111c2d; color:rgba(255,255,255,.6); padding:56px 24px 32px;
 .forlob-steps li:last-child { border-bottom:none; }
 .forlob-steps li::before { content:'→'; position:absolute; left:0; color:var(--teal); font-weight:700; }
 .forlob-cta { align-self:flex-start; margin-top:auto; }
+.forlob-card-link { text-decoration:none; color:inherit; cursor:pointer; }
+.forlob-card-link .card-link { display:block; margin-top:auto; padding-top:16px; color:var(--teal); font-weight:700; font-size:.88rem; }
+.forlob-card-link:hover .card-link { color:var(--teal2); }
