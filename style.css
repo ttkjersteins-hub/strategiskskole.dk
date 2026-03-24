@@ -387,7 +387,7 @@ footer { background:#111c2d; color:rgba(255,255,255,.6); padding:56px 24px 32px;
   .focus-grid { grid-template-columns:1fr; }
   .nav-links { display:none; }
   .nav-hamburger { display:flex; }
-  .forlob-grid { grid-template-columns:1fr; }
+  .forlob-grid { grid-template-columns:1fr !important; }
 }
 @media(max-width:600px){
   .related-grid { grid-template-columns:1fr; }
@@ -398,7 +398,7 @@ footer { background:#111c2d; color:rgba(255,255,255,.6); padding:56px 24px 32px;
   .page-hero-subtitle { font-size:.95rem; }
   .focus-grid { grid-template-columns:1fr; }
   .ydelse-list { grid-template-columns:1fr; }
-  .forlob-grid { grid-template-columns:1fr; }
+  .forlob-grid { grid-template-columns:1fr !important; }
 }
 
 /* ─── FORLØB CARDS ─── */
