@@ -35,6 +35,12 @@
     <changefreq>monthly</changefreq>
   </url>
   <url>
+    <loc>https://strategiskskole.dk/forandringsledelse.html</loc>
+    <lastmod>2026-03-26</lastmod>
+    <priority>0.9</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
     <loc>https://strategiskskole.dk/om-os.html</loc>
     <lastmod>2026-03-19</lastmod>
     <priority>0.8</priority>
@@ -100,6 +106,12 @@
   </url>
 
   <!-- SEO Landingpages -->
+  <url>
+    <loc>https://strategiskskole.dk/lp-forandringsledelse.html</loc>
+    <lastmod>2026-03-26</lastmod>
+    <priority>0.8</priority>
+    <changefreq>monthly</changefreq>
+  </url>
   <url>
     <loc>https://strategiskskole.dk/lp-intro-workshop.html</loc>
     <lastmod>2026-03-25</lastmod>
