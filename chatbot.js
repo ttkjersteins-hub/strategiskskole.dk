@@ -56,19 +56,9 @@
   style.textContent = `
     #ssk-chat-root * { box-sizing: border-box; font-family: 'Segoe UI', Arial, sans-serif; }
 
-    /* Root-container: dækker hele skærmen og fanger al overflow
-       — forhindrer chat-elementerne i at udvide siden */
-    #ssk-chat-root {
-      position: fixed; inset: 0;
-      pointer-events: none;
-      z-index: 9997;
-      overflow: hidden;
-    }
-
     /* Boble-knap */
     #ssk-bubble {
-      position: absolute; bottom: 24px; right: 24px;
-      pointer-events: auto;
+      position: fixed; bottom: 24px; right: 24px; z-index: 9999;
       width: 58px; height: 58px; border-radius: 50%;
       background: ${BRAND_COLOR}; color: #fff;
       border: none; cursor: pointer;
@@ -89,11 +79,11 @@
 
     /* Chat-vindue */
     #ssk-window {
-      position: absolute; bottom: 96px; right: 24px;
-      pointer-events: auto;
-      width: 360px; max-width: calc(100% - 32px);
+      position: fixed; bottom: 96px; right: 24px; z-index: 9998;
+      width: 360px; max-width: calc(100vw - 32px);
       height: 500px;
-      max-height: calc(100% - 120px);
+      max-height: calc(100vh - 120px);
+      max-height: calc(100dvh - 120px);
       border-radius: 16px; overflow: hidden;
       background: #fff;
       box-shadow: 0 8px 32px rgba(0,0,0,0.18);
@@ -197,12 +187,16 @@
     .ssk-error { color: #c0392b; font-style: italic; font-size: 13px; }
 
     @media (max-width: 480px) {
+      /* Mobil: fuld-skærm chat — eliminerer alle overflow- og iOS-problemer */
       #ssk-window {
-        right: 8px; left: 8px; bottom: 76px;
-        width: auto; max-width: none;
-        height: auto;
-        max-height: calc(100% - 96px);
+        position: fixed;
+        top: 0; left: 0; right: 0; bottom: 0;
+        width: 100%; max-width: 100%;
+        height: 100%; max-height: 100%;
+        border-radius: 0;
       }
+      /* Forhindrer iOS Safari i at zoome siden ved fokus på inputfelt */
+      #ssk-input { font-size: 16px; }
       #ssk-bubble { right: 12px; bottom: 12px; }
     }
   `;
@@ -280,6 +274,11 @@
       ? `<svg viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>`
       : SVG_CHAT;
     badge.style.display = "none";
+    // Mobil: lås hjemmesidens scroll mens chat er åben, så siden ikke skifter størrelse
+    if (window.innerWidth <= 480) {
+      document.documentElement.style.overflow = isOpen ? "hidden" : "";
+      document.body.style.overflow = isOpen ? "hidden" : "";
+    }
     if (isOpen) {
       setTimeout(() => input.focus(), 50);
       scrollBottom();
