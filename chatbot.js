@@ -354,12 +354,19 @@
     history.push({ role: "user", content: text });
     setLoading(true);
 
+    // Timeout: afbryd efter 25 sekunder
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 25000);
+
     try {
       const res = await fetch(WORKER_URL, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ message: text, history: history.slice(-6) }),
+        signal: controller.signal,
       });
+
+      clearTimeout(timeoutId);
 
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
       const data = await res.json();
@@ -375,13 +382,33 @@
         badge.style.display = "block";
       }
     } catch (err) {
+      clearTimeout(timeoutId);
       console.error("[SSK Chat]", err);
-      addErrorMessage(
-        "Beklager, der opstod en fejl. Prøv igen eller kontakt Thomas direkte på " +
-        "thomas@strategiskskole.dk eller +45 61 65 73 65."
-      );
       // Fjern den fejlslagne bruger-besked fra historikken
       history.pop();
+
+      // Vis fejl med "prøv igen"-knap
+      const isTimeout = err.name === "AbortError";
+      const errDiv = el("div", { class: "ssk-msg ssk-msg-bot ssk-error" });
+      const errMsg = isTimeout
+        ? "Svaret tog for lang tid. "
+        : "Beklager, der opstod en fejl. ";
+      errDiv.textContent = errMsg;
+      const retryBtn = el("button", {
+        style: {
+          background: "none", border: "none", color: "#2a6496",
+          cursor: "pointer", textDecoration: "underline",
+          font: "inherit", fontSize: "13px", padding: "0",
+        },
+        onclick: () => {
+          errDiv.remove();
+          input.value = text;
+          sendMessage();
+        },
+      }, "Prøv igen");
+      errDiv.appendChild(retryBtn);
+      messages.appendChild(errDiv);
+      requestAnimationFrame(() => errDiv.scrollIntoView({ block: "start", behavior: "smooth" }));
     } finally {
       setLoading(false);
       input.focus();
