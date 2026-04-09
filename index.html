@@ -385,6 +385,13 @@
     .forlob-steps li::before { content:'→'; position:absolute; left:0; color:var(--teal2); font-weight:700; }
     .forlob-cta { align-self:flex-start; margin-top:auto; }
     @media(max-width:960px){ .forlob-grid{grid-template-columns:1fr!important;} }
+    /* Forløb lys sektion – For skolelederen */
+    .forlob-light { background:var(--white); border-bottom:1px solid var(--border); }
+    .forlob-light .forlob-section-header h2 { color:var(--navy); }
+    .forlob-light .forlob-section-header p { color:var(--muted); }
+    .forlob-light .forlob-audience-label { color:var(--teal); border-bottom-color:rgba(46,125,140,.35); }
+    .forlob-light .forlob-card { background:var(--navy); border-color:rgba(255,255,255,.08); }
+    .forlob-light .forlob-card:hover { background:var(--navy2); }
 
     /* MODEL-TEASER */
     .model-teaser { background:var(--white); padding:72px 24px; text-align:center; border-top:1px solid var(--border); }
@@ -695,16 +702,15 @@
 </section>
 
 <!-- FORLØB -->
-<section class="forlob-section" id="forlob">
+<!-- FOR SKOLELEDEREN – lys baggrund -->
+<section class="forlob-section forlob-light" id="forlob">
   <div class="forlob-inner">
     <div class="forlob-section-header">
       <span class="section-eyebrow">Konkrete forløb</span>
       <h2>Find det forløb, der matcher din situation</h2>
       <p>Alle forløb tager afsæt i Tirsdag kl. 10-modellen® og tilpasses jeres skoles konkrete virkelighed.</p>
     </div>
-
-    <!-- FOR SKOLELEDEREN -->
-    <div class="forlob-audience">
+    <div class="forlob-audience" style="margin-bottom:0;">
       <div class="forlob-audience-label">For skolelederen</div>
       <div class="forlob-grid">
         <div class="forlob-card">
@@ -729,9 +735,13 @@
         </div>
       </div>
     </div>
+  </div>
+</section>
 
-    <!-- FOR BESTYRELSEN -->
-    <div class="forlob-audience">
+<!-- FOR BESTYRELSEN – mørk baggrund -->
+<section class="forlob-section">
+  <div class="forlob-inner">
+    <div class="forlob-audience" style="margin-bottom:0;">
       <div class="forlob-audience-label">For bestyrelsen</div>
       <div class="forlob-grid">
         <div class="forlob-card">
