@@ -388,10 +388,31 @@
 
     /* MODEL-TEASER */
     .model-teaser { background:var(--white); padding:72px 24px; text-align:center; border-top:1px solid var(--border); }
-    .model-teaser-inner { max-width:680px; margin:0 auto; }
+    .model-teaser-inner { max-width:960px; margin:0 auto; }
     .model-teaser h2 { font-family:'Merriweather',serif; font-size:1.9rem; color:var(--navy); margin-bottom:20px; line-height:1.3; }
-    .model-teaser p { color:var(--muted); font-size:1rem; line-height:1.78; margin-bottom:28px; }
+    .model-teaser p { color:var(--muted); font-size:1rem; line-height:1.78; margin-bottom:0; }
     .model-teaser .link-arrow { font-size:.95rem; }
+    /* Model 6-trin flow */
+    .idx-model-steps { display:flex; align-items:stretch; gap:0; margin:36px 0 20px; }
+    .idx-m-step { flex:1; background:var(--navy); color:#fff; padding:1.1rem .85rem 1rem 1.2rem; position:relative; clip-path:polygon(0 0,calc(100% - 14px) 0,100% 50%,calc(100% - 14px) 100%,0 100%,14px 50%); margin-left:-7px; }
+    .idx-m-step:first-child { clip-path:polygon(0 0,calc(100% - 14px) 0,100% 50%,calc(100% - 14px) 100%,0 100%); margin-left:0; border-radius:4px 0 0 4px; }
+    .idx-m-step:last-child { clip-path:polygon(0 0,100% 0,100% 100%,0 100%,14px 50%); border-radius:0 4px 4px 0; }
+    .idx-m-step.hl { background:var(--teal); flex:1.3; z-index:2; box-shadow:0 3px 16px rgba(26,122,110,.25); }
+    .idx-m-step-num { font-size:.52rem; font-weight:700; letter-spacing:1.6px; color:rgba(255,255,255,.7); text-transform:uppercase; margin-bottom:.22rem; }
+    .idx-m-step.hl .idx-m-step-num { color:#a8e0d8; }
+    .idx-m-step-name { font-weight:700; font-size:.8rem; color:#fff; line-height:1.2; margin-bottom:.25rem; }
+    .idx-m-step.hl .idx-m-step-name { font-size:.9rem; }
+    .idx-m-step-q { font-size:.6rem; color:#8ab0c4; font-style:italic; line-height:1.35; }
+    .idx-m-step.hl .idx-m-step-q { color:#b8e2d8; }
+    .idx-m-steps-mob { display:none; margin:28px 0 16px; text-align:left; }
+    .idx-m-step-mob { background:var(--navy); border-radius:6px; padding:.8rem .95rem; margin-bottom:.35rem; display:flex; gap:.8rem; align-items:flex-start; }
+    .idx-m-step-mob.hl { background:var(--teal); }
+    .idx-m-step-mob-n { font-size:.52rem; font-weight:700; letter-spacing:1.5px; color:#3a9db0; padding-top:2px; white-space:nowrap; }
+    .idx-m-step-mob.hl .idx-m-step-mob-n { color:#a8e0d8; }
+    .idx-m-step-mob-name { font-weight:700; font-size:.85rem; color:#fff; margin-bottom:.15rem; }
+    .idx-m-step-mob-q { font-size:.68rem; color:#8ab0c4; font-style:italic; }
+    .idx-m-step-mob.hl .idx-m-step-mob-q { color:#b8e2d8; }
+    @media(max-width:720px){ .idx-model-steps{display:none!important;} .idx-m-steps-mob{display:block!important;} }
 
   </style>
 
@@ -712,8 +733,29 @@
   <div class="model-teaser-inner">
     <span class="section-eyebrow">Signaturmodel</span>
     <h2>Tirsdag kl. 10-modellen<sup style="font-size:.55em;vertical-align:super;">®</sup></h2>
-    <p>Kan vi se vores strategi i det, der sker tirsdag kl. 10? Det er kernen. Seks trin fra spejling til forankring — ikke som endnu en konsulentmodel, men som et konkret arbejdsredskab der omsætter strategi til reel hverdagspraksis.</p>
-    <a href="tirsdag-kl10-modellen.html" class="link-arrow">Læs om Tirsdag kl. 10-modellen® →</a>
+    <p>Kan vi se vores strategi i det, der sker tirsdag kl. 10? Det er kernen i vores arbejde. Seks trin fra spejling til forankring — et konkret redskab der omsætter strategi til reel hverdagspraksis.</p>
+
+    <!-- Desktop: chevron-pileflow -->
+    <div class="idx-model-steps">
+      <div class="idx-m-step"><div class="idx-m-step-num">01</div><div class="idx-m-step-name">Spejling</div><div class="idx-m-step-q">Hvad er det, vi egentlig står i?</div></div>
+      <div class="idx-m-step"><div class="idx-m-step-num">02</div><div class="idx-m-step-name">Klarhed</div><div class="idx-m-step-q">Hvad er problemet bag problemet?</div></div>
+      <div class="idx-m-step"><div class="idx-m-step-num">03</div><div class="idx-m-step-name">Valg</div><div class="idx-m-step-q">Hvad vælger vi — og hvad vælger vi fra?</div></div>
+      <div class="idx-m-step"><div class="idx-m-step-num">04</div><div class="idx-m-step-name">Struktur</div><div class="idx-m-step-q">Hvordan organiserer vi os?</div></div>
+      <div class="idx-m-step hl"><div class="idx-m-step-num">05 &nbsp;·&nbsp; Kernen</div><div class="idx-m-step-name">Tirsdag kl. 10</div><div class="idx-m-step-q">Kan vi se det i praksis — i møder, roller og hverdagen?</div></div>
+      <div class="idx-m-step"><div class="idx-m-step-num">06</div><div class="idx-m-step-name">Forankring</div><div class="idx-m-step-q">Hvordan holder vi det levende?</div></div>
+    </div>
+
+    <!-- Mobil: stacked liste -->
+    <div class="idx-m-steps-mob">
+      <div class="idx-m-step-mob"><div class="idx-m-step-mob-n">01</div><div><div class="idx-m-step-mob-name">Spejling</div><div class="idx-m-step-mob-q">Hvad er det, vi egentlig står i?</div></div></div>
+      <div class="idx-m-step-mob"><div class="idx-m-step-mob-n">02</div><div><div class="idx-m-step-mob-name">Klarhed</div><div class="idx-m-step-mob-q">Hvad er problemet bag problemet?</div></div></div>
+      <div class="idx-m-step-mob"><div class="idx-m-step-mob-n">03</div><div><div class="idx-m-step-mob-name">Valg</div><div class="idx-m-step-mob-q">Hvad vælger vi — og hvad vælger vi fra?</div></div></div>
+      <div class="idx-m-step-mob"><div class="idx-m-step-mob-n">04</div><div><div class="idx-m-step-mob-name">Struktur</div><div class="idx-m-step-mob-q">Hvordan organiserer vi os?</div></div></div>
+      <div class="idx-m-step-mob hl"><div class="idx-m-step-mob-n">05&nbsp;·&nbsp;Kernen</div><div><div class="idx-m-step-mob-name">Tirsdag kl. 10</div><div class="idx-m-step-mob-q">Kan vi se det i praksis — i møder, roller og hverdagen?</div></div></div>
+      <div class="idx-m-step-mob"><div class="idx-m-step-mob-n">06</div><div><div class="idx-m-step-mob-name">Forankring</div><div class="idx-m-step-mob-q">Hvordan holder vi det levende?</div></div></div>
+    </div>
+
+    <a href="tirsdag-kl10-modellen.html" class="link-arrow" style="display:inline-block;margin-top:8px;">Læs mere om Tirsdag kl. 10-modellen® →</a>
   </div>
 </section>
 
