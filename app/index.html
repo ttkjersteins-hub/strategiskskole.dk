@@ -1,0 +1,703 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="theme-color" content="#1A2E4A">
+<title>Tirsdag kl. 10 — Strategiskskole.dk</title>
+<link rel="manifest" href="manifest.json">
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,400;0,700;1,400&family=Open+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --navy:#1A2E4A;--navy2:#243d61;--teal:#3A9DB0;--teal2:#1A7A6E;--teal-lt:#e6f4f7;
+  --gold:#C9982A;--gold-lt:#fdf3dc;--red:#e05c5c;--green:#3aa87a;
+  --light:#F4F7FA;--white:#fff;--muted:#4A5A6A;--border:#DDE3EA;
+  --r:14px;--r-sm:8px;--sh:0 2px 12px rgba(26,46,74,.10);--sh-lg:0 8px 32px rgba(26,46,74,.16);
+  --safe-b:env(safe-area-inset-bottom,0px);--safe-t:env(safe-area-inset-top,0px);
+  --sans:'Open Sans',system-ui,sans-serif;--serif:'Merriweather',Georgia,serif
+}
+html,body{height:100%;overflow:hidden}
+body{font-family:var(--sans);background:var(--light);color:var(--muted);font-size:15px;line-height:1.5;-webkit-font-smoothing:antialiased}
+button{font-family:var(--sans)}
+.screen{position:fixed;inset:0;display:flex;flex-direction:column;overflow:hidden;opacity:0;pointer-events:none;transform:translateX(40px);transition:opacity .28s,transform .28s cubic-bezier(.4,0,.2,1);background:var(--light);will-change:transform,opacity}
+.screen.active{opacity:1;pointer-events:all;transform:translateX(0)}
+.screen.exit{opacity:0;transform:translateX(-40px);transition-duration:.2s}
+.topbar{display:flex;align-items:center;gap:12px;padding:calc(var(--safe-t)+14px) 16px 14px;background:var(--navy);color:white;flex-shrink:0;z-index:10;min-height:60px}
+.topbar-title{flex:1}.topbar-title h1{font-family:var(--serif);font-size:17px;font-weight:700;line-height:1.2}
+.topbar-title .sub{font-size:11px;opacity:.6;margin-top:1px}
+.btn-back{background:rgba(255,255,255,.12);border:none;color:white;cursor:pointer;width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;transition:background .15s;flex-shrink:0}
+.btn-back:active{background:rgba(255,255,255,.22)}.btn-back svg{width:20px;height:20px}
+.role-chip{font-size:10px;font-weight:700;letter-spacing:.6px;text-transform:uppercase;padding:4px 10px;border-radius:20px}
+.role-chip.skoleleder{background:var(--teal);color:white}
+.role-chip.ledelsesteam{background:rgba(255,255,255,.18);color:white;border:1px solid rgba(255,255,255,.3)}
+.role-chip.bestyrelse{background:var(--gold);color:white}
+.btn-icon-top{background:rgba(255,255,255,.12);border:none;color:white;cursor:pointer;width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.btn-icon-top svg{width:18px;height:18px}
+.scroll{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch}
+.pad{padding:20px 16px}
+.bottomnav{display:flex;background:white;border-top:1px solid var(--border);padding-bottom:var(--safe-b);flex-shrink:0;z-index:10}
+.nav-btn{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;padding:10px 4px;background:none;border:none;cursor:pointer;color:var(--border);font-size:9px;font-weight:600;letter-spacing:.4px;text-transform:uppercase;transition:color .15s}
+.nav-btn svg{width:22px;height:22px;stroke:currentColor}.nav-btn.active{color:var(--teal)}
+
+/* WELCOME */
+#s-welcome{background:linear-gradient(160deg,var(--navy) 0%,#0e1e32 100%);justify-content:center;align-items:center;transform:none;opacity:1;pointer-events:all}
+.wlc-wrap{padding:40px 28px;text-align:center;max-width:380px}
+.wlc-icon{width:88px;height:88px;border-radius:26px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);display:flex;align-items:center;justify-content:center;margin:0 auto 32px;backdrop-filter:blur(8px)}
+.wlc-icon svg{width:48px;height:48px}
+.wlc-title{font-family:var(--serif);font-size:32px;color:white;font-weight:700;line-height:1.2;margin-bottom:8px}
+.wlc-sub{font-size:15px;color:rgba(255,255,255,.55);margin-bottom:12px}
+.wlc-quote{font-family:var(--serif);font-size:14px;font-style:italic;color:rgba(255,255,255,.45);margin-bottom:48px;line-height:1.6}
+.btn-cta{display:inline-flex;align-items:center;gap:10px;background:var(--teal);color:white;border:none;border-radius:50px;padding:16px 36px;font-size:16px;font-weight:600;cursor:pointer;box-shadow:0 4px 24px rgba(58,157,176,.35);transition:transform .15s}
+.btn-cta:active{transform:scale(.96)}
+.wlc-brand{position:absolute;bottom:calc(var(--safe-b)+20px);left:0;right:0;text-align:center;font-size:11px;color:rgba(255,255,255,.25);letter-spacing:.5px}
+
+/* FORLOEB */
+.fl-header{background:var(--navy);padding:calc(var(--safe-t)+20px) 20px 24px;flex-shrink:0}
+.fl-header h2{font-family:var(--serif);font-size:20px;color:white;margin-bottom:4px}
+.fl-header p{font-size:13px;color:rgba(255,255,255,.55)}
+.fl-card{background:white;border-radius:var(--r);padding:18px;display:flex;align-items:center;gap:14px;box-shadow:var(--sh);cursor:pointer;transition:transform .15s;border-left:4px solid var(--teal);margin-bottom:10px}
+.fl-card:active{transform:scale(.98)}
+.fl-icon{width:44px;height:44px;border-radius:12px;background:var(--teal-lt);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:20px}
+.fl-body{flex:1;min-width:0}
+.fl-name{font-weight:700;color:var(--navy);font-size:15px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.fl-meta{font-size:12px;color:var(--muted);margin-top:2px}
+.fl-prog{display:flex;align-items:center;gap:6px;margin-top:6px}
+.fl-prog-bar{flex:1;height:3px;background:var(--border);border-radius:2px;overflow:hidden}
+.fl-prog-fill{height:100%;background:var(--teal);border-radius:2px}
+.fl-prog-pct{font-size:10px;font-weight:700;color:var(--teal)}
+.fl-arrow svg{width:18px;height:18px;stroke:var(--border)}
+.btn-new{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;padding:16px;background:none;border:2px dashed var(--border);border-radius:var(--r);cursor:pointer;color:var(--muted);font-size:14px;font-weight:600;transition:border-color .15s,color .15s;margin-top:4px}
+.btn-new:hover{border-color:var(--teal);color:var(--teal2)}.btn-new svg{width:18px;height:18px}
+
+/* ROLLE */
+.rolle-card{background:white;border-radius:var(--r);padding:22px 20px;cursor:pointer;display:flex;align-items:center;gap:16px;box-shadow:var(--sh);transition:transform .15s,border-color .15s;border:2px solid transparent;margin-bottom:12px}
+.rolle-card:active{transform:scale(.97)}.rolle-card.sl:hover{border-color:var(--teal)}.rolle-card.lt:hover{border-color:var(--navy)}.rolle-card.bst:hover{border-color:var(--gold)}
+.re{font-size:28px;width:52px;height:52px;border-radius:14px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.rolle-card.sl .re{background:var(--teal-lt)}.rolle-card.lt .re{background:#e8eef5}.rolle-card.bst .re{background:var(--gold-lt)}
+.ri{flex:1}.ri .rn{font-size:17px;font-weight:700;color:var(--navy)}.ri .rd{font-size:12px;color:var(--muted);margin-top:3px;line-height:1.4}
+.ra svg{width:18px;height:18px;stroke:var(--border)}
+
+/* DASHBOARD */
+.dash-hero{padding:calc(var(--safe-t)+16px) 18px 22px;flex-shrink:0}
+.dash-hero-top{display:flex;align-items:flex-start;gap:10px;margin-bottom:16px}
+.dht{flex:1}.dash-ctx{font-size:11px;color:rgba(255,255,255,.5);letter-spacing:.8px;text-transform:uppercase;margin-bottom:4px}
+.dash-title{font-family:var(--serif);font-size:19px;color:white;font-weight:700;line-height:1.2}
+.dash-sub2{font-size:12px;color:rgba(255,255,255,.5);margin-top:3px}
+.dash-stats{display:flex;gap:8px}
+.stat-box{flex:1;background:rgba(255,255,255,.1);border-radius:10px;padding:10px;border:1px solid rgba(255,255,255,.12)}
+.stat-num{font-size:22px;font-weight:700;color:white;line-height:1}.stat-lbl{font-size:10px;color:rgba(255,255,255,.5);margin-top:3px}.stat-ico{font-size:16px;margin-bottom:4px}
+.next-step{background:rgba(58,157,176,.18);border:1px solid rgba(58,157,176,.3);border-radius:10px;padding:12px 14px;display:flex;align-items:center;gap:10px;cursor:pointer;margin-top:12px}
+.ns-ico{font-size:18px;flex-shrink:0}.ns-txt{flex:1}.ns-lbl{font-size:10px;color:rgba(255,255,255,.5);letter-spacing:.6px;text-transform:uppercase}
+.ns-act{font-size:13px;font-weight:600;color:white;margin-top:1px}
+.ns-arr svg{width:16px;height:16px;stroke:rgba(255,255,255,.5)}
+.journey-sec{padding:20px 16px 8px}
+.sec-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+.sec-hdr-lbl{font-size:11px;font-weight:700;color:var(--muted);letter-spacing:1px;text-transform:uppercase}
+.jgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.jtile{background:white;border-radius:var(--r);padding:16px 14px;cursor:pointer;box-shadow:var(--sh);transition:transform .15s;border-top:3px solid var(--border)}
+.jtile:active{transform:scale(.97)}.jtile.done{border-top-color:var(--green)}.jtile.active2{border-top-color:var(--teal);box-shadow:0 4px 20px rgba(58,157,176,.18)}
+.jt-num{font-size:10px;font-weight:700;color:var(--muted);letter-spacing:.5px;margin-bottom:8px;display:flex;align-items:center;gap:6px}
+.jt-dot{width:8px;height:8px;border-radius:50%;background:var(--border);flex-shrink:0}
+.jtile.done .jt-dot{background:var(--green)}.jtile.active2 .jt-dot{background:var(--teal)}
+.jt-name{font-size:15px;font-weight:700;color:var(--navy);margin-bottom:4px}.jtile.active2 .jt-name{color:var(--teal2)}
+.jt-q{font-size:11px;color:var(--muted);line-height:1.4;font-style:italic}
+.jt-counts{display:flex;gap:6px;margin-top:10px;flex-wrap:wrap}
+.jt-cnt{font-size:10px;font-weight:600;color:var(--muted);background:var(--light);padding:3px 7px;border-radius:20px}
+.jt-cnt.has{background:var(--teal-lt);color:var(--teal2)}
+
+/* OVERSIGT BESLUTNINGER / HANDLINGER */
+.ov-grp{margin-bottom:16px}
+.ov-lbl{font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--muted);margin-bottom:8px;display:flex;align-items:center;gap:8px}
+.ov-lbl::after{content:'';flex:1;height:1px;background:var(--border)}
+.bsl-ov{background:white;border-radius:var(--r-sm);padding:14px 16px;border-left:3px solid var(--teal);box-shadow:var(--sh);margin-bottom:8px}
+.bsl-ov-t{font-size:14px;font-weight:600;color:var(--navy);margin-bottom:4px}
+.bsl-ov-m{font-size:11px;color:var(--muted);line-height:1.5}
+.hdl-ov{background:white;border-radius:var(--r-sm);padding:12px 14px;display:flex;align-items:flex-start;gap:12px;box-shadow:var(--sh);margin-bottom:8px}
+.hck{width:24px;height:24px;border-radius:50%;border:2px solid var(--border);display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;transition:all .15s;background:white}
+.hck.done{background:var(--green);border-color:var(--green)}.hck svg{display:none;width:12px;height:12px;stroke:white;stroke-width:3}.hck.done svg{display:block}
+.hb{flex:1}.ht{font-size:14px;font-weight:600;color:var(--navy)}.ht.done{text-decoration:line-through;color:var(--muted)}.hm{font-size:11px;color:var(--muted);margin-top:3px}
+.overdue{color:var(--red);font-weight:600}
+
+/* TRIN */
+.trin-nav-strip{background:var(--navy);padding:8px 14px 12px;display:flex;gap:6px;flex-shrink:0}
+.tdot{flex:1;height:4px;border-radius:2px;background:rgba(255,255,255,.18);cursor:pointer;transition:background .2s}
+.tdot.active{background:var(--teal)}.tdot.done{background:rgba(255,255,255,.45)}
+.kort-wrap{perspective:1000px;margin:0 0 18px}
+.kort-inner{position:relative;transform-style:preserve-3d;transition:transform .55s cubic-bezier(.4,0,.2,1)}
+.kort-inner.flipped{transform:rotateY(180deg)}
+.kort-face{width:100%;background:white;border-radius:var(--r);box-shadow:var(--sh-lg);padding:28px 22px;backface-visibility:hidden;-webkit-backface-visibility:hidden}
+.kort-back{position:absolute;top:0;left:0;right:0;transform:rotateY(180deg)}
+.kf-brow{display:flex;align-items:center;gap:8px;margin-bottom:18px}
+.kf-tag{font-size:10px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;padding:4px 10px;border-radius:20px;background:var(--teal-lt);color:var(--teal2)}
+.kf-side{font-size:10px;color:var(--muted);opacity:.7}
+.kf-q{font-family:var(--serif);font-size:24px;font-weight:700;color:var(--navy);line-height:1.35;margin-bottom:24px}
+.kf-hint{display:flex;align-items:center;gap:6px;font-size:11px;color:var(--muted);opacity:.5}
+.kf-hint svg{width:14px;height:14px}
+.kb-brow{display:flex;align-items:center;gap:8px;margin-bottom:16px}
+.kb-lbl{font-size:10px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;color:var(--navy);opacity:.6}
+.kb-qs{list-style:none;margin-bottom:20px}
+.kb-qs li{padding:11px 0;border-bottom:1px solid var(--light);font-size:14px;color:var(--muted);display:flex;gap:10px;line-height:1.45}
+.kb-qs li:last-child{border-bottom:none}
+.kb-qs li::before{content:'→';color:var(--teal);font-weight:700;flex-shrink:0;margin-top:1px}
+.btn-flip-back{width:100%;padding:12px;background:var(--light);border:none;border-radius:var(--r-sm);cursor:pointer;color:var(--muted);font-size:13px;font-weight:600;display:flex;align-items:center;justify-content:center;gap:8px;transition:background .15s}
+.btn-flip-back:hover{background:var(--border)}.btn-flip-back svg{width:15px;height:15px}
+.ctx-panel{background:white;border-radius:var(--r);padding:16px 18px;margin-bottom:16px;box-shadow:var(--sh);border-left:4px solid var(--navy)}
+.cp-lbl{font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--muted);margin-bottom:6px}
+.cp-txt{font-size:13px;color:var(--navy);line-height:1.55}
+.cp-prev-lbl{font-size:10px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;color:var(--muted);margin:12px 0 8px}
+.cp-prev{background:var(--light);border-radius:var(--r-sm);padding:10px 12px;font-size:12px;color:var(--muted);margin-bottom:6px;border-left:2px solid var(--teal)}
+.mode-strip{display:flex;gap:6px;margin-bottom:18px}
+.mpill{flex:1;padding:10px 6px;border:2px solid var(--border);border-radius:10px;cursor:pointer;font-size:11px;font-weight:600;color:var(--muted);background:white;text-align:center;transition:all .15s}
+.mpill .mpi{font-size:16px;display:block;margin-bottom:3px}
+.mpill.active{border-color:var(--teal);color:var(--teal2);background:var(--teal-lt)}
+.mode-box{background:white;border-radius:var(--r);padding:18px;box-shadow:var(--sh);margin-bottom:16px}
+.mb-title{font-size:13px;font-weight:700;color:var(--navy);margin-bottom:10px;display:flex;align-items:center;gap:8px}
+.mb-title svg{width:16px;height:16px;stroke:var(--teal)}
+.mb-pts{list-style:none;margin-bottom:0}
+.mb-pts li{font-size:13px;color:var(--muted);padding:6px 0;display:flex;gap:8px;border-bottom:1px solid var(--light);line-height:1.4}
+.mb-pts li:last-child{border-bottom:none}.mb-pts li::before{content:'•';color:var(--teal);font-weight:700;flex-shrink:0}
+.notes-sec{margin-bottom:16px}
+.sec-t{font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--muted);margin-bottom:10px}
+.note-tabs{display:flex;gap:4px;background:var(--light);border-radius:10px;padding:4px;margin-bottom:10px}
+.ntab{flex:1;padding:8px 4px;border:none;border-radius:7px;cursor:pointer;font-size:11px;font-weight:600;color:var(--muted);background:none;font-family:var(--sans);transition:all .15s;text-align:center}
+.ntab.active{background:white;color:var(--navy);box-shadow:0 1px 4px rgba(0,0,0,.08)}
+.ntab small{font-size:9px;display:block;opacity:.6;margin-top:1px}
+.note-fld{width:100%;min-height:100px;border:1px solid var(--border);border-radius:var(--r-sm);padding:12px;resize:none;font-family:var(--sans);font-size:14px;color:var(--navy);background:white;line-height:1.6;transition:border-color .15s}
+.note-fld:focus{outline:none;border-color:var(--teal)}
+.note-hint{font-size:11px;color:var(--muted);opacity:.6;margin-top:6px}
+.note-save-row{display:flex;justify-content:flex-end;margin-top:6px}
+.btn-save-n{background:var(--teal);color:white;border:none;border-radius:8px;padding:8px 16px;font-size:12px;font-weight:600;cursor:pointer}
+.save-ind{font-size:11px;color:var(--green);margin-top:4px;opacity:0;transition:opacity .3s}.save-ind.show{opacity:1}
+.bsl-item{background:white;border-radius:var(--r-sm);padding:14px 16px;border-left:3px solid var(--teal);box-shadow:var(--sh);position:relative;margin-bottom:8px}
+.bsl-t{font-size:14px;font-weight:600;color:var(--navy);margin-bottom:4px}.bsl-m{font-size:11px;color:var(--muted);line-height:1.5}
+.bsl-del{position:absolute;top:10px;right:10px;background:none;border:none;cursor:pointer;color:var(--border);padding:4px}
+.bsl-del:hover{color:var(--red)}.bsl-del svg{width:14px;height:14px}
+.hdl-item{background:white;border-radius:var(--r-sm);padding:12px 14px;display:flex;align-items:flex-start;gap:12px;box-shadow:var(--sh);margin-bottom:8px}
+.hck2{width:22px;height:22px;border-radius:50%;border:2px solid var(--border);display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;transition:all .15s;background:white;margin-top:1px}
+.hck2.done{background:var(--green);border-color:var(--green)}.hck2 svg{display:none;width:11px;height:11px;stroke:white;stroke-width:3}.hck2.done svg{display:block}
+.hb2{flex:1}.ht2{font-size:13px;font-weight:600;color:var(--navy)}.ht2.done{text-decoration:line-through;color:var(--muted)}.hm2{font-size:11px;color:var(--muted);margin-top:2px}
+.btn-add{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:12px;background:none;border:1.5px dashed var(--border);border-radius:var(--r-sm);cursor:pointer;color:var(--muted);font-size:13px;font-weight:600;transition:border-color .15s,color .15s}
+.btn-add:hover{border-color:var(--teal);color:var(--teal2)}.btn-add svg{width:15px;height:15px}
+.status-row{display:flex;gap:6px;flex-wrap:wrap}
+.st-btn{flex:1;padding:10px 6px;border:2px solid var(--border);border-radius:10px;background:white;color:var(--muted);font-size:11px;font-weight:600;cursor:pointer;min-width:80px;text-align:center;transition:all .15s}
+.st-btn.active{border-color:var(--teal);color:var(--teal2);background:var(--teal-lt)}
+.st-btn.active-done{border-color:var(--green);color:var(--green);background:#e6f5ef}
+.divider{height:1px;background:var(--border);margin:18px 0}
+.bsp{height:24px}
+.btn-next{width:100%;margin-top:14px;padding:13px;background:var(--teal);color:white;border:none;border-radius:50px;font-size:14px;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;box-shadow:0 3px 16px rgba(58,157,176,.3)}
+.btn-next svg{width:16px;height:16px}
+
+/* MODALS */
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:100;display:flex;align-items:flex-end;opacity:0;pointer-events:none;transition:opacity .25s}
+.overlay.show{opacity:1;pointer-events:all}
+.sheet{background:white;border-radius:24px 24px 0 0;padding:20px 20px calc(20px + var(--safe-b));width:100%;max-height:85vh;overflow-y:auto;transform:translateY(100%);transition:transform .3s cubic-bezier(.4,0,.2,1)}
+.overlay.show .sheet{transform:translateY(0)}
+.sh-handle{width:36px;height:4px;background:var(--border);border-radius:2px;margin:0 auto 18px}
+.sh-title{font-size:17px;font-weight:700;color:var(--navy);margin-bottom:18px}
+.fg{margin-bottom:14px}.fl{font-size:11px;font-weight:700;color:var(--muted);letter-spacing:.5px;text-transform:uppercase;margin-bottom:5px;display:block}
+.fi,.fta{width:100%;padding:12px;border:1px solid var(--border);border-radius:var(--r-sm);font-size:14px;font-family:var(--sans);color:var(--navy);background:var(--light);transition:border-color .15s}
+.fi:focus,.fta:focus{outline:none;border-color:var(--teal);background:white}.fta{min-height:80px;resize:none}
+.sh-acts{display:flex;gap:8px;margin-top:4px}
+.btn-sc{flex:1;padding:14px;border:1px solid var(--border);border-radius:12px;background:white;color:var(--muted);font-size:15px;font-weight:600;cursor:pointer}
+.btn-ss{flex:2;padding:14px;border:none;border-radius:12px;background:var(--teal);color:white;font-size:15px;font-weight:600;cursor:pointer;box-shadow:0 3px 12px rgba(58,157,176,.3)}
+
+/* EMPTY */
+.empty{text-align:center;padding:28px 16px;color:var(--muted)}.empty-ico{font-size:36px;margin-bottom:10px;opacity:.5}.empty p{font-size:13px;line-height:1.5}
+
+/* TOAST */
+.toast{position:fixed;bottom:calc(72px + var(--safe-b) + 6px);left:50%;transform:translateX(-50%) translateY(12px);background:var(--navy);color:white;font-size:13px;font-weight:500;padding:10px 20px;border-radius:50px;opacity:0;transition:all .25s;pointer-events:none;white-space:nowrap;z-index:300}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+/* PRINT */
+@media print{
+  .screen:not(.active),.bottomnav,.trin-nav-strip,.btn-back,.btn-icon-top,.btn-add,.mode-strip,.note-save-row,.status-row,.btn-flip-back,.kf-hint,.bsp,.btn-next,.bsl-del{display:none!important}
+  .screen.active{position:static!important;overflow:visible!important;opacity:1!important;transform:none!important}
+  .scroll{overflow:visible!important}
+  body{overflow:auto!important;background:white}
+  .print-hdr{display:block!important;padding:0 0 16px;margin-bottom:20px;border-bottom:2px solid var(--navy)}
+  .ph-t{font-family:var(--serif);font-size:22px;font-weight:700;color:var(--navy)}
+  .ph-m{font-size:12px;color:var(--muted);margin-top:4px}
+  .kort-wrap,.bsl-item,.hdl-item{page-break-inside:avoid}
+  .mode-box{box-shadow:none!important;border:1px solid var(--border)}
+  .ctx-panel{box-shadow:none!important}
+}
+.print-hdr{display:none}
+
+/* AUDIT LOG */
+.audit-toggle{background:none;border:none;font-size:11px;color:var(--muted);cursor:pointer;padding:4px 0;text-decoration:underline;text-underline-offset:2px;display:block;margin-top:6px;opacity:.7}
+.audit-list{margin-top:6px;padding:8px 12px;background:var(--light);border-radius:var(--r-sm);border:1px solid var(--border)}
+.audit-item{display:flex;gap:8px;padding:5px 0;border-bottom:1px solid var(--border);font-size:11px;color:var(--muted);line-height:1.4}
+.audit-item:last-child{border-bottom:none}
+.audit-dot{width:6px;height:6px;border-radius:50%;background:var(--border);flex-shrink:0;margin-top:4px}
+.audit-item.bsl .audit-dot{background:var(--teal)}
+.audit-item.hdl .audit-dot{background:var(--green)}
+.audit-item.del .audit-dot{background:var(--red)}
+
+/* MØDE */
+.mste-log-btn{width:100%;padding:10px 14px;background:var(--teal-lt);border:1.5px dashed rgba(58,157,176,.4);border-radius:var(--r-sm);cursor:pointer;color:var(--teal2);font-size:12px;font-weight:600;display:flex;align-items:center;justify-content:center;gap:8px;margin-top:10px;transition:all .15s}
+.mste-log-btn:hover{background:var(--teal);color:white;border-style:solid}
+.mste-log-btn svg{width:14px;height:14px;stroke:currentColor}
+.mste-item{background:white;border-radius:var(--r-sm);padding:12px 14px;box-shadow:var(--sh);margin-bottom:8px;border-left:3px solid var(--teal)}
+.mste-item-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:4px;gap:8px}
+.mste-item-t{font-size:13px;font-weight:700;color:var(--navy);flex:1}
+.mste-item-m{font-size:11px;color:var(--muted);line-height:1.55}
+.mste-exp-btn{background:var(--teal-lt);color:var(--teal2);border:none;border-radius:6px;padding:5px 10px;font-size:11px;font-weight:600;cursor:pointer;flex-shrink:0}
+
+/* MØDE EKSPORT */
+.exp-sec{background:var(--light);border-radius:var(--r-sm);padding:12px 14px;margin-bottom:10px;border:1px solid var(--border)}
+.exp-sec-lbl{font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--muted);margin-bottom:8px}
+.exp-content{font-size:13px;color:var(--navy);line-height:1.6}
+.exp-item{padding:5px 0;border-bottom:1px solid var(--border);font-size:13px;color:var(--muted);display:flex;gap:8px;align-items:flex-start}
+.exp-item:last-child{border-bottom:none}
+.exp-item::before{content:'→';color:var(--teal);flex-shrink:0;font-weight:700}
+
+/* GPT PANEL */
+.gpt-panel-btn{width:100%;margin-top:10px;padding:12px;background:linear-gradient(135deg,#10a37f,#0d8a6a);color:white;border:none;border-radius:var(--r-sm);cursor:pointer;font-size:13px;font-weight:600;display:flex;align-items:center;justify-content:center;gap:8px;box-shadow:0 3px 10px rgba(16,163,127,.2);transition:opacity .15s}
+.gpt-panel-btn:active{opacity:.82}
+.gpt-panel-btn svg{width:15px;height:15px;stroke:currentColor}
+.gpt-prompt-box{background:var(--light);border-radius:var(--r-sm);padding:12px;font-size:12px;color:var(--navy);line-height:1.65;border:1px solid var(--border);margin-bottom:12px;white-space:pre-wrap;max-height:200px;overflow-y:auto}
+.gpt-copy-row{display:flex;gap:8px;margin-bottom:8px}
+.gpt-copy-btn{flex:1;padding:10px;background:white;border:1.5px solid var(--border);border-radius:var(--r-sm);cursor:pointer;font-size:12px;font-weight:600;color:var(--muted);transition:border-color .15s}
+.gpt-copy-btn:hover{border-color:var(--teal);color:var(--teal2)}
+.gpt-open-btn{flex:1;padding:10px;background:linear-gradient(135deg,#10a37f,#0d8a6a);color:white;border:none;border-radius:var(--r-sm);cursor:pointer;font-size:12px;font-weight:600}
+
+/* role color overrides */
+body.role-bestyrelse .dash-hero{background:linear-gradient(135deg,#7a5a12 0%,var(--gold) 100%)}
+body.role-bestyrelse .tdot.active{background:var(--gold)}
+body.role-bestyrelse .kf-tag{background:var(--gold-lt);color:#7a5a12}
+body.role-bestyrelse .bsl-item{border-left-color:var(--gold)}
+body.role-bestyrelse .btn-next{background:var(--gold);box-shadow:0 3px 16px rgba(201,152,42,.3)}
+body.role-ledelsesteam .dash-hero{background:linear-gradient(135deg,var(--navy) 0%,var(--navy2) 100%)}
+body.role-ledelsesteam .tdot.active{background:white}
+body.role-ledelsesteam .btn-next{background:var(--navy2)}
+</style>
+</head>
+<body>
+
+<!-- WELCOME -->
+<div id="s-welcome" class="screen active">
+  <div class="wlc-wrap">
+    <div class="wlc-icon">
+      <svg width="48" height="48" viewBox="0 0 48 48" fill="none" stroke="rgba(255,255,255,.8)" stroke-width="2.2">
+        <circle cx="24" cy="24" r="19"/><path d="M24 13v11l7 4" stroke-linecap="round"/><circle cx="24" cy="24" r="2" fill="white" stroke="none"/>
+      </svg>
+    </div>
+    <div class="wlc-title">Tirsdag kl. 10</div>
+    <div class="wlc-sub">Strategisk procesapp til skoleledelse</div>
+    <div class="wlc-quote">"Kan vi se strategien i det, der sker tirsdag kl. 10?"</div>
+    <button class="btn-cta" onclick="goForloeb()">
+      Gå til dine forløb
+      <svg width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M4 10h12M10 4l6 6-6 6"/></svg>
+    </button>
+  </div>
+  <div class="wlc-brand">Strategiskskole.dk</div>
+</div>
+
+<!-- FORLØB -->
+<div id="s-forloeb" class="screen">
+  <div class="fl-header"><h2>Dine forløb</h2><p>Vælg et aktivt forløb eller opret nyt</p></div>
+  <div class="scroll pad" id="fl-list"></div>
+</div>
+
+<!-- ROLLEVALG -->
+<div id="s-rolle" class="screen">
+  <div class="topbar">
+    <button class="btn-back" onclick="showScreen('forloeb')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M19 12H5M12 5l-7 7 7 7"/></svg></button>
+    <div class="topbar-title"><h1>Vælg rolle</h1><div class="sub" id="rolle-fl-name"></div></div>
+  </div>
+  <div class="scroll pad">
+    <button class="rolle-card sl" onclick="selectRolle('skoleleder')">
+      <div class="re">🏫</div><div class="ri"><div class="rn">Skoleleder</div><div class="rd">Personlig strategisk refleksion og beslutningsrum</div></div>
+      <div class="ra"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M9 18l6-6-6-6"/></svg></div>
+    </button>
+    <button class="rolle-card lt" onclick="selectRolle('ledelsesteam')">
+      <div class="re">👥</div><div class="ri"><div class="rn">Ledelsesteam</div><div class="rd">Fælles beslutningslog og struktureret opfølgning</div></div>
+      <div class="ra"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M9 18l6-6-6-6"/></svg></div>
+    </button>
+    <button class="rolle-card bst" onclick="selectRolle('bestyrelse')">
+      <div class="re">🏛️</div><div class="ri"><div class="rn">Bestyrelse</div><div class="rd">Strategisk tilsyn, årshjul og governance</div></div>
+      <div class="ra"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M9 18l6-6-6-6"/></svg></div>
+    </button>
+  </div>
+</div>
+
+<!-- DASHBOARD -->
+<div id="s-dash" class="screen">
+  <div class="dash-hero" id="dash-hero">
+    <div class="dash-hero-top">
+      <div class="dht"><div class="dash-ctx" id="dash-ctx"></div><div class="dash-title" id="dash-title"></div><div class="dash-sub2" id="dash-sub2"></div></div>
+      <button class="btn-icon-top" onclick="showScreen('rolle')" title="Skift rolle">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+      </button>
+    </div>
+    <div class="dash-stats" id="dash-stats"></div>
+    <div id="dash-next"></div>
+  </div>
+  <div class="scroll" id="dash-scroll">
+    <div class="journey-sec">
+      <div class="sec-hdr"><span class="sec-hdr-lbl">Procesforløb — 6 trin</span></div>
+      <div class="jgrid" id="jgrid"></div>
+    </div>
+    <div style="height:16px"></div>
+  </div>
+  <div class="bottomnav">
+    <button class="nav-btn active" id="nav-oversigt" onclick="dashTab('oversigt')">
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+      Oversigt
+    </button>
+    <button class="nav-btn" id="nav-beslutninger" onclick="dashTab('beslutninger')">
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+      Beslutninger
+    </button>
+    <button class="nav-btn" id="nav-handlinger" onclick="dashTab('handlinger')">
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><path d="M4 6h16M4 10h16M4 14h8"/><circle cx="17" cy="17" r="3"/><path d="M21 21l-1.5-1.5"/></svg>
+      Handlinger
+    </button>
+    <button class="nav-btn" id="nav-export" onclick="window.print()">
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><path d="M6 9V2h12v7"/><path d="M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"/><path d="M6 14h12v8H6z"/></svg>
+      Eksport
+    </button>
+  </div>
+</div>
+
+<!-- TRIN -->
+<div id="s-trin" class="screen">
+  <div class="print-hdr" id="print-hdr"><div class="ph-t" id="ph-t"></div><div class="ph-m" id="ph-m"></div></div>
+  <div class="topbar">
+    <button class="btn-back" onclick="showScreen('dash')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M19 12H5M12 5l-7 7 7 7"/></svg></button>
+    <div class="topbar-title"><h1 id="trin-ttl"></h1><div class="sub" id="trin-sub"></div></div>
+    <span class="role-chip" id="trin-chip"></span>
+  </div>
+  <div class="trin-nav-strip" id="trin-dots"></div>
+  <div class="scroll pad" id="trin-content"></div>
+</div>
+
+<!-- OVERLAYS -->
+<div id="ov-fl" class="overlay" onclick="closeOv('fl')">
+  <div class="sheet" onclick="event.stopPropagation()">
+    <div class="sh-handle"></div><div class="sh-title">Opret nyt forløb</div>
+    <div class="fg"><label class="fl">Forløbets navn</label><input id="fl-navn" type="text" class="fi" placeholder="f.eks. Strategiproces 2025-26"></div>
+    <div class="fg"><label class="fl">Mål for forløbet (valgfrit)</label><textarea id="fl-maal" class="fta" placeholder="Hvad ønsker vi at opnå med dette forløb?"></textarea></div>
+    <div class="sh-acts"><button class="btn-sc" onclick="closeOv('fl')">Annullér</button><button class="btn-ss" onclick="createFl()">Opret forløb</button></div>
+  </div>
+</div>
+
+<div id="ov-bsl" class="overlay" onclick="closeOv('bsl')">
+  <div class="sheet" onclick="event.stopPropagation()">
+    <div class="sh-handle"></div><div class="sh-title">Tilføj beslutning</div>
+    <div class="fg"><label class="fl">Beslutning</label><textarea id="bsl-t" class="fta" placeholder="Hvad besluttede vi?"></textarea></div>
+    <div class="fg"><label class="fl">Besluttet af</label><input id="bsl-af" type="text" class="fi" placeholder="Navne eller roller..."></div>
+    <div class="fg"><label class="fl">Opfølgning (valgfrit)</label><input id="bsl-opf" type="text" class="fi" placeholder="Hvad sker der videre?"></div>
+    <div class="sh-acts"><button class="btn-sc" onclick="closeOv('bsl')">Annullér</button><button class="btn-ss" onclick="saveBsl()">Gem beslutning</button></div>
+  </div>
+</div>
+
+<div id="ov-hdl" class="overlay" onclick="closeOv('hdl')">
+  <div class="sheet" onclick="event.stopPropagation()">
+    <div class="sh-handle"></div><div class="sh-title">Tilføj handling</div>
+    <div class="fg"><label class="fl">Opgave</label><textarea id="hdl-o" class="fta" placeholder="Hvad skal gøres?"></textarea></div>
+    <div class="fg"><label class="fl">Ansvarlig</label><input id="hdl-a" type="text" class="fi" placeholder="Hvem er ansvarlig?"></div>
+    <div class="fg"><label class="fl">Deadline</label><input id="hdl-d" type="date" class="fi"></div>
+    <div class="sh-acts"><button class="btn-sc" onclick="closeOv('hdl')">Annullér</button><button class="btn-ss" onclick="saveHdl()">Gem handling</button></div>
+  </div>
+</div>
+
+<!-- MØDE LOG OVERLAY -->
+<div id="ov-mste" class="overlay" onclick="closeOv('mste')">
+  <div class="sheet" onclick="event.stopPropagation()">
+    <div class="sh-handle"></div><div class="sh-title">Log møde</div>
+    <div class="fg"><label class="fl">Dato</label><input id="mste-dato" type="date" class="fi"></div>
+    <div class="fg"><label class="fl">Deltagere</label><input id="mste-del" type="text" class="fi" placeholder="f.eks. Skoleleder, viceinspektør, teamledere"></div>
+    <div class="fg"><label class="fl">Møde-type</label><select id="mste-type" class="fi"><option value="forberedelse">Forberedelsesmøde</option><option value="beslutning" selected>Beslutningsøde</option><option value="opfolgning">Opfølgningsmøde</option></select></div>
+    <div class="fg"><label class="fl">Opsummering (valgfrit)</label><textarea id="mste-ops" class="fta" placeholder="Hvad var det vigtigste fra mødet?"></textarea></div>
+    <div class="sh-acts"><button class="btn-sc" onclick="closeOv('mste')">Annullér</button><button class="btn-ss" onclick="saveMste()">Gem møde</button></div>
+  </div>
+</div>
+
+<!-- MØDE EKSPORT OVERLAY -->
+<div id="ov-mste-exp" class="overlay" onclick="closeOv('mste-exp')">
+  <div class="sheet" onclick="event.stopPropagation()">
+    <div class="sh-handle"></div>
+    <div class="sh-title" id="mste-exp-ttl">Mødereferat</div>
+    <div id="mste-exp-body"></div>
+    <div class="sh-acts"><button class="btn-sc" onclick="closeOv('mste-exp')">Luk</button><button class="btn-ss" onclick="window.print()">Udskriv referat</button></div>
+  </div>
+</div>
+
+<!-- GPT PANEL OVERLAY -->
+<div id="ov-gpt" class="overlay" onclick="closeOv('gpt')">
+  <div class="sheet" onclick="event.stopPropagation()">
+    <div class="sh-handle"></div>
+    <div class="sh-title">AI-refleksionspartner</div>
+    <p style="font-size:13px;color:var(--muted);line-height:1.6;margin-bottom:14px">Kopiér denne prompt og indsæt den i Strategiskskoles GPT — din faglige sparringspartner til Tirsdag kl. 10-modellen.</p>
+    <div class="gpt-prompt-box" id="gpt-prompt-txt"></div>
+    <div class="gpt-copy-row">
+      <button class="gpt-copy-btn" onclick="copyGptPrompt()">📋 Kopiér prompt</button>
+      <button class="gpt-open-btn" onclick="window.open('https://chatgpt.com/g/g-69cea435188c8191b62f4b463a691da5','_blank')">🤖 Åbn GPT</button>
+    </div>
+    <div class="save-ind" id="gpt-copy-ind" style="text-align:center">Kopieret til udklipsholder ✓</div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+/* DATA */
+const TN=["Spejling","Klarhed","Valg","Struktur","Kernen","Forankring"];
+const TS=["Hvad er det vi egentlig står i?","Hvad er problemet bag problemet?","Hvad vælger vi — og hvad vælger vi fra?","Hvordan organiserer vi os?","Kan vi se det i praksis tirsdag kl. 10?","Hvordan holder vi det levende?"];
+const TC=["Spejling handler om at se virkeligheden klart — ikke som vi ønsker den, men som den faktisk er. Ingen løsninger endnu. Kun observation og ærlighed.","Klarhed handler om at finde det egentlige problem bag de synlige symptomer. En forkert diagnose giver altid den forkerte løsning.","Valg handler om prioritering. At sige ja er kun meningsfuldt, hvis vi også siger nej til noget andet. Hvad vælger vi fra?","Struktur handler om at designe de rammer, der gør strategien mulig i hverdagen. Møder, ansvar, koordinering — alt er design.","Kernen er prøven. Kan strategien faktisk mærkes i det, der sker tirsdag kl. 10? Ikke i dokumenter — i praksis.","Forankring handler om at holde det levende. Strategier dør ikke af modstand — de dør af glemsel og hverdagspres."];
+const TGUIDE={
+  forberedelse:[["Hvad er det vigtigste at have overblik over inden mødet?","Hvilke observationer tager du med ind?","Hvad vil du gerne have svar på?"],["Hvad er de vigtigste spørgsmål du ønsker afklaret?","Hvad er du usikker på, som holdet bør drøfte?","Hvad har du brug for fra de andre?"],["Hvad er din holdning til det forestående valg?","Hvad er dine bekymringer?","Hvad er afgørende at have på bordet?"],["Hvad ved du om den nuværende struktur, der bør deles?","Hvad mangler struktur?","Hvad vil du foreslå?"],["Hvad ser du faktisk ske tirsdag kl. 10?","Hvad viser det om strategien?","Hvad vil du fremhæve?"],["Hvad er dine forankringspunkter?","Hvornår tjekker du selv op?","Hvad frygter du kan gå i glemmebogen?"]],
+  beslutning:[["Hvad er vi enige om at kalde den aktuelle situation?","Hvad er den fælles forståelse vi vil arbejde ud fra?","Hvem ejer opfølgningen?"],["Hvad er vi enige om er kerneproblemet?","Hvad beslutter vi at sætte fokus på — og hvad parkerer vi?","Hvem formulerer problemudmeldingen?"],["Hvad vælger vi?","Hvad siger vi eksplicit fra til?","Hvem kommunikerer valget — og til hvem?"],["Hvem gør hvad?","Hvad er den nye struktur vi er enige om?","Hvad skal koordineres — og hvad kan løbe selv?"],["Er vi enige om, at strategien er synlig i hverdagen?","Hvad kræver øjeblikkelig justering?","Hvad er vores fælles billede af 'godt nok'?"],["Hvad er vores konkrete opfølgningsstruktur?","Hvornår mødes vi næste gang om dette?","Hvad er vores tegn på fremgang?"]],
+  opfolgning:[["Hvad har vi gjort siden sidst?","Hvad er ændret i det billede vi har?","Hvad er ikke ændret — og hvad siger det?"],["Er vi kommet tættere på klarhed?","Hvad er stadig uklart?","Hvad nyt har vi lært?"],["Holder vores valg?","Hvad viser konsekvenserne sig at være?","Skal vi justere?"],["Fungerer strukturen i praksis?","Hvad kræver justering?","Hvad kører godt?"],["Er strategien stadig synlig tirsdag kl. 10?","Hvad er forbedret?","Hvad er vi stadig utilfredse med?"],["Holder vi det levende?","Hvad er vores opfølgningsdisciplin?","Hvad fejrer vi?"]]
+};
+const KD={
+  skoleleder:[{f:"Hvad ser jeg som leder, som teamet ikke ser?",b:["Hvad sker der, når jeg kigger på min skole udefra?","Hvad undgår jeg at adressere?","Hvad er mit næste ledelsesmæssige skridt?"]},{f:"Hvad er den egentlige udfordring — ikke symptomet?",b:["Hvad er det mest forvirrende just nu?","Hvad ville klarhed gøre muligt?","Hvad holder mig fra at skabe klarhed?"]},{f:"Hvad er mit ledelsesmæssige valg?",b:["Hvad siger jeg ja til med min tid og opmærksomhed?","Hvad delegerer jeg?","Hvad er konsekvensen af mit valg for teamet?"]},{f:"Har jeg designet de rigtige rammer?",b:["Er mødestrukturen et spejl af strategien?","Hvad er der for meget af — og hvad mangler?","Hvad ville jeg ændre, hvis jeg begyndte fra scratch?"]},{f:"Er strategien til stede tirsdag kl. 10?",b:["Hvad siger dagsordenen om prioriteringen?","Hvad siger stemningen om kulturen?","Hvad siger beslutningerne om retningen?"]},{f:"Hvad gør jeg, for at det holder?",b:["Hvad er min forankringsrolle?","Hvornår tjekker jeg op?","Hvad er tegnet på, at strategien lever?"]}],
+  ledelsesteam:[{f:"Hvad ser vi samlet — og er vi enige om det?",b:["Har vi det samme billede af virkeligheden?","Hvad taler vi ikke om?","Hvad ville en udefrakommende se?"]},{f:"Er vi klare på problemet — eller arbejder vi med symptomer?",b:["Hvad er vi uenige om?","Hvad er det vi egentlig prøver at løse?","Hvad ville klarhed kræve af os?"]},{f:"Hvad beslutter vi — og hvem ved det?",b:["Er alle med på valget?","Hvad er vi uenige om — og kan vi leve med det?","Hvad følger af dette valg?"]},{f:"Hvem gør hvad hvornår — og tjekker vi op?",b:["Er der tydelige ansvarsområder?","Koordinerer vi det rigtige?","Hvad kører på autopilot — og er det OK?"]},{f:"Kan vi se strategien i vores møder?",b:["Hvad siger vores dagsorden om vores prioriteringer?","Hvad besluttes — hvad udskydes?","Er alle stemmer til stede?"]},{f:"Hvad holder vi hinanden på?",b:["Hvad er vores opfølgningsstruktur?","Hvad sker der, når det er svært?","Hvad fejrer vi?"]}],
+  bestyrelse:[{f:"Hvad ser bestyrelsen — og stiller vi de rigtige spørgsmål?",b:["Har vi et realistisk billede af skolen?","Hvad hører vi ikke om?","Hvad bør vi spørge mere til?"]},{f:"Er vi klare på, hvad vi skal tage stilling til?",b:["Hvad er vores rolle i denne udfordring?","Hvad er strategisk — og hvad er drift?","Hvad kræver bestyrelsens stillingtagen?"]},{f:"Hvad er bestyrelsens strategiske valg?",b:["Hvad siger vi ja til som bestyrelse?","Hvad er ikke vores opgave?","Hvad er konsekvensen af vores valg for skolen?"]},{f:"Har vi de rigtige rammer for samarbejdet med ledelsen?",b:["Er roller og ansvar tydelige?","Hvad er bestyrelsens mødekadence og fokus?","Hvad mangler vi at strukturere?"]},{f:"Er der sammenhæng mellem bestyrelsens fokus og skolens hverdag?",b:["Hvad viser årshjulet?","Hvad beslutter vi — og hvad delegerer vi?","Er strategien synlig i vores dagsorden?"]},{f:"Hvad holder bestyrelsen øje med over tid?",b:["Hvad er vores opfølgningsansvar?","Hvad er tegnene på, at strategien virker?","Hvornår justerer vi?"]}]
+};
+const RL={skoleleder:"Skoleleder",ledelsesteam:"Ledelsesteam",bestyrelse:"Bestyrelse"};
+
+/* STATE */
+let S={flId:null,rolle:null,trin:0,flipped:false,mode:'forberedelse',noteTav:'privat',dtab:'oversigt'};
+function loadDB(){try{return JSON.parse(localStorage.getItem('tk10v2')||'null')||{forloeb:[]}}catch{return{forloeb:[]}}}
+function saveDB(){localStorage.setItem('tk10v2',JSON.stringify(DB))}
+let DB=loadDB();
+function getFl(id){return DB.forloeb.find(f=>f.id===id)}
+function getTD(id,r,t){const fl=getFl(id);if(!fl)return null;if(!fl.data)fl.data={};if(!fl.data[r])fl.data[r]={};if(!fl.data[r][t])fl.data[r][t]={noter:{privat:'',team:'',bestyrelse:''},beslutninger:[],handlinger:[],moeder:[],auditLog:[],status:'ikke-startet'};const d=fl.data[r][t];if(!d.moeder)d.moeder=[];if(!d.auditLog)d.auditLog=[];return d}
+
+/* SCREENS */
+function showScreen(name){
+  const prev=document.querySelector('.screen.active');
+  if(prev){prev.classList.add('exit');setTimeout(()=>prev.classList.remove('active','exit'),220)}
+  const next=document.getElementById('s-'+name);
+  if(!next)return;
+  requestAnimationFrame(()=>next.classList.add('active'));
+}
+function goForloeb(){renderFlList();showScreen('forloeb')}
+
+/* FORLOEB */
+function calcProg(fl){let d=0;for(let i=0;i<6;i++){let a=false;['skoleleder','ledelsesteam','bestyrelse'].forEach(r=>{if(fl.data?.[r]?.[i]?.status==='afsluttet')a=true});if(a)d++}return d}
+function renderFlList(){
+  const w=document.getElementById('fl-list');let h='';
+  if(!DB.forloeb.length)h+='<div class="empty"><div class="empty-ico">📋</div><p>Du har ingen forløb endnu.<br>Opret dit første forløb herunder.</p></div>';
+  DB.forloeb.forEach(fl=>{const p=calcProg(fl),pct=Math.round(p/6*100);h+=`<div class="fl-card" onclick="openFl('${fl.id}')"><div class="fl-icon">📋</div><div class="fl-body"><div class="fl-name">${esc(fl.navn)}</div><div class="fl-meta">Oprettet ${fmt(fl.oprettet)} · ${p}/6 trin afsluttet</div><div class="fl-prog"><div class="fl-prog-bar"><div class="fl-prog-fill" style="width:${pct}%"></div></div><span class="fl-prog-pct">${pct}%</span></div></div><div class="fl-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M9 18l6-6-6-6"/></svg></div></div>`});
+  h+=`<button class="btn-new" onclick="openOv('fl')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>Opret nyt forløb</button>`;
+  w.innerHTML=h;
+}
+function openFl(id){S.flId=id;const fl=getFl(id);document.getElementById('rolle-fl-name').textContent=fl.navn;showScreen('rolle')}
+function createFl(){
+  const n=document.getElementById('fl-navn').value.trim();if(!n){showToast('Giv forløbet et navn');return}
+  DB.forloeb.unshift({id:'fl_'+Date.now(),navn:n,maal:document.getElementById('fl-maal').value.trim(),oprettet:new Date().toISOString(),data:{}});
+  saveDB();document.getElementById('fl-navn').value='';document.getElementById('fl-maal').value='';
+  closeOv('fl');renderFlList();showToast('Forløb oprettet ✓')
+}
+
+/* ROLLE */
+function selectRolle(r){S.rolle=r;document.body.className='role-'+r;renderDash();showScreen('dash')}
+
+/* DASHBOARD */
+function renderDash(){
+  const fl=getFl(S.flId),r=S.rolle;
+  document.getElementById('dash-ctx').textContent=RL[r]+' · '+fl.navn;
+  document.getElementById('dash-title').textContent='Tirsdag kl. 10-modellen®';
+  document.getElementById('dash-sub2').textContent='Strategisk procesforløb';
+  let tBsl=0,oHdl=0,done=0;
+  for(let i=0;i<6;i++){const d=getTD(S.flId,r,i);tBsl+=d.beslutninger.length;oHdl+=d.handlinger.filter(h=>h.status!=='udfoert').length;if(d.status==='afsluttet')done++}
+  document.getElementById('dash-stats').innerHTML=`<div class="stat-box"><div class="stat-ico">✅</div><div class="stat-num">${done}</div><div class="stat-lbl">Trin afsluttet</div></div><div class="stat-box"><div class="stat-ico">📋</div><div class="stat-num">${tBsl}</div><div class="stat-lbl">Beslutninger</div></div><div class="stat-box"><div class="stat-ico">⚡</div><div class="stat-num">${oHdl}</div><div class="stat-lbl">Åbne handlinger</div></div>`;
+  let nt=null;for(let i=0;i<6;i++){if(getTD(S.flId,r,i).status!=='afsluttet'){nt=i;break}}
+  document.getElementById('dash-next').innerHTML=nt!==null?`<div class="next-step" onclick="openTrin(${nt})"><div class="ns-ico">🎯</div><div class="ns-txt"><div class="ns-lbl">Anbefalet næste skridt</div><div class="ns-act">Trin ${nt+1} — ${TN[nt]}: ${TS[nt]}</div></div><div class="ns-arr"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M9 18l6-6-6-6"/></svg></div></div>`:`<div class="next-step"><div class="ns-ico">🎉</div><div class="ns-txt"><div class="ns-lbl">Status</div><div class="ns-act">Alle trin afsluttet — klar til næste forløb</div></div></div>`;
+  dashTab('oversigt')
+}
+function dashTab(tab){
+  S.dtab=tab;
+  ['oversigt','beslutninger','handlinger','export'].forEach(t=>{const e=document.getElementById('nav-'+t);if(e)e.classList.toggle('active',t===tab)});
+  const sc=document.getElementById('dash-scroll');
+  if(tab==='oversigt'){
+    sc.innerHTML=`<div class="journey-sec"><div class="sec-hdr"><span class="sec-hdr-lbl">Procesforløb — 6 trin</span></div><div class="jgrid" id="jgrid"></div></div><div style="height:16px"></div>`;
+    renderGrid()
+  }else if(tab==='beslutninger')renderBslOv(sc);
+  else if(tab==='handlinger')renderHdlOv(sc);
+}
+function renderGrid(){
+  const r=S.rolle;let h='';
+  for(let i=0;i<6;i++){const d=getTD(S.flId,r,i),st=d.status,bc=d.beslutninger.length,hc=d.handlinger.filter(h=>h.status!=='udfoert').length;
+    const cls=st==='afsluttet'?'done':st==='i-gang'?'active2':'';
+    h+=`<div class="jtile ${cls}" onclick="openTrin(${i})"><div class="jt-num"><div class="jt-dot"></div>${st==='afsluttet'?'Afsluttet':st==='i-gang'?'I gang':'Trin '+(i+1)}</div><div class="jt-name">${TN[i]}</div><div class="jt-q">${TS[i]}</div><div class="jt-counts"><span class="jt-cnt${bc>0?' has':''}">${bc} bsl.</span><span class="jt-cnt${hc>0?' has':''}">${hc} hdl.</span></div></div>`
+  }
+  const g=document.getElementById('jgrid');if(g)g.innerHTML=h
+}
+function renderBslOv(c){
+  const r=S.rolle;let h='<div class="pad">',any=false;
+  for(let i=0;i<6;i++){const d=getTD(S.flId,r,i);if(!d.beslutninger.length)continue;any=true;h+=`<div class="ov-grp"><div class="ov-lbl">Trin ${i+1} — ${TN[i]}</div>${d.beslutninger.map(b=>`<div class="bsl-ov"><div class="bsl-ov-t">${esc(b.tekst)}</div><div class="bsl-ov-m">${b.af?'<strong>'+esc(b.af)+'</strong> · ':''}${fmt(b.dato)}${b.opf?'<br>Opfølgning: '+esc(b.opf):''}</div></div>`).join('')}</div>`}
+  if(!any)h+='<div class="empty"><div class="empty-ico">📋</div><p>Ingen beslutninger endnu.<br>Gå til et trin og tilføj beslutninger.</p></div>';
+  c.innerHTML=h+'</div>'
+}
+function renderHdlOv(c){
+  const r=S.rolle;let h='<div class="pad">',any=false;
+  for(let i=0;i<6;i++){const d=getTD(S.flId,r,i),open=d.handlinger.filter(h=>h.status!=='udfoert');if(!open.length)continue;any=true;
+    h+=`<div class="ov-grp"><div class="ov-lbl">Trin ${i+1} — ${TN[i]}</div>${open.map(hh=>{const ov=hh.deadline&&new Date(hh.deadline)<new Date();return`<div class="hdl-ov"><div class="hck${hh.status==='udfoert'?' done':''}" onclick="toggleHdlOv(${i},${d.handlinger.indexOf(hh)})"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor"><path d="M2 6l3 3 5-5"/></svg></div><div class="hb"><div class="ht${hh.status==='udfoert'?' done':''}">${esc(hh.opgave)}</div><div class="hm">${hh.ansvar?'<strong>'+esc(hh.ansvar)+'</strong>':''}${hh.deadline?' · <span class="'+(ov?'overdue':'')+'">'+fmt(hh.deadline)+(ov?' ⚠':'')+'</span>':''}</div></div></div>`}).join('')}</div>`
+  }
+  if(!any)h+='<div class="empty"><div class="empty-ico">⚡</div><p>Ingen åbne handlinger.<br>Alle opgaver er udført.</p></div>';
+  c.innerHTML=h+'</div>'
+}
+function toggleHdlOv(t,i){const d=getTD(S.flId,S.rolle,t);if(!d.handlinger[i])return;d.handlinger[i].status=d.handlinger[i].status==='udfoert'?'i-gang':'udfoert';saveDB();dashTab(S.dtab)}
+
+/* TRIN */
+function openTrin(idx){S.trin=idx;S.flipped=false;S.mode='forberedelse';S.noteTav='privat';renderTrin();showScreen('trin')}
+function renderTrin(){
+  const r=S.rolle,i=S.trin,d=getTD(S.flId,r,i),fl=getFl(S.flId),k=KD[r][i];
+  document.getElementById('trin-ttl').textContent=`Trin ${i+1} — ${TN[i]}`;
+  document.getElementById('trin-sub').textContent=fl.navn;
+  const chip=document.getElementById('trin-chip');chip.textContent=RL[r];chip.className='role-chip '+r;
+  document.getElementById('ph-t').textContent=`${fl.navn} · Trin ${i+1} — ${TN[i]}`;
+  document.getElementById('ph-m').textContent=`${RL[r]} · Udskrevet ${fmt(new Date().toISOString())}`;
+  let dots='';for(let j=0;j<6;j++)dots+=`<div class="tdot${j===i?' active':j<i?' done':''}" onclick="openTrin(${j})"></div>`;
+  document.getElementById('trin-dots').innerHTML=dots;
+  let prevH='';
+  if(i>0){const pd=getTD(S.flId,r,i-1),pb=pd.beslutninger.slice(0,2);if(pb.length){prevH=`<div class="cp-prev-lbl">Beslutninger fra Trin ${i} — ${TN[i-1]}</div>`;pb.forEach(b=>prevH+=`<div class="cp-prev">${esc(b.tekst)}</div>`)}}
+  const guides=TGUIDE[S.mode][i];
+  const bslH=d.beslutninger.length?d.beslutninger.map((b,bi)=>`<div class="bsl-item"><button class="bsl-del" onclick="delBsl(${bi})"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg></button><div class="bsl-t">${esc(b.tekst)}</div><div class="bsl-m">${b.af?'<strong>'+esc(b.af)+'</strong> · ':''}${fmt(b.dato)}${b.opf?'<br>Opfølgning: '+esc(b.opf):''}</div></div>`).join(''):'<div class="empty"><div class="empty-ico">📋</div><p>Ingen beslutninger endnu</p></div>';
+  const hdlH=d.handlinger.length?d.handlinger.map((h,hi)=>{const ov=h.deadline&&new Date(h.deadline)<new Date()&&h.status!=='udfoert';return`<div class="hdl-item"><div class="hck2${h.status==='udfoert'?' done':''}" onclick="toggleHdl(${hi})"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor"><path d="M2 6l3 3 5-5"/></svg></div><div class="hb2"><div class="ht2${h.status==='udfoert'?' done':''}">${esc(h.opgave)}</div><div class="hm2">${h.ansvar?'<strong>'+esc(h.ansvar)+'</strong>':''}${h.deadline?' · <span class="'+(ov?'overdue':'')+'">'+fmt(h.deadline)+(ov?' ⚠':'')+'</span>':''}</div></div></div>`}).join(''):'<div class="empty"><div class="empty-ico">⚡</div><p>Ingen handlinger endnu</p></div>';
+  const stBtns=['ikke-startet','i-gang','afsluttet'].map(st=>{const a=d.status===st;return`<button class="st-btn${a?(st==='afsluttet'?' active-done':' active'):''}" onclick="setStatus('${st}')">${st==='ikke-startet'?'Ikke startet':st==='i-gang'?'I gang':'Afsluttet ✓'}</button>`}).join('');
+  document.getElementById('trin-content').innerHTML=`
+<div class="ctx-panel"><div class="cp-lbl">Om dette trin</div><div class="cp-txt">${TC[i]}</div>${prevH}</div>
+<div class="kort-wrap"><div class="kort-inner${S.flipped?' flipped':''}" id="kort-inner" onclick="flipKort()">
+  <div class="kort-face"><div class="kf-brow"><span class="kf-tag">Trin ${i+1} — ${TN[i]}</span><span class="kf-side">Forside</span></div><div class="kf-q">${k.f}</div><div class="kf-hint"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 12v-2a8 8 0 0114.93-4M20 12v2a8 8 0 01-14.93 4" stroke-linecap="round"/><path d="M16 6l2-2 2 2M6 20l-2-2-2 2" stroke-linecap="round"/></svg>Tryk for at se bagsiden</div></div>
+  <div class="kort-face kort-back"><div class="kb-brow"><span class="kf-tag">Trin ${i+1} — ${TN[i]}</span><span class="kb-lbl">Skærpende spørgsmål</span></div><ul class="kb-qs">${k.b.map(q=>`<li>${q}</li>`).join('')}</ul><button class="btn-flip-back" onclick="event.stopPropagation();flipKort()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 12v-2a8 8 0 0114.93-4M20 12v2a8 8 0 01-14.93 4" stroke-linecap="round"/></svg>Tilbage til forside</button>
+<button class="gpt-panel-btn" onclick="event.stopPropagation();openGptPanel()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/><path d="M8 10h8M8 14h5"/></svg>Reflektér med AI-refleksionspartner</button></div>
+</div></div>
+<div class="sec-t">Møde-mode</div>
+<div class="mode-strip">
+  <button class="mpill${S.mode==='forberedelse'?' active':''}" onclick="setMode('forberedelse')"><span class="mpi">📋</span>Forberedelse</button>
+  <button class="mpill${S.mode==='beslutning'?' active':''}" onclick="setMode('beslutning')"><span class="mpi">✅</span>Beslutning</button>
+  <button class="mpill${S.mode==='opfolgning'?' active':''}" onclick="setMode('opfolgning')"><span class="mpi">🔁</span>Opfølgning</button>
+</div>
+<div class="mode-box">
+  <div class="mb-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>${S.mode==='forberedelse'?'Forbered dig til mødet':S.mode==='beslutning'?'Strukturér beslutningerne':'Følg op på handlingerne'}</div>
+  <ul class="mb-pts">${guides.map(g=>`<li>${g}</li>`).join('')}</ul>
+  ${S.mode==='beslutning'?`<button class="mste-log-btn" onclick="openMsteOv()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>Log dette møde</button>`:''}
+</div>
+<div class="notes-sec">
+  <div class="sec-t">Noter</div>
+  <div class="note-tabs">
+    <button class="ntab${S.noteTav==='privat'?' active':''}" onclick="setNtav('privat')">🔒 Privat<small>kun mig</small></button>
+    <button class="ntab${S.noteTav==='team'?' active':''}" onclick="setNtav('team')">👥 Team</button>
+    <button class="ntab${S.noteTav==='bestyrelse'?' active':''}" onclick="setNtav('bestyrelse')">🏛 Bestyrelse</button>
+  </div>
+  <textarea id="note-fld" class="note-fld" placeholder="${S.noteTav==='privat'?'Mine refleksioner — kun mig...':S.noteTav==='team'?'Teamnoter — synlige for ledelsesteamet...':'Notat til bestyrelsesniveauet...'}">${d.noter[S.noteTav]||''}</textarea>
+  <div class="note-save-row"><button class="btn-save-n" onclick="saveNote()">Gem noter</button></div>
+  <div class="save-ind" id="save-ind">Gemt ✓</div>
+</div>
+<div class="divider"></div>
+<div class="sec-t">Beslutninger fra dette trin</div>
+<div id="bsl-list">${bslH}</div>
+<button class="btn-add" onclick="openOv('bsl')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>Tilføj beslutning</button>
+<div class="divider"></div>
+<div class="sec-t">Handlinger fra dette trin</div>
+<div id="hdl-list">${hdlH}</div>
+<button class="btn-add" onclick="openOv('hdl')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>Tilføj handling</button>
+${d.moeder&&d.moeder.length?`<div class="divider"></div>
+<div class="sec-t">Møder på dette trin (${d.moeder.length})</div>
+<div id="mste-list">${d.moeder.map((m,mi)=>`<div class="mste-item"><div class="mste-item-hdr"><div class="mste-item-t">📅 ${fmt(m.dato)} — ${m.type==='forberedelse'?'Forberedelsesmøde':m.type==='beslutning'?'Beslutningsøde':'Opfølgningsmøde'}</div><button class="mste-exp-btn" onclick="openMsteExp(${mi})">Se referat</button></div><div class="mste-item-m">${m.deltagere?'<strong>Deltagere:</strong> '+esc(m.deltagere)+'<br>':''}${m.bslCount||0} beslutninger · ${m.hdlCount||0} handlinger${m.opsummering?'<br><em>'+esc(m.opsummering)+'</em>':''}</div></div>`).join('')}</div>`:''}
+${d.auditLog&&d.auditLog.length?`<button class="audit-toggle" onclick="toggleAudit(this)">📜 Ændringslog (${d.auditLog.length} handlinger)</button><div class="audit-list" style="display:none">${d.auditLog.slice().reverse().map(e=>`<div class="audit-item ${e.type}"><div class="audit-dot"></div><div><strong>${e.tekst}</strong>${e.detaljer?' — '+esc(e.detaljer.substring(0,60)):''}<br><span style="opacity:.65">${fmt(e.dato)}</span></div></div>`).join('')}</div>`:''}
+<div class="divider"></div>
+<div class="sec-t">Status for Trin ${i+1}</div>
+<div class="status-row">${stBtns}</div>
+${i<5?`<button class="btn-next" onclick="goNext()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M9 18l6-6-6-6"/></svg>Gå til Trin ${i+2} — ${TN[i+1]}</button>`:''}
+<div class="bsp"></div>`;
+}
+function flipKort(){S.flipped=!S.flipped;const e=document.getElementById('kort-inner');if(e)e.classList.toggle('flipped',S.flipped)}
+function setMode(m){S.mode=m;const tc=document.getElementById('trin-content');const scrollY=tc.scrollTop;renderTrin();tc.scrollTop=scrollY}
+function setNtav(t){const f=document.getElementById('note-fld');if(f){const d=getTD(S.flId,S.rolle,S.trin);d.noter[S.noteTav]=f.value;saveDB()}S.noteTav=t;const d=getTD(S.flId,S.rolle,S.trin);if(document.getElementById('note-fld'))document.getElementById('note-fld').value=d.noter[t]||'';document.querySelectorAll('.ntab').forEach((b,j)=>b.classList.toggle('active',j===['privat','team','bestyrelse'].indexOf(t)))}
+function saveNote(){const f=document.getElementById('note-fld');if(!f)return;const d=getTD(S.flId,S.rolle,S.trin);d.noter[S.noteTav]=f.value;saveDB();const ind=document.getElementById('save-ind');if(ind){ind.classList.add('show');setTimeout(()=>ind.classList.remove('show'),1800)}}
+function setStatus(st){const d=getTD(S.flId,S.rolle,S.trin);d.status=st;saveDB();renderTrin();if(st==='afsluttet')showToast('Trin '+(S.trin+1)+' afsluttet ✓')}
+function goNext(){const d=getTD(S.flId,S.rolle,S.trin);if(d.status==='ikke-startet')d.status='i-gang';saveDB();openTrin(S.trin+1)}
+function delBsl(i){const d=getTD(S.flId,S.rolle,S.trin);const b=d.beslutninger[i];if(b)d.auditLog.push({dato:new Date().toISOString(),type:'del',tekst:'Beslutning slettet',detaljer:b.tekst});d.beslutninger.splice(i,1);saveDB();renderTrin()}
+function toggleHdl(i){const d=getTD(S.flId,S.rolle,S.trin);const ny=d.handlinger[i].status==='udfoert'?'i-gang':'udfoert';d.handlinger[i].status=ny;d.auditLog.push({dato:new Date().toISOString(),type:'hdl',tekst:'Handling markeret som '+(ny==='udfoert'?'udført':'i gang'),detaljer:d.handlinger[i].opgave});saveDB();const e=document.getElementById('hdl-list');if(e){const h=d.handlinger;e.innerHTML=h.length?h.map((hh,hi)=>{const ov=hh.deadline&&new Date(hh.deadline)<new Date()&&hh.status!=='udfoert';return`<div class="hdl-item"><div class="hck2${hh.status==='udfoert'?' done':''}" onclick="toggleHdl(${hi})"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor"><path d="M2 6l3 3 5-5"/></svg></div><div class="hb2"><div class="ht2${hh.status==='udfoert'?' done':''}">${esc(hh.opgave)}</div><div class="hm2">${hh.ansvar?'<strong>'+esc(hh.ansvar)+'</strong>':''}${hh.deadline?' · <span class="'+(ov?'overdue':'')+'">'+fmt(hh.deadline)+(ov?' ⚠':'')+'</span>':''}</div></div></div>`}).join(''):'<div class="empty"><div class="empty-ico">⚡</div><p>Ingen handlinger endnu</p></div>'}}
+
+/* OVERLAYS */
+function openOv(t){document.getElementById('ov-'+t).classList.add('show')}
+function closeOv(t){document.getElementById('ov-'+t).classList.remove('show')}
+function saveBsl(){const t=document.getElementById('bsl-t').value.trim();if(!t){showToast('Beskriv beslutningen');return}const d=getTD(S.flId,S.rolle,S.trin);const af=document.getElementById('bsl-af').value.trim();d.beslutninger.push({id:Date.now()+'',tekst:t,af:af,opf:document.getElementById('bsl-opf').value.trim(),dato:new Date().toISOString()});d.auditLog.push({dato:new Date().toISOString(),type:'bsl',tekst:'Beslutning tilføjet'+(af?' af '+af:''),detaljer:t});if(d.status==='ikke-startet')d.status='i-gang';saveDB();['bsl-t','bsl-af','bsl-opf'].forEach(id=>document.getElementById(id).value='');closeOv('bsl');renderTrin();showToast('Beslutning gemt ✓')}
+function saveHdl(){const o=document.getElementById('hdl-o').value.trim();if(!o){showToast('Beskriv opgaven');return}const d=getTD(S.flId,S.rolle,S.trin);const a=document.getElementById('hdl-a').value.trim();d.handlinger.push({id:Date.now()+'',opgave:o,ansvar:a,deadline:document.getElementById('hdl-d').value,status:'ikke-startet'});d.auditLog.push({dato:new Date().toISOString(),type:'hdl',tekst:'Handling tilføjet'+(a?' (ansvarlig: '+a+')':''),detaljer:o});if(d.status==='ikke-startet')d.status='i-gang';saveDB();['hdl-o','hdl-a'].forEach(id=>document.getElementById(id).value='');closeOv('hdl');renderTrin();showToast('Handling tilføjet ✓')}
+
+/* MØDE */
+function openMsteOv(){const d=new Date();const iso=d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');const f=document.getElementById('mste-dato');if(f)f.value=iso;openOv('mste')}
+function saveMste(){
+  const dato=document.getElementById('mste-dato').value;
+  if(!dato){showToast('Vælg en dato');return}
+  const d=getTD(S.flId,S.rolle,S.trin);
+  const deltagere=document.getElementById('mste-del').value.trim();
+  const type=document.getElementById('mste-type').value;
+  const ops=document.getElementById('mste-ops').value.trim();
+  const mste={id:Date.now()+'',dato,deltagere,type,opsummering:ops,bslCount:d.beslutninger.length,hdlCount:d.handlinger.filter(h=>h.status!=='udfoert').length,oprettet:new Date().toISOString()};
+  d.moeder.push(mste);
+  d.auditLog.push({dato:new Date().toISOString(),type:'bsl',tekst:'Møde logget'+(deltagere?' — '+deltagere:''),detaljer:ops||type});
+  saveDB();
+  ['mste-del','mste-ops'].forEach(id=>{const e=document.getElementById(id);if(e)e.value=''});
+  closeOv('mste');renderTrin();showToast('Møde gemt ✓');
+  setTimeout(()=>openMsteExp(d.moeder.length-1),400);
+}
+function openMsteExp(mi){
+  const d=getTD(S.flId,S.rolle,S.trin);
+  const m=d.moeder[mi];if(!m)return;
+  const fl=getFl(S.flId);
+  const typeLabel=m.type==='forberedelse'?'Forberedelsesmøde':m.type==='beslutning'?'Beslutningsøde':'Opfølgningsmøde';
+  document.getElementById('mste-exp-ttl').textContent=typeLabel+' — '+fmt(m.dato);
+  let h='';
+  h+=`<div class="exp-sec"><div class="exp-sec-lbl">Mødeoplysninger</div><div class="exp-content"><strong>Forløb:</strong> ${esc(fl.navn)}<br><strong>Trin:</strong> ${S.trin+1} — ${TN[S.trin]}<br><strong>Dato:</strong> ${fmt(m.dato)}<br>${m.deltagere?'<strong>Deltagere:</strong> '+esc(m.deltagere)+'<br>':''}</div></div>`;
+  if(m.opsummering)h+=`<div class="exp-sec"><div class="exp-sec-lbl">Opsummering</div><div class="exp-content">${esc(m.opsummering)}</div></div>`;
+  if(d.beslutninger.length){h+=`<div class="exp-sec"><div class="exp-sec-lbl">Beslutningslog (${d.beslutninger.length})</div>${d.beslutninger.map(b=>`<div class="exp-item"><div>${esc(b.tekst)}${b.af?' <span style="opacity:.7;font-size:11px">— '+esc(b.af)+'</span>':''}</div></div>`).join('')}</div>`}
+  const aabne=d.handlinger.filter(h=>h.status!=='udfoert');
+  if(aabne.length){h+=`<div class="exp-sec"><div class="exp-sec-lbl">Åbne handlinger (${aabne.length})</div>${aabne.map(hh=>`<div class="exp-item"><div>${esc(hh.opgave)}${hh.ansvar?' <span style="opacity:.7;font-size:11px">— '+esc(hh.ansvar)+'</span>':''}${hh.deadline?' · '+fmt(hh.deadline):''}</div></div>`).join('')}</div>`}
+  document.getElementById('mste-exp-body').innerHTML=h;
+  openOv('mste-exp');
+}
+
+/* GPT */
+function openGptPanel(){
+  const r=S.rolle,i=S.trin,k=KD[r][i];
+  const prompt=`Jeg arbejder med Tirsdag kl. 10-modellen® — Trin ${i+1}: ${TN[i]}
+
+Kernespørgsmål: "${k.f}"
+
+Skærpende spørgsmål:
+${k.b.map((q,j)=>`${j+1}. ${q}`).join('\n')}
+
+Kontekst: ${TC[i]}
+
+Min rolle: ${RL[r]}
+
+Hjælp mig at reflektere over dette trin. Stil mig uddybende spørgsmål, og hjælp mig finde klarhed.`;
+  document.getElementById('gpt-prompt-txt').textContent=prompt;
+  document.getElementById('gpt-copy-ind').classList.remove('show');
+  openOv('gpt');
+}
+function copyGptPrompt(){
+  const txt=document.getElementById('gpt-prompt-txt').textContent;
+  navigator.clipboard.writeText(txt).then(()=>{
+    const ind=document.getElementById('gpt-copy-ind');
+    ind.classList.add('show');setTimeout(()=>ind.classList.remove('show'),2000);
+  }).catch(()=>showToast('Kopiér teksten manuelt'));
+}
+function toggleAudit(btn){
+  const list=btn.nextElementSibling;
+  if(!list)return;
+  const hidden=list.style.display==='none';
+  list.style.display=hidden?'block':'none';
+  btn.textContent=hidden?btn.textContent.replace('Vis','Skjul'):btn.textContent.replace('Skjul','Vis');
+}
+
+/* HELPERS */
+function esc(s){return(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
+function fmt(d){if(!d)return'';try{return new Date(d).toLocaleDateString('da-DK',{day:'numeric',month:'short',year:'numeric'})}catch{return''}}
+function showToast(m){const t=document.getElementById('toast');t.textContent=m;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2200)}
+
+if('serviceWorker' in navigator)window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').catch(()=>{}));
+</script>
+</body>
+</html>
