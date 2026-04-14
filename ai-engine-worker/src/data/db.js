@@ -193,14 +193,63 @@ export async function getSharedKnowledge(db, { tema, trin, rolle, limit = 5 }) {
   return results || []
 }
 
+// Danske stopord der ikke bidrager til relevans
+const SEARCH_STOPORD = new Set([
+  'hvad', 'hvor', 'hvornaar', 'hvornår', 'hvorfor', 'hvordan', 'hvilken', 'hvilke',
+  'noget', 'nogen', 'alle', 'anden', 'andet', 'andre', 'denne', 'dette', 'disse',
+  'kunne', 'skulle', 'ville', 'kender', 'mener', 'synes', 'tror',
+  'også', 'ogsaa', 'meget', 'mere', 'mest', 'mindre', 'mindst',
+  'selv', 'sine', 'mine', 'vores', 'jeres', 'deres', 'dine', 'dette',
+  'efter', 'over', 'under', 'mellem', 'uden', 'foran', 'siden', 'inden'
+])
+
 export async function searchSharedKnowledge(db, searchTerms, limit = 5) {
-  // Simpel tekstsøgning i indhold og kontekst
-  const pattern = `%${searchTerms}%`
+  // Tokeniseret tekstsøgning — split i enkeltord og søg per ord
+  // Et chunk matcher hvis ANY af ordene findes i indhold eller kontekst
+  const words = (searchTerms || '')
+    .toLowerCase()
+    .split(/\s+/)
+    .map(w => w.replace(/[?.,!:;'"()]/g, ''))
+    .filter(w => w.length >= 4 && !SEARCH_STOPORD.has(w))
+    .slice(0, 8) // max 8 ord for at undgå overdrevne OR-klausuler
+
+  if (words.length === 0) {
+    // Fallback: brug hele strengen som tidligere
+    const pattern = `%${searchTerms}%`
+    const { results } = await db.prepare(
+      `SELECT tema, type, indhold, kontekst, kvalitet FROM shared_knowledge
+       WHERE indhold LIKE ? OR kontekst LIKE ?
+       ORDER BY kvalitet DESC LIMIT ?`
+    ).bind(pattern, pattern, limit).all()
+    return results || []
+  }
+
+  // Byg WHERE-klausuler og match-score: chunks der matcher FLERE ord rankes højere
+  const whereConditions = words.map(() => '(LOWER(indhold) LIKE ? OR LOWER(kontekst) LIKE ?)').join(' OR ')
+  const scoreExpression = words.map(() =>
+    '(CASE WHEN LOWER(indhold) LIKE ? OR LOWER(kontekst) LIKE ? THEN 1 ELSE 0 END)'
+  ).join(' + ')
+
+  const params = []
+  // Først score-parametrene (2 per ord)
+  for (const w of words) {
+    const p = `%${w}%`
+    params.push(p, p)
+  }
+  // Så WHERE-parametrene (2 per ord)
+  for (const w of words) {
+    const p = `%${w}%`
+    params.push(p, p)
+  }
+  params.push(limit)
+
   const { results } = await db.prepare(
-    `SELECT tema, type, indhold, kontekst, kvalitet FROM shared_knowledge
-     WHERE indhold LIKE ? OR kontekst LIKE ?
-     ORDER BY kvalitet DESC LIMIT ?`
-  ).bind(pattern, pattern, limit).all()
+    `SELECT tema, type, indhold, kontekst, kvalitet,
+            (${scoreExpression}) AS match_count
+     FROM shared_knowledge
+     WHERE ${whereConditions}
+     ORDER BY match_count DESC, kvalitet DESC LIMIT ?`
+  ).bind(...params).all()
   return results || []
 }
 
