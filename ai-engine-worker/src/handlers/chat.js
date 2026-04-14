@@ -8,11 +8,33 @@ import { buildSystemPrompt } from '../ai/prompt-builder.js'
 import { runAI } from '../ai/workers-ai.js'
 import { runExtractionPipeline } from '../ai/extraction.js'
 import { getFallbackResponse } from '../ai/fallback.js'
+import { THEME_TAXONOMY } from '../data/model.js'
 import {
   getSession, createSession, updateSessionMessageCount,
   getMessages, insertMessages,
-  getPriorInsights, getThemes, getKeywords
+  getPriorInsights, getThemes, getKeywords,
+  getSharedKnowledge, searchSharedKnowledge
 } from '../data/db.js'
+
+// ── Tema-extraction fra brugerens besked ──────────────────────
+function extractTema(message) {
+  if (!message) return null
+  const msg = message.toLowerCase()
+  let best = null
+  let bestScore = 0
+
+  for (const [theme, config] of Object.entries(THEME_TAXONOMY)) {
+    let score = 0
+    if (config.patterns.test(msg)) score += 0.5
+    const hits = config.related.filter(word => msg.includes(word))
+    score += hits.length * 0.15
+    if (score > bestScore) {
+      bestScore = score
+      best = theme
+    }
+  }
+  return bestScore >= 0.3 ? best : null
+}
 
 export async function handleChat(body, env, ctx) {
   const db = env.DB
@@ -35,7 +57,7 @@ export async function handleChat(body, env, ctx) {
       return { error: 'Session ikke fundet', status: 404 }
     }
   } else {
-    // Website-chatbot: auto-opret session
+    // Brug forloeb_id fra request body hvis tilgængeligt (delt på tværs af kort)
     session = await createSession({
       db,
       forloeb_id: body.forloeb_id || 'website-default',
@@ -50,24 +72,48 @@ export async function handleChat(body, env, ctx) {
   const trin = session.trin || body.trin
   const mode = session.mode || body.mode
   const src = source || session.source || 'website'
+  const forloebId = body.forloeb_id || session.forloeb_id
 
   // ── Hent samtalehistorik ────────────────────────────────────
   const history = await getMessages(db, session.id, 16)
 
   // ── Hent carry-forward fra tidligere trin ────────────────────
   let priorInsights = []
-  if (trin && session.forloeb_id && session.forloeb_id !== 'website-default') {
-    priorInsights = await getPriorInsights(db, session.forloeb_id, rolle || 'skoleleder', trin)
+  if (trin && forloebId && forloebId !== 'website-default') {
+    priorInsights = await getPriorInsights(db, forloebId, rolle || 'skoleleder', trin)
   }
 
   // ── Hent temaer ─────────────────────────────────────────────
   let themes = []
-  if (session.forloeb_id && session.forloeb_id !== 'website-default') {
-    themes = await getThemes(db, session.forloeb_id, 0.3, 8)
+  if (forloebId && forloebId !== 'website-default') {
+    themes = await getThemes(db, forloebId, 0.3, 8)
   }
 
   // ── Hent nøgleord ───────────────────────────────────────────
   const keywords = await getKeywords(db, session.id, 15)
+
+  // ── Hent delt viden (med tema-extraction) ───────────────────
+  let sharedKnowledge = []
+  try {
+    // Udtræk tema fra brugerens besked
+    const tema = extractTema(message)
+
+    // Hent viden relevant for aktuelt trin, rolle og tema
+    sharedKnowledge = await getSharedKnowledge(db, { tema, trin, rolle, limit: 5 })
+
+    // Supplér med tekstsøgning baseret på brugerens besked
+    if (sharedKnowledge.length < 3) {
+      const searchWords = message.split(/\s+/).filter(w => w.length > 3).slice(0, 6).join(' ')
+      const extra = await searchSharedKnowledge(db, searchWords, 3)
+      const existingIds = new Set(sharedKnowledge.map(k => k.indhold))
+      for (const e of extra) {
+        if (!existingIds.has(e.indhold)) sharedKnowledge.push(e)
+      }
+    }
+  } catch (e) {
+    // Shared knowledge er optional — fejl stopper ikke samtalen
+    console.error('Shared knowledge fejl:', e.message)
+  }
 
   // ── Byg system prompt ───────────────────────────────────────
   const systemPrompt = buildSystemPrompt({
@@ -77,7 +123,11 @@ export async function handleChat(body, env, ctx) {
     mode,
     priorInsights,
     themes,
-    keywords
+    keywords,
+    kort: body.kort || null,
+    kort_type: body.kort_type || null,
+    sharedKnowledge,
+    messageCount: history.length
   })
 
   // ── Kald Workers AI (med fallback) ──────────────────────────
@@ -112,14 +162,16 @@ export async function handleChat(body, env, ctx) {
   // Opdater message_count
   await updateSessionMessageCount(db, session.id, history.length + 2)
 
-  // ── Kør extraction pipeline (asynkron) ──────────────────────
-  if (session.forloeb_id !== 'website-default') {
-    ctx.waitUntil(
-      runExtractionPipeline(
-        env, db, session.id, session.forloeb_id,
+  // ── Kør extraction pipeline (SYNKRONT for carry-forward) ────
+  if (forloebId !== 'website-default') {
+    try {
+      await runExtractionPipeline(
+        env, db, session.id, forloebId,
         message, trin, rolle
-      ).catch(e => console.error('Extraction fejl:', e.message))
-    )
+      )
+    } catch (e) {
+      console.error('Extraction fejl:', e.message)
+    }
   }
 
   // ── Response ────────────────────────────────────────────────

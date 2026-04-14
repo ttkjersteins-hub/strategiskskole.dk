@@ -1,703 +1,643 @@
 <!DOCTYPE html>
 <html lang="da">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="theme-color" content="#1A2E4A">
-<title>Tirsdag kl. 10 — Strategiskskole.dk</title>
-<link rel="manifest" href="manifest.json">
-<link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,400;0,700;1,400&family=Open+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no"/>
+<meta name="theme-color" content="#1A3A5C"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+<meta name="description" content="Digitalt procesforløb med Tirsdag kl. 10-modellen® — strategisk refleksion for skoleledere, ledelsesteams og bestyrelser. Strategi, der kan mærkes i praksis."/>
+<title>Tirsdag kl. 10-modellen® — Digitalt procesforløb | Strategiskskole.dk</title>
+<link rel="canonical" href="https://strategiskskole.dk/app/"/>
+<meta property="og:type" content="website"/>
+<meta property="og:url" content="https://strategiskskole.dk/app/"/>
+<meta property="og:title" content="Tirsdag kl. 10-modellen® — Digitalt procesforløb"/>
+<meta property="og:description" content="Strategisk refleksion for skoleledere, ledelsesteams og bestyrelser. Kan vi se strategien i det, der sker tirsdag kl. 10?"/>
+<meta property="og:image" content="https://strategiskskole.dk/images/og-app.png"/>
+<meta property="og:image:width" content="1200"/>
+<meta property="og:image:height" content="630"/>
+<meta property="og:locale" content="da_DK"/>
+<meta property="og:site_name" content="Strategiskskole.dk"/>
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:title" content="Tirsdag kl. 10-modellen® — Digitalt procesforløb"/>
+<meta name="twitter:description" content="Strategisk refleksion for skoleledere, ledelsesteams og bestyrelser. Kan vi se strategien i det, der sker tirsdag kl. 10?"/>
+<meta name="twitter:image" content="https://strategiskskole.dk/images/og-app.png"/>
+<meta name="robots" content="index, follow"/>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' rx='14' fill='%231A3A5C'/><text x='32' y='44' text-anchor='middle' font-family='serif' font-size='36' font-weight='bold' fill='white'>S</text></svg>"/>
+<link rel="apple-touch-icon" sizes="192x192" href="https://strategiskskole.dk/app/icon-192.png"/>
+<link rel="manifest" href="/manifest.json"/>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700&family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet"/>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-:root{
-  --navy:#1A2E4A;--navy2:#243d61;--teal:#3A9DB0;--teal2:#1A7A6E;--teal-lt:#e6f4f7;
-  --gold:#C9982A;--gold-lt:#fdf3dc;--red:#e05c5c;--green:#3aa87a;
-  --light:#F4F7FA;--white:#fff;--muted:#4A5A6A;--border:#DDE3EA;
-  --r:14px;--r-sm:8px;--sh:0 2px 12px rgba(26,46,74,.10);--sh-lg:0 8px 32px rgba(26,46,74,.16);
-  --safe-b:env(safe-area-inset-bottom,0px);--safe-t:env(safe-area-inset-top,0px);
-  --sans:'Open Sans',system-ui,sans-serif;--serif:'Merriweather',Georgia,serif
+html,body,#root{height:100%;width:100%;-webkit-font-smoothing:antialiased}
+#root{overflow:auto}
+html{overscroll-behavior:none}
+body{font-family:'Open Sans',sans-serif;background:#f7f9fb;color:#333}
+.chat-scroll{-webkit-overflow-scrolling:touch;scroll-behavior:smooth}
+.tabs-scroll::-webkit-scrollbar{display:none}
+.tabs-scroll{-ms-overflow-style:none;scrollbar-width:none}
+input:focus{border-color:#2E6DA4!important;box-shadow:0 0 0 3px rgba(46,109,164,0.12)}
+button{transition:all 0.2s ease;-webkit-tap-highlight-color:transparent}
+button:active{transform:scale(0.97)}
+@supports(padding-top:env(safe-area-inset-top)){
+  .app-header{padding-top:calc(12px + env(safe-area-inset-top))}
+  .app-input{padding-bottom:calc(14px + env(safe-area-inset-bottom))}
 }
-html,body{height:100%;overflow:hidden}
-body{font-family:var(--sans);background:var(--light);color:var(--muted);font-size:15px;line-height:1.5;-webkit-font-smoothing:antialiased}
-button{font-family:var(--sans)}
-.screen{position:fixed;inset:0;display:flex;flex-direction:column;overflow:hidden;opacity:0;pointer-events:none;transform:translateX(40px);transition:opacity .28s,transform .28s cubic-bezier(.4,0,.2,1);background:var(--light);will-change:transform,opacity}
-.screen.active{opacity:1;pointer-events:all;transform:translateX(0)}
-.screen.exit{opacity:0;transform:translateX(-40px);transition-duration:.2s}
-.topbar{display:flex;align-items:center;gap:12px;padding:calc(var(--safe-t)+14px) 16px 14px;background:var(--navy);color:white;flex-shrink:0;z-index:10;min-height:60px}
-.topbar-title{flex:1}.topbar-title h1{font-family:var(--serif);font-size:17px;font-weight:700;line-height:1.2}
-.topbar-title .sub{font-size:11px;opacity:.6;margin-top:1px}
-.btn-back{background:rgba(255,255,255,.12);border:none;color:white;cursor:pointer;width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;transition:background .15s;flex-shrink:0}
-.btn-back:active{background:rgba(255,255,255,.22)}.btn-back svg{width:20px;height:20px}
-.role-chip{font-size:10px;font-weight:700;letter-spacing:.6px;text-transform:uppercase;padding:4px 10px;border-radius:20px}
-.role-chip.skoleleder{background:var(--teal);color:white}
-.role-chip.ledelsesteam{background:rgba(255,255,255,.18);color:white;border:1px solid rgba(255,255,255,.3)}
-.role-chip.bestyrelse{background:var(--gold);color:white}
-.btn-icon-top{background:rgba(255,255,255,.12);border:none;color:white;cursor:pointer;width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
-.btn-icon-top svg{width:18px;height:18px}
-.scroll{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch}
-.pad{padding:20px 16px}
-.bottomnav{display:flex;background:white;border-top:1px solid var(--border);padding-bottom:var(--safe-b);flex-shrink:0;z-index:10}
-.nav-btn{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;padding:10px 4px;background:none;border:none;cursor:pointer;color:var(--border);font-size:9px;font-weight:600;letter-spacing:.4px;text-transform:uppercase;transition:color .15s}
-.nav-btn svg{width:22px;height:22px;stroke:currentColor}.nav-btn.active{color:var(--teal)}
+.drawer-overlay{animation:fadeIn 0.2s ease}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+.bubble-enter{animation:slideUp 0.25s ease}
+@keyframes slideUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+.thinking-dots span{animation:blink 1.4s infinite both}
+.thinking-dots span:nth-child(2){animation-delay:0.2s}
+.thinking-dots span:nth-child(3){animation-delay:0.4s}
+@keyframes blink{0%,80%,100%{opacity:0.25}40%{opacity:1}}
 
-/* WELCOME */
-#s-welcome{background:linear-gradient(160deg,var(--navy) 0%,#0e1e32 100%);justify-content:center;align-items:center;transform:none;opacity:1;pointer-events:all}
-.wlc-wrap{padding:40px 28px;text-align:center;max-width:380px}
-.wlc-icon{width:88px;height:88px;border-radius:26px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);display:flex;align-items:center;justify-content:center;margin:0 auto 32px;backdrop-filter:blur(8px)}
-.wlc-icon svg{width:48px;height:48px}
-.wlc-title{font-family:var(--serif);font-size:32px;color:white;font-weight:700;line-height:1.2;margin-bottom:8px}
-.wlc-sub{font-size:15px;color:rgba(255,255,255,.55);margin-bottom:12px}
-.wlc-quote{font-family:var(--serif);font-size:14px;font-style:italic;color:rgba(255,255,255,.45);margin-bottom:48px;line-height:1.6}
-.btn-cta{display:inline-flex;align-items:center;gap:10px;background:var(--teal);color:white;border:none;border-radius:50px;padding:16px 36px;font-size:16px;font-weight:600;cursor:pointer;box-shadow:0 4px 24px rgba(58,157,176,.35);transition:transform .15s}
-.btn-cta:active{transform:scale(.96)}
-.wlc-brand{position:absolute;bottom:calc(var(--safe-b)+20px);left:0;right:0;text-align:center;font-size:11px;color:rgba(255,255,255,.25);letter-spacing:.5px}
-
-/* FORLOEB */
-.fl-header{background:var(--navy);padding:calc(var(--safe-t)+20px) 20px 24px;flex-shrink:0}
-.fl-header h2{font-family:var(--serif);font-size:20px;color:white;margin-bottom:4px}
-.fl-header p{font-size:13px;color:rgba(255,255,255,.55)}
-.fl-card{background:white;border-radius:var(--r);padding:18px;display:flex;align-items:center;gap:14px;box-shadow:var(--sh);cursor:pointer;transition:transform .15s;border-left:4px solid var(--teal);margin-bottom:10px}
-.fl-card:active{transform:scale(.98)}
-.fl-icon{width:44px;height:44px;border-radius:12px;background:var(--teal-lt);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:20px}
-.fl-body{flex:1;min-width:0}
-.fl-name{font-weight:700;color:var(--navy);font-size:15px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.fl-meta{font-size:12px;color:var(--muted);margin-top:2px}
-.fl-prog{display:flex;align-items:center;gap:6px;margin-top:6px}
-.fl-prog-bar{flex:1;height:3px;background:var(--border);border-radius:2px;overflow:hidden}
-.fl-prog-fill{height:100%;background:var(--teal);border-radius:2px}
-.fl-prog-pct{font-size:10px;font-weight:700;color:var(--teal)}
-.fl-arrow svg{width:18px;height:18px;stroke:var(--border)}
-.btn-new{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;padding:16px;background:none;border:2px dashed var(--border);border-radius:var(--r);cursor:pointer;color:var(--muted);font-size:14px;font-weight:600;transition:border-color .15s,color .15s;margin-top:4px}
-.btn-new:hover{border-color:var(--teal);color:var(--teal2)}.btn-new svg{width:18px;height:18px}
-
-/* ROLLE */
-.rolle-card{background:white;border-radius:var(--r);padding:22px 20px;cursor:pointer;display:flex;align-items:center;gap:16px;box-shadow:var(--sh);transition:transform .15s,border-color .15s;border:2px solid transparent;margin-bottom:12px}
-.rolle-card:active{transform:scale(.97)}.rolle-card.sl:hover{border-color:var(--teal)}.rolle-card.lt:hover{border-color:var(--navy)}.rolle-card.bst:hover{border-color:var(--gold)}
-.re{font-size:28px;width:52px;height:52px;border-radius:14px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
-.rolle-card.sl .re{background:var(--teal-lt)}.rolle-card.lt .re{background:#e8eef5}.rolle-card.bst .re{background:var(--gold-lt)}
-.ri{flex:1}.ri .rn{font-size:17px;font-weight:700;color:var(--navy)}.ri .rd{font-size:12px;color:var(--muted);margin-top:3px;line-height:1.4}
-.ra svg{width:18px;height:18px;stroke:var(--border)}
-
-/* DASHBOARD */
-.dash-hero{padding:calc(var(--safe-t)+16px) 18px 22px;flex-shrink:0}
-.dash-hero-top{display:flex;align-items:flex-start;gap:10px;margin-bottom:16px}
-.dht{flex:1}.dash-ctx{font-size:11px;color:rgba(255,255,255,.5);letter-spacing:.8px;text-transform:uppercase;margin-bottom:4px}
-.dash-title{font-family:var(--serif);font-size:19px;color:white;font-weight:700;line-height:1.2}
-.dash-sub2{font-size:12px;color:rgba(255,255,255,.5);margin-top:3px}
-.dash-stats{display:flex;gap:8px}
-.stat-box{flex:1;background:rgba(255,255,255,.1);border-radius:10px;padding:10px;border:1px solid rgba(255,255,255,.12)}
-.stat-num{font-size:22px;font-weight:700;color:white;line-height:1}.stat-lbl{font-size:10px;color:rgba(255,255,255,.5);margin-top:3px}.stat-ico{font-size:16px;margin-bottom:4px}
-.next-step{background:rgba(58,157,176,.18);border:1px solid rgba(58,157,176,.3);border-radius:10px;padding:12px 14px;display:flex;align-items:center;gap:10px;cursor:pointer;margin-top:12px}
-.ns-ico{font-size:18px;flex-shrink:0}.ns-txt{flex:1}.ns-lbl{font-size:10px;color:rgba(255,255,255,.5);letter-spacing:.6px;text-transform:uppercase}
-.ns-act{font-size:13px;font-weight:600;color:white;margin-top:1px}
-.ns-arr svg{width:16px;height:16px;stroke:rgba(255,255,255,.5)}
-.journey-sec{padding:20px 16px 8px}
-.sec-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
-.sec-hdr-lbl{font-size:11px;font-weight:700;color:var(--muted);letter-spacing:1px;text-transform:uppercase}
-.jgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.jtile{background:white;border-radius:var(--r);padding:16px 14px;cursor:pointer;box-shadow:var(--sh);transition:transform .15s;border-top:3px solid var(--border)}
-.jtile:active{transform:scale(.97)}.jtile.done{border-top-color:var(--green)}.jtile.active2{border-top-color:var(--teal);box-shadow:0 4px 20px rgba(58,157,176,.18)}
-.jt-num{font-size:10px;font-weight:700;color:var(--muted);letter-spacing:.5px;margin-bottom:8px;display:flex;align-items:center;gap:6px}
-.jt-dot{width:8px;height:8px;border-radius:50%;background:var(--border);flex-shrink:0}
-.jtile.done .jt-dot{background:var(--green)}.jtile.active2 .jt-dot{background:var(--teal)}
-.jt-name{font-size:15px;font-weight:700;color:var(--navy);margin-bottom:4px}.jtile.active2 .jt-name{color:var(--teal2)}
-.jt-q{font-size:11px;color:var(--muted);line-height:1.4;font-style:italic}
-.jt-counts{display:flex;gap:6px;margin-top:10px;flex-wrap:wrap}
-.jt-cnt{font-size:10px;font-weight:600;color:var(--muted);background:var(--light);padding:3px 7px;border-radius:20px}
-.jt-cnt.has{background:var(--teal-lt);color:var(--teal2)}
-
-/* OVERSIGT BESLUTNINGER / HANDLINGER */
-.ov-grp{margin-bottom:16px}
-.ov-lbl{font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--muted);margin-bottom:8px;display:flex;align-items:center;gap:8px}
-.ov-lbl::after{content:'';flex:1;height:1px;background:var(--border)}
-.bsl-ov{background:white;border-radius:var(--r-sm);padding:14px 16px;border-left:3px solid var(--teal);box-shadow:var(--sh);margin-bottom:8px}
-.bsl-ov-t{font-size:14px;font-weight:600;color:var(--navy);margin-bottom:4px}
-.bsl-ov-m{font-size:11px;color:var(--muted);line-height:1.5}
-.hdl-ov{background:white;border-radius:var(--r-sm);padding:12px 14px;display:flex;align-items:flex-start;gap:12px;box-shadow:var(--sh);margin-bottom:8px}
-.hck{width:24px;height:24px;border-radius:50%;border:2px solid var(--border);display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;transition:all .15s;background:white}
-.hck.done{background:var(--green);border-color:var(--green)}.hck svg{display:none;width:12px;height:12px;stroke:white;stroke-width:3}.hck.done svg{display:block}
-.hb{flex:1}.ht{font-size:14px;font-weight:600;color:var(--navy)}.ht.done{text-decoration:line-through;color:var(--muted)}.hm{font-size:11px;color:var(--muted);margin-top:3px}
-.overdue{color:var(--red);font-weight:600}
-
-/* TRIN */
-.trin-nav-strip{background:var(--navy);padding:8px 14px 12px;display:flex;gap:6px;flex-shrink:0}
-.tdot{flex:1;height:4px;border-radius:2px;background:rgba(255,255,255,.18);cursor:pointer;transition:background .2s}
-.tdot.active{background:var(--teal)}.tdot.done{background:rgba(255,255,255,.45)}
-.kort-wrap{perspective:1000px;margin:0 0 18px}
-.kort-inner{position:relative;transform-style:preserve-3d;transition:transform .55s cubic-bezier(.4,0,.2,1)}
-.kort-inner.flipped{transform:rotateY(180deg)}
-.kort-face{width:100%;background:white;border-radius:var(--r);box-shadow:var(--sh-lg);padding:28px 22px;backface-visibility:hidden;-webkit-backface-visibility:hidden}
-.kort-back{position:absolute;top:0;left:0;right:0;transform:rotateY(180deg)}
-.kf-brow{display:flex;align-items:center;gap:8px;margin-bottom:18px}
-.kf-tag{font-size:10px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;padding:4px 10px;border-radius:20px;background:var(--teal-lt);color:var(--teal2)}
-.kf-side{font-size:10px;color:var(--muted);opacity:.7}
-.kf-q{font-family:var(--serif);font-size:24px;font-weight:700;color:var(--navy);line-height:1.35;margin-bottom:24px}
-.kf-hint{display:flex;align-items:center;gap:6px;font-size:11px;color:var(--muted);opacity:.5}
-.kf-hint svg{width:14px;height:14px}
-.kb-brow{display:flex;align-items:center;gap:8px;margin-bottom:16px}
-.kb-lbl{font-size:10px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;color:var(--navy);opacity:.6}
-.kb-qs{list-style:none;margin-bottom:20px}
-.kb-qs li{padding:11px 0;border-bottom:1px solid var(--light);font-size:14px;color:var(--muted);display:flex;gap:10px;line-height:1.45}
-.kb-qs li:last-child{border-bottom:none}
-.kb-qs li::before{content:'→';color:var(--teal);font-weight:700;flex-shrink:0;margin-top:1px}
-.btn-flip-back{width:100%;padding:12px;background:var(--light);border:none;border-radius:var(--r-sm);cursor:pointer;color:var(--muted);font-size:13px;font-weight:600;display:flex;align-items:center;justify-content:center;gap:8px;transition:background .15s}
-.btn-flip-back:hover{background:var(--border)}.btn-flip-back svg{width:15px;height:15px}
-.ctx-panel{background:white;border-radius:var(--r);padding:16px 18px;margin-bottom:16px;box-shadow:var(--sh);border-left:4px solid var(--navy)}
-.cp-lbl{font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--muted);margin-bottom:6px}
-.cp-txt{font-size:13px;color:var(--navy);line-height:1.55}
-.cp-prev-lbl{font-size:10px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;color:var(--muted);margin:12px 0 8px}
-.cp-prev{background:var(--light);border-radius:var(--r-sm);padding:10px 12px;font-size:12px;color:var(--muted);margin-bottom:6px;border-left:2px solid var(--teal)}
-.mode-strip{display:flex;gap:6px;margin-bottom:18px}
-.mpill{flex:1;padding:10px 6px;border:2px solid var(--border);border-radius:10px;cursor:pointer;font-size:11px;font-weight:600;color:var(--muted);background:white;text-align:center;transition:all .15s}
-.mpill .mpi{font-size:16px;display:block;margin-bottom:3px}
-.mpill.active{border-color:var(--teal);color:var(--teal2);background:var(--teal-lt)}
-.mode-box{background:white;border-radius:var(--r);padding:18px;box-shadow:var(--sh);margin-bottom:16px}
-.mb-title{font-size:13px;font-weight:700;color:var(--navy);margin-bottom:10px;display:flex;align-items:center;gap:8px}
-.mb-title svg{width:16px;height:16px;stroke:var(--teal)}
-.mb-pts{list-style:none;margin-bottom:0}
-.mb-pts li{font-size:13px;color:var(--muted);padding:6px 0;display:flex;gap:8px;border-bottom:1px solid var(--light);line-height:1.4}
-.mb-pts li:last-child{border-bottom:none}.mb-pts li::before{content:'•';color:var(--teal);font-weight:700;flex-shrink:0}
-.notes-sec{margin-bottom:16px}
-.sec-t{font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--muted);margin-bottom:10px}
-.note-tabs{display:flex;gap:4px;background:var(--light);border-radius:10px;padding:4px;margin-bottom:10px}
-.ntab{flex:1;padding:8px 4px;border:none;border-radius:7px;cursor:pointer;font-size:11px;font-weight:600;color:var(--muted);background:none;font-family:var(--sans);transition:all .15s;text-align:center}
-.ntab.active{background:white;color:var(--navy);box-shadow:0 1px 4px rgba(0,0,0,.08)}
-.ntab small{font-size:9px;display:block;opacity:.6;margin-top:1px}
-.note-fld{width:100%;min-height:100px;border:1px solid var(--border);border-radius:var(--r-sm);padding:12px;resize:none;font-family:var(--sans);font-size:14px;color:var(--navy);background:white;line-height:1.6;transition:border-color .15s}
-.note-fld:focus{outline:none;border-color:var(--teal)}
-.note-hint{font-size:11px;color:var(--muted);opacity:.6;margin-top:6px}
-.note-save-row{display:flex;justify-content:flex-end;margin-top:6px}
-.btn-save-n{background:var(--teal);color:white;border:none;border-radius:8px;padding:8px 16px;font-size:12px;font-weight:600;cursor:pointer}
-.save-ind{font-size:11px;color:var(--green);margin-top:4px;opacity:0;transition:opacity .3s}.save-ind.show{opacity:1}
-.bsl-item{background:white;border-radius:var(--r-sm);padding:14px 16px;border-left:3px solid var(--teal);box-shadow:var(--sh);position:relative;margin-bottom:8px}
-.bsl-t{font-size:14px;font-weight:600;color:var(--navy);margin-bottom:4px}.bsl-m{font-size:11px;color:var(--muted);line-height:1.5}
-.bsl-del{position:absolute;top:10px;right:10px;background:none;border:none;cursor:pointer;color:var(--border);padding:4px}
-.bsl-del:hover{color:var(--red)}.bsl-del svg{width:14px;height:14px}
-.hdl-item{background:white;border-radius:var(--r-sm);padding:12px 14px;display:flex;align-items:flex-start;gap:12px;box-shadow:var(--sh);margin-bottom:8px}
-.hck2{width:22px;height:22px;border-radius:50%;border:2px solid var(--border);display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;transition:all .15s;background:white;margin-top:1px}
-.hck2.done{background:var(--green);border-color:var(--green)}.hck2 svg{display:none;width:11px;height:11px;stroke:white;stroke-width:3}.hck2.done svg{display:block}
-.hb2{flex:1}.ht2{font-size:13px;font-weight:600;color:var(--navy)}.ht2.done{text-decoration:line-through;color:var(--muted)}.hm2{font-size:11px;color:var(--muted);margin-top:2px}
-.btn-add{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:12px;background:none;border:1.5px dashed var(--border);border-radius:var(--r-sm);cursor:pointer;color:var(--muted);font-size:13px;font-weight:600;transition:border-color .15s,color .15s}
-.btn-add:hover{border-color:var(--teal);color:var(--teal2)}.btn-add svg{width:15px;height:15px}
-.status-row{display:flex;gap:6px;flex-wrap:wrap}
-.st-btn{flex:1;padding:10px 6px;border:2px solid var(--border);border-radius:10px;background:white;color:var(--muted);font-size:11px;font-weight:600;cursor:pointer;min-width:80px;text-align:center;transition:all .15s}
-.st-btn.active{border-color:var(--teal);color:var(--teal2);background:var(--teal-lt)}
-.st-btn.active-done{border-color:var(--green);color:var(--green);background:#e6f5ef}
-.divider{height:1px;background:var(--border);margin:18px 0}
-.bsp{height:24px}
-.btn-next{width:100%;margin-top:14px;padding:13px;background:var(--teal);color:white;border:none;border-radius:50px;font-size:14px;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;box-shadow:0 3px 16px rgba(58,157,176,.3)}
-.btn-next svg{width:16px;height:16px}
-
-/* MODALS */
-.overlay{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:100;display:flex;align-items:flex-end;opacity:0;pointer-events:none;transition:opacity .25s}
-.overlay.show{opacity:1;pointer-events:all}
-.sheet{background:white;border-radius:24px 24px 0 0;padding:20px 20px calc(20px + var(--safe-b));width:100%;max-height:85vh;overflow-y:auto;transform:translateY(100%);transition:transform .3s cubic-bezier(.4,0,.2,1)}
-.overlay.show .sheet{transform:translateY(0)}
-.sh-handle{width:36px;height:4px;background:var(--border);border-radius:2px;margin:0 auto 18px}
-.sh-title{font-size:17px;font-weight:700;color:var(--navy);margin-bottom:18px}
-.fg{margin-bottom:14px}.fl{font-size:11px;font-weight:700;color:var(--muted);letter-spacing:.5px;text-transform:uppercase;margin-bottom:5px;display:block}
-.fi,.fta{width:100%;padding:12px;border:1px solid var(--border);border-radius:var(--r-sm);font-size:14px;font-family:var(--sans);color:var(--navy);background:var(--light);transition:border-color .15s}
-.fi:focus,.fta:focus{outline:none;border-color:var(--teal);background:white}.fta{min-height:80px;resize:none}
-.sh-acts{display:flex;gap:8px;margin-top:4px}
-.btn-sc{flex:1;padding:14px;border:1px solid var(--border);border-radius:12px;background:white;color:var(--muted);font-size:15px;font-weight:600;cursor:pointer}
-.btn-ss{flex:2;padding:14px;border:none;border-radius:12px;background:var(--teal);color:white;font-size:15px;font-weight:600;cursor:pointer;box-shadow:0 3px 12px rgba(58,157,176,.3)}
-
-/* EMPTY */
-.empty{text-align:center;padding:28px 16px;color:var(--muted)}.empty-ico{font-size:36px;margin-bottom:10px;opacity:.5}.empty p{font-size:13px;line-height:1.5}
-
-/* TOAST */
-.toast{position:fixed;bottom:calc(72px + var(--safe-b) + 6px);left:50%;transform:translateX(-50%) translateY(12px);background:var(--navy);color:white;font-size:13px;font-weight:500;padding:10px 20px;border-radius:50px;opacity:0;transition:all .25s;pointer-events:none;white-space:nowrap;z-index:300}
-.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
-
-/* PRINT */
-@media print{
-  .screen:not(.active),.bottomnav,.trin-nav-strip,.btn-back,.btn-icon-top,.btn-add,.mode-strip,.note-save-row,.status-row,.btn-flip-back,.kf-hint,.bsp,.btn-next,.bsl-del{display:none!important}
-  .screen.active{position:static!important;overflow:visible!important;opacity:1!important;transform:none!important}
-  .scroll{overflow:visible!important}
-  body{overflow:auto!important;background:white}
-  .print-hdr{display:block!important;padding:0 0 16px;margin-bottom:20px;border-bottom:2px solid var(--navy)}
-  .ph-t{font-family:var(--serif);font-size:22px;font-weight:700;color:var(--navy)}
-  .ph-m{font-size:12px;color:var(--muted);margin-top:4px}
-  .kort-wrap,.bsl-item,.hdl-item{page-break-inside:avoid}
-  .mode-box{box-shadow:none!important;border:1px solid var(--border)}
-  .ctx-panel{box-shadow:none!important}
+/* ── Desktop split-view ─────────────────────── */
+@media(min-width:769px){
+  .split-main{display:grid!important;grid-template-columns:1fr 380px;gap:0;height:100%;overflow:hidden}
+  .split-chat{display:flex;flex-direction:column;min-height:0;overflow:hidden;border-right:1px solid #e2e8f0}
+  .split-kort{display:flex!important;flex-direction:column;overflow-y:auto;background:var(--kort-bg,#fff);border-left:1px solid #e2e8f0}
+  .mobile-kort-btn{display:none!important}
+  .drawer-overlay,.kort-drawer{display:none!important}
 }
-.print-hdr{display:none}
-
-/* AUDIT LOG */
-.audit-toggle{background:none;border:none;font-size:11px;color:var(--muted);cursor:pointer;padding:4px 0;text-decoration:underline;text-underline-offset:2px;display:block;margin-top:6px;opacity:.7}
-.audit-list{margin-top:6px;padding:8px 12px;background:var(--light);border-radius:var(--r-sm);border:1px solid var(--border)}
-.audit-item{display:flex;gap:8px;padding:5px 0;border-bottom:1px solid var(--border);font-size:11px;color:var(--muted);line-height:1.4}
-.audit-item:last-child{border-bottom:none}
-.audit-dot{width:6px;height:6px;border-radius:50%;background:var(--border);flex-shrink:0;margin-top:4px}
-.audit-item.bsl .audit-dot{background:var(--teal)}
-.audit-item.hdl .audit-dot{background:var(--green)}
-.audit-item.del .audit-dot{background:var(--red)}
-
-/* MØDE */
-.mste-log-btn{width:100%;padding:10px 14px;background:var(--teal-lt);border:1.5px dashed rgba(58,157,176,.4);border-radius:var(--r-sm);cursor:pointer;color:var(--teal2);font-size:12px;font-weight:600;display:flex;align-items:center;justify-content:center;gap:8px;margin-top:10px;transition:all .15s}
-.mste-log-btn:hover{background:var(--teal);color:white;border-style:solid}
-.mste-log-btn svg{width:14px;height:14px;stroke:currentColor}
-.mste-item{background:white;border-radius:var(--r-sm);padding:12px 14px;box-shadow:var(--sh);margin-bottom:8px;border-left:3px solid var(--teal)}
-.mste-item-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:4px;gap:8px}
-.mste-item-t{font-size:13px;font-weight:700;color:var(--navy);flex:1}
-.mste-item-m{font-size:11px;color:var(--muted);line-height:1.55}
-.mste-exp-btn{background:var(--teal-lt);color:var(--teal2);border:none;border-radius:6px;padding:5px 10px;font-size:11px;font-weight:600;cursor:pointer;flex-shrink:0}
-
-/* MØDE EKSPORT */
-.exp-sec{background:var(--light);border-radius:var(--r-sm);padding:12px 14px;margin-bottom:10px;border:1px solid var(--border)}
-.exp-sec-lbl{font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--muted);margin-bottom:8px}
-.exp-content{font-size:13px;color:var(--navy);line-height:1.6}
-.exp-item{padding:5px 0;border-bottom:1px solid var(--border);font-size:13px;color:var(--muted);display:flex;gap:8px;align-items:flex-start}
-.exp-item:last-child{border-bottom:none}
-.exp-item::before{content:'→';color:var(--teal);flex-shrink:0;font-weight:700}
-
-/* GPT PANEL */
-.gpt-panel-btn{width:100%;margin-top:10px;padding:12px;background:linear-gradient(135deg,#10a37f,#0d8a6a);color:white;border:none;border-radius:var(--r-sm);cursor:pointer;font-size:13px;font-weight:600;display:flex;align-items:center;justify-content:center;gap:8px;box-shadow:0 3px 10px rgba(16,163,127,.2);transition:opacity .15s}
-.gpt-panel-btn:active{opacity:.82}
-.gpt-panel-btn svg{width:15px;height:15px;stroke:currentColor}
-.gpt-prompt-box{background:var(--light);border-radius:var(--r-sm);padding:12px;font-size:12px;color:var(--navy);line-height:1.65;border:1px solid var(--border);margin-bottom:12px;white-space:pre-wrap;max-height:200px;overflow-y:auto}
-.gpt-copy-row{display:flex;gap:8px;margin-bottom:8px}
-.gpt-copy-btn{flex:1;padding:10px;background:white;border:1.5px solid var(--border);border-radius:var(--r-sm);cursor:pointer;font-size:12px;font-weight:600;color:var(--muted);transition:border-color .15s}
-.gpt-copy-btn:hover{border-color:var(--teal);color:var(--teal2)}
-.gpt-open-btn{flex:1;padding:10px;background:linear-gradient(135deg,#10a37f,#0d8a6a);color:white;border:none;border-radius:var(--r-sm);cursor:pointer;font-size:12px;font-weight:600}
-
-/* role color overrides */
-body.role-bestyrelse .dash-hero{background:linear-gradient(135deg,#7a5a12 0%,var(--gold) 100%)}
-body.role-bestyrelse .tdot.active{background:var(--gold)}
-body.role-bestyrelse .kf-tag{background:var(--gold-lt);color:#7a5a12}
-body.role-bestyrelse .bsl-item{border-left-color:var(--gold)}
-body.role-bestyrelse .btn-next{background:var(--gold);box-shadow:0 3px 16px rgba(201,152,42,.3)}
-body.role-ledelsesteam .dash-hero{background:linear-gradient(135deg,var(--navy) 0%,var(--navy2) 100%)}
-body.role-ledelsesteam .tdot.active{background:white}
-body.role-ledelsesteam .btn-next{background:var(--navy2)}
+@media(max-width:768px){
+  .split-kort{display:none!important}
+  .split-chat{display:flex;flex-direction:column;min-height:0;overflow:hidden}
+}
 </style>
 </head>
 <body>
+<div id="root"></div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.3.1/umd/react.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.3.1/umd/react-dom.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.26.4/babel.min.js"></script>
+<script type="text/babel" data-type="module">
+const {useState,useRef,useEffect}=React;
 
-<!-- WELCOME -->
-<div id="s-welcome" class="screen active">
-  <div class="wlc-wrap">
-    <div class="wlc-icon">
-      <svg width="48" height="48" viewBox="0 0 48 48" fill="none" stroke="rgba(255,255,255,.8)" stroke-width="2.2">
-        <circle cx="24" cy="24" r="19"/><path d="M24 13v11l7 4" stroke-linecap="round"/><circle cx="24" cy="24" r="2" fill="white" stroke="none"/>
-      </svg>
-    </div>
-    <div class="wlc-title">Tirsdag kl. 10</div>
-    <div class="wlc-sub">Strategisk procesapp til skoleledelse</div>
-    <div class="wlc-quote">"Kan vi se strategien i det, der sker tirsdag kl. 10?"</div>
-    <button class="btn-cta" onclick="goForloeb()">
-      Gå til dine forløb
-      <svg width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M4 10h12M10 4l6 6-6 6"/></svg>
-    </button>
-  </div>
-  <div class="wlc-brand">Strategiskskole.dk</div>
-</div>
+const C={navy:"#1A3A5C",blue:"#2E6DA4",light:"#D5E8F0",gold:"#C8A84B",gray:"#5A5A5A",bg:"#f7f9fb",warm:"#f4ede4"};
+const API_URL="https://strategi-chat.strategiskskole.workers.dev/api/chat";
 
-<!-- FORLØB -->
-<div id="s-forloeb" class="screen">
-  <div class="fl-header"><h2>Dine forløb</h2><p>Vælg et aktivt forløb eller opret nyt</p></div>
-  <div class="scroll pad" id="fl-list"></div>
-</div>
+const STEPS=[
+  {id:"aabning",nr:0,type:"aabning",navn:"Åbning",label:"Åbning",farve:C.blue,sp:"Hvad bringer du med ind i rummet?",kont:"Inden vi begynder — hvad fylder, og hvad håber du at få ud af dette?"},
+  {id:"t1-model",nr:1,type:"model",navn:"Spejling",label:"1. Spejling",farve:C.blue,sp:"Hvad er det vi egentlig står i?",kont:"Se virkeligheden klart — ikke som vi ønsker den."},
+  {id:"t1-human",nr:1,type:"human",navn:"Usikkerhed",label:"Usikkerhed",farve:C.gold,sp:"Hvad bærer du med dig — som du ikke siger højt?",kont:"Det menneskelige rum — her er plads til det der fylder."},
+  {id:"t2-model",nr:2,type:"model",navn:"Klarhed",label:"2. Klarhed",farve:C.blue,sp:"Hvad er problemet bag problemet?",kont:"Find den egentlige diagnose bag symptomerne."},
+  {id:"t2-human",nr:2,type:"human",navn:"Sårbarhed",label:"Sårbarhed",farve:C.gold,sp:"Hvad koster det at se klart?",kont:"Det menneskelige rum — ærlighed kræver sårbarhed."},
+  {id:"t3-model",nr:3,type:"model",navn:"Valg",label:"3. Valg",farve:C.blue,sp:"Hvad vælger vi — og hvad vælger vi fra?",kont:"At sige ja er kun meningsfuldt, hvis vi også siger nej."},
+  {id:"t3-human",nr:3,type:"human",navn:"Mod",label:"Mod",farve:C.gold,sp:"Hvad koster det at vælge — og hvad koster det ikke at gøre det?",kont:"Det menneskelige rum — modige valg kræver noget af os."},
+  {id:"t4-model",nr:4,type:"model",navn:"Struktur",label:"4. Struktur",farve:C.blue,sp:"Hvordan organiserer vi os?",kont:"Design de rammer der gør strategien mulig."},
+  {id:"t4-human",nr:4,type:"human",navn:"Tillid",label:"Tillid",farve:C.gold,sp:"Hvad bygger vi rammerne på — kontrol eller tillid?",kont:"Det menneskelige rum — rammer fortæller noget om relationer."},
+  {id:"t5-model",nr:5,type:"model",navn:"Kernen",label:"5. Kernen",farve:C.blue,sp:"Kan vi se det i praksis tirsdag kl. 10?",kont:"Prøven: kan strategien mærkes i hverdagen?"},
+  {id:"t5-human",nr:5,type:"human",navn:"Ærlighed",label:"Ærlighed",farve:C.gold,sp:"Hvad ser vi — som vi ikke taler om?",kont:"Det menneskelige rum — sandheden kræver mod."},
+  {id:"t6-model",nr:6,type:"model",navn:"Forankring",label:"6. Forankring",farve:C.blue,sp:"Hvordan holder vi det levende?",kont:"Strategier dør ikke af modstand — de dør af glemsel."},
+  {id:"t6-human",nr:6,type:"human",navn:"Udholdenhed",label:"Udholdenhed",farve:C.gold,sp:"Hvad kræver det at holde fast — når hverdagen vender tilbage?",kont:"Det menneskelige rum — forandring kræver udholdenhed."},
+  {id:"afslutning",nr:7,type:"afslutning",navn:"Afslutning",label:"Afslutning",farve:C.navy,sp:"Hvad tager vi med herfra — og hvad gør vi i morgen?",kont:"Vi samler op: erkendelser, beslutninger og konkrete næste skridt."},
+];
 
-<!-- ROLLEVALG -->
-<div id="s-rolle" class="screen">
-  <div class="topbar">
-    <button class="btn-back" onclick="showScreen('forloeb')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M19 12H5M12 5l-7 7 7 7"/></svg></button>
-    <div class="topbar-title"><h1>Vælg rolle</h1><div class="sub" id="rolle-fl-name"></div></div>
-  </div>
-  <div class="scroll pad">
-    <button class="rolle-card sl" onclick="selectRolle('skoleleder')">
-      <div class="re">🏫</div><div class="ri"><div class="rn">Skoleleder</div><div class="rd">Personlig strategisk refleksion og beslutningsrum</div></div>
-      <div class="ra"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M9 18l6-6-6-6"/></svg></div>
-    </button>
-    <button class="rolle-card lt" onclick="selectRolle('ledelsesteam')">
-      <div class="re">👥</div><div class="ri"><div class="rn">Ledelsesteam</div><div class="rd">Fælles beslutningslog og struktureret opfølgning</div></div>
-      <div class="ra"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M9 18l6-6-6-6"/></svg></div>
-    </button>
-    <button class="rolle-card bst" onclick="selectRolle('bestyrelse')">
-      <div class="re">🏛️</div><div class="ri"><div class="rn">Bestyrelse</div><div class="rd">Strategisk tilsyn, årshjul og governance</div></div>
-      <div class="ra"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M9 18l6-6-6-6"/></svg></div>
-    </button>
-  </div>
-</div>
+const ROLLER=[
+  {key:"skoleleder",label:"Skoleleder",icon:"🏫",desc:"Arbejd med din personlige ledelsesopgave"},
+  {key:"ledelsesteam",label:"Ledelsesteam",icon:"👥",desc:"Styrk jeres fælles retning og klarhed"},
+  {key:"bestyrelse",label:"Bestyrelse",icon:"🏛️",desc:"Skærp bestyrelsens strategiske rolle"},
+];
 
-<!-- DASHBOARD -->
-<div id="s-dash" class="screen">
-  <div class="dash-hero" id="dash-hero">
-    <div class="dash-hero-top">
-      <div class="dht"><div class="dash-ctx" id="dash-ctx"></div><div class="dash-title" id="dash-title"></div><div class="dash-sub2" id="dash-sub2"></div></div>
-      <button class="btn-icon-top" onclick="showScreen('rolle')" title="Skift rolle">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
-      </button>
-    </div>
-    <div class="dash-stats" id="dash-stats"></div>
-    <div id="dash-next"></div>
-  </div>
-  <div class="scroll" id="dash-scroll">
-    <div class="journey-sec">
-      <div class="sec-hdr"><span class="sec-hdr-lbl">Procesforløb — 6 trin</span></div>
-      <div class="jgrid" id="jgrid"></div>
-    </div>
-    <div style="height:16px"></div>
-  </div>
-  <div class="bottomnav">
-    <button class="nav-btn active" id="nav-oversigt" onclick="dashTab('oversigt')">
-      <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
-      Oversigt
-    </button>
-    <button class="nav-btn" id="nav-beslutninger" onclick="dashTab('beslutninger')">
-      <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
-      Beslutninger
-    </button>
-    <button class="nav-btn" id="nav-handlinger" onclick="dashTab('handlinger')">
-      <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><path d="M4 6h16M4 10h16M4 14h8"/><circle cx="17" cy="17" r="3"/><path d="M21 21l-1.5-1.5"/></svg>
-      Handlinger
-    </button>
-    <button class="nav-btn" id="nav-export" onclick="window.print()">
-      <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><path d="M6 9V2h12v7"/><path d="M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"/><path d="M6 14h12v8H6z"/></svg>
-      Eksport
-    </button>
-  </div>
-</div>
+const AABNING={forside:"Før vi begynder — hvad bringer I med ind i rummet?",aabning:["Hvad fylder hos jer lige nu?","Hvad håber I at gå herfra med?","Hvad er den vigtigste ting, I har brug for at blive klogere på i dag?"],ramme:["Vi arbejder med virkelige situationer — ikke cases","Der er ingen rigtige svar — men der er skarpere spørgsmål","Vi arbejder os gennem modellens trin — ét ad gangen","Hvert trin har et output, der fører videre til det næste"],erkendelse:"Et fælles afsæt: hvad er vi her for, og hvad vil vi arbejde med?"};
 
-<!-- TRIN -->
-<div id="s-trin" class="screen">
-  <div class="print-hdr" id="print-hdr"><div class="ph-t" id="ph-t"></div><div class="ph-m" id="ph-m"></div></div>
-  <div class="topbar">
-    <button class="btn-back" onclick="showScreen('dash')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M19 12H5M12 5l-7 7 7 7"/></svg></button>
-    <div class="topbar-title"><h1 id="trin-ttl"></h1><div class="sub" id="trin-sub"></div></div>
-    <span class="role-chip" id="trin-chip"></span>
-  </div>
-  <div class="trin-nav-strip" id="trin-dots"></div>
-  <div class="scroll pad" id="trin-content"></div>
-</div>
+const AFSLUTNING={forside:"Hvad tager vi med herfra — og hvad gør vi i morgen?",aabning:["Hvad er den vigtigste erkendelse fra i dag?","Hvad har vi besluttet — og hvem gør hvad?","Hvad var overraskende — eller svært?","Hvad har vi brug for at vende tilbage til?"],ramme:["Hvert trin har givet et konkret output","Handlingerne starter i morgen — ikke 'snart'","Vi mødes igen tirsdag kl. 10 — med status på det vi aftalte"],erkendelse:"Vi ved, hvad vi gør — og vi ved, hvem der gør hvad."};
 
-<!-- OVERLAYS -->
-<div id="ov-fl" class="overlay" onclick="closeOv('fl')">
-  <div class="sheet" onclick="event.stopPropagation()">
-    <div class="sh-handle"></div><div class="sh-title">Opret nyt forløb</div>
-    <div class="fg"><label class="fl">Forløbets navn</label><input id="fl-navn" type="text" class="fi" placeholder="f.eks. Strategiproces 2025-26"></div>
-    <div class="fg"><label class="fl">Mål for forløbet (valgfrit)</label><textarea id="fl-maal" class="fta" placeholder="Hvad ønsker vi at opnå med dette forløb?"></textarea></div>
-    <div class="sh-acts"><button class="btn-sc" onclick="closeOv('fl')">Annullér</button><button class="btn-ss" onclick="createFl()">Opret forløb</button></div>
-  </div>
-</div>
-
-<div id="ov-bsl" class="overlay" onclick="closeOv('bsl')">
-  <div class="sheet" onclick="event.stopPropagation()">
-    <div class="sh-handle"></div><div class="sh-title">Tilføj beslutning</div>
-    <div class="fg"><label class="fl">Beslutning</label><textarea id="bsl-t" class="fta" placeholder="Hvad besluttede vi?"></textarea></div>
-    <div class="fg"><label class="fl">Besluttet af</label><input id="bsl-af" type="text" class="fi" placeholder="Navne eller roller..."></div>
-    <div class="fg"><label class="fl">Opfølgning (valgfrit)</label><input id="bsl-opf" type="text" class="fi" placeholder="Hvad sker der videre?"></div>
-    <div class="sh-acts"><button class="btn-sc" onclick="closeOv('bsl')">Annullér</button><button class="btn-ss" onclick="saveBsl()">Gem beslutning</button></div>
-  </div>
-</div>
-
-<div id="ov-hdl" class="overlay" onclick="closeOv('hdl')">
-  <div class="sheet" onclick="event.stopPropagation()">
-    <div class="sh-handle"></div><div class="sh-title">Tilføj handling</div>
-    <div class="fg"><label class="fl">Opgave</label><textarea id="hdl-o" class="fta" placeholder="Hvad skal gøres?"></textarea></div>
-    <div class="fg"><label class="fl">Ansvarlig</label><input id="hdl-a" type="text" class="fi" placeholder="Hvem er ansvarlig?"></div>
-    <div class="fg"><label class="fl">Deadline</label><input id="hdl-d" type="date" class="fi"></div>
-    <div class="sh-acts"><button class="btn-sc" onclick="closeOv('hdl')">Annullér</button><button class="btn-ss" onclick="saveHdl()">Gem handling</button></div>
-  </div>
-</div>
-
-<!-- MØDE LOG OVERLAY -->
-<div id="ov-mste" class="overlay" onclick="closeOv('mste')">
-  <div class="sheet" onclick="event.stopPropagation()">
-    <div class="sh-handle"></div><div class="sh-title">Log møde</div>
-    <div class="fg"><label class="fl">Dato</label><input id="mste-dato" type="date" class="fi"></div>
-    <div class="fg"><label class="fl">Deltagere</label><input id="mste-del" type="text" class="fi" placeholder="f.eks. Skoleleder, viceinspektør, teamledere"></div>
-    <div class="fg"><label class="fl">Møde-type</label><select id="mste-type" class="fi"><option value="forberedelse">Forberedelsesmøde</option><option value="beslutning" selected>Beslutningsøde</option><option value="opfolgning">Opfølgningsmøde</option></select></div>
-    <div class="fg"><label class="fl">Opsummering (valgfrit)</label><textarea id="mste-ops" class="fta" placeholder="Hvad var det vigtigste fra mødet?"></textarea></div>
-    <div class="sh-acts"><button class="btn-sc" onclick="closeOv('mste')">Annullér</button><button class="btn-ss" onclick="saveMste()">Gem møde</button></div>
-  </div>
-</div>
-
-<!-- MØDE EKSPORT OVERLAY -->
-<div id="ov-mste-exp" class="overlay" onclick="closeOv('mste-exp')">
-  <div class="sheet" onclick="event.stopPropagation()">
-    <div class="sh-handle"></div>
-    <div class="sh-title" id="mste-exp-ttl">Mødereferat</div>
-    <div id="mste-exp-body"></div>
-    <div class="sh-acts"><button class="btn-sc" onclick="closeOv('mste-exp')">Luk</button><button class="btn-ss" onclick="window.print()">Udskriv referat</button></div>
-  </div>
-</div>
-
-<!-- GPT PANEL OVERLAY -->
-<div id="ov-gpt" class="overlay" onclick="closeOv('gpt')">
-  <div class="sheet" onclick="event.stopPropagation()">
-    <div class="sh-handle"></div>
-    <div class="sh-title">AI-refleksionspartner</div>
-    <p style="font-size:13px;color:var(--muted);line-height:1.6;margin-bottom:14px">Kopiér denne prompt og indsæt den i Strategiskskoles GPT — din faglige sparringspartner til Tirsdag kl. 10-modellen.</p>
-    <div class="gpt-prompt-box" id="gpt-prompt-txt"></div>
-    <div class="gpt-copy-row">
-      <button class="gpt-copy-btn" onclick="copyGptPrompt()">📋 Kopiér prompt</button>
-      <button class="gpt-open-btn" onclick="window.open('https://chatgpt.com/g/g-69cea435188c8191b62f4b463a691da5','_blank')">🤖 Åbn GPT</button>
-    </div>
-    <div class="save-ind" id="gpt-copy-ind" style="text-align:center">Kopieret til udklipsholder ✓</div>
-  </div>
-</div>
-
-<div class="toast" id="toast"></div>
-
-<script>
-/* DATA */
-const TN=["Spejling","Klarhed","Valg","Struktur","Kernen","Forankring"];
-const TS=["Hvad er det vi egentlig står i?","Hvad er problemet bag problemet?","Hvad vælger vi — og hvad vælger vi fra?","Hvordan organiserer vi os?","Kan vi se det i praksis tirsdag kl. 10?","Hvordan holder vi det levende?"];
-const TC=["Spejling handler om at se virkeligheden klart — ikke som vi ønsker den, men som den faktisk er. Ingen løsninger endnu. Kun observation og ærlighed.","Klarhed handler om at finde det egentlige problem bag de synlige symptomer. En forkert diagnose giver altid den forkerte løsning.","Valg handler om prioritering. At sige ja er kun meningsfuldt, hvis vi også siger nej til noget andet. Hvad vælger vi fra?","Struktur handler om at designe de rammer, der gør strategien mulig i hverdagen. Møder, ansvar, koordinering — alt er design.","Kernen er prøven. Kan strategien faktisk mærkes i det, der sker tirsdag kl. 10? Ikke i dokumenter — i praksis.","Forankring handler om at holde det levende. Strategier dør ikke af modstand — de dør af glemsel og hverdagspres."];
-const TGUIDE={
-  forberedelse:[["Hvad er det vigtigste at have overblik over inden mødet?","Hvilke observationer tager du med ind?","Hvad vil du gerne have svar på?"],["Hvad er de vigtigste spørgsmål du ønsker afklaret?","Hvad er du usikker på, som holdet bør drøfte?","Hvad har du brug for fra de andre?"],["Hvad er din holdning til det forestående valg?","Hvad er dine bekymringer?","Hvad er afgørende at have på bordet?"],["Hvad ved du om den nuværende struktur, der bør deles?","Hvad mangler struktur?","Hvad vil du foreslå?"],["Hvad ser du faktisk ske tirsdag kl. 10?","Hvad viser det om strategien?","Hvad vil du fremhæve?"],["Hvad er dine forankringspunkter?","Hvornår tjekker du selv op?","Hvad frygter du kan gå i glemmebogen?"]],
-  beslutning:[["Hvad er vi enige om at kalde den aktuelle situation?","Hvad er den fælles forståelse vi vil arbejde ud fra?","Hvem ejer opfølgningen?"],["Hvad er vi enige om er kerneproblemet?","Hvad beslutter vi at sætte fokus på — og hvad parkerer vi?","Hvem formulerer problemudmeldingen?"],["Hvad vælger vi?","Hvad siger vi eksplicit fra til?","Hvem kommunikerer valget — og til hvem?"],["Hvem gør hvad?","Hvad er den nye struktur vi er enige om?","Hvad skal koordineres — og hvad kan løbe selv?"],["Er vi enige om, at strategien er synlig i hverdagen?","Hvad kræver øjeblikkelig justering?","Hvad er vores fælles billede af 'godt nok'?"],["Hvad er vores konkrete opfølgningsstruktur?","Hvornår mødes vi næste gang om dette?","Hvad er vores tegn på fremgang?"]],
-  opfolgning:[["Hvad har vi gjort siden sidst?","Hvad er ændret i det billede vi har?","Hvad er ikke ændret — og hvad siger det?"],["Er vi kommet tættere på klarhed?","Hvad er stadig uklart?","Hvad nyt har vi lært?"],["Holder vores valg?","Hvad viser konsekvenserne sig at være?","Skal vi justere?"],["Fungerer strukturen i praksis?","Hvad kræver justering?","Hvad kører godt?"],["Er strategien stadig synlig tirsdag kl. 10?","Hvad er forbedret?","Hvad er vi stadig utilfredse med?"],["Holder vi det levende?","Hvad er vores opfølgningsdisciplin?","Hvad fejrer vi?"]]
+const MK={
+skoleleder:[
+{forside:"Hvad er det, jeg faktisk står i som skoleleder?",aabning:["Hvad er det for en situation, jeg står i lige nu?","Hvad kalder tydeligt på min opmærksomhed?","Hvor mister jeg retning eller overblik?"],skaerpelse:["Hvad gør jeg i dag — som ikke skaber retning?","Hvornår bliver jeg uklar i min ledelse?","Hvad undgår jeg at tage fat på?"],perspektiv:["Hvad kalder situationen på af ledelse?","Hvad er min opgave — og hvad er ikke min?","Hvad gør jeg anderledes fra i morgen?"],erkendelse:"Et klart billede af situationen og skolelederens opgave."},
+{forside:"Hvad er det egentlige problem — ikke symptomet?",aabning:["Hvad holder mig faktisk tilbage?","Hvad forsøger jeg at løse — igen og igen?","Hvad binder problemerne sammen?"],skaerpelse:["Hvad er symptomet — og hvad er problemet bag?","Hvad ville klarhed gøre muligt?","Hvad undgår jeg at sige højt?"],perspektiv:["Hvad kræver det at finde egentlig klarhed?","Hvad kan ingen se tydeligere end jeg?","Hvad ville ændre sig, hvis jeg var klar?"],erkendelse:"En præcis formulering af det egentlige problem."},
+{forside:"Hvad er mit ledelsesmæssige valg?",aabning:["Hvad er de reelle muligheder?","Hvad trækker mig i forskellige retninger?","Hvad viger jeg uden om?"],skaerpelse:["Hvad siger jeg ja til — med min tid?","Hvad er jeg nødt til at sige nej til?","Hvad koster det ikke at vælge?"],perspektiv:["Hvad kræver valget af mig som leder?","Hvad er konsekvensen for teamet?","Hvad ville jeg fortryde?"],erkendelse:"Et tydeligt og ansvarligt ledelsesvalg."},
+{forside:"Har jeg designet de rigtige rammer?",aabning:["Hvad er den nuværende struktur til for?","Hvad fungerer — og hvad ikke?","Hvem er strukturen designet for?"],skaerpelse:["Hvilke møder skaber retning — og hvilke er vane?","Hvad er for meget — og hvad mangler?","Hvad ville jeg ændre fra scratch?"],perspektiv:["Hvad kalder strukturen på af ledelse?","Hvad skal designes — og hvad frigives?","Hvad ændrer jeg først?"],erkendelse:"En klar forståelse af, hvad der skal redesignes."},
+{forside:"Er strategien til stede tirsdag kl. 10?",aabning:["Hvad sker der faktisk i vores møder?","Hvad siger dagsordenen om prioriteringerne?","Hvad siger stemningen om kulturen?"],skaerpelse:["Hvad beslutter vi — og hvad udskydes?","Hvad er alle enige om at undgå?","Hvornår mærkes strategien?"],perspektiv:["Hvad kalder det på af ledelse?","Hvad er mit ansvar?","Hvad gør jeg anderledes næste tirsdag?"],erkendelse:"Et ærligt billede af, om strategien lever."},
+{forside:"Hvad gør jeg, for at det holder?",aabning:["Hvad er mit ansvar for at holde strategien levende?","Hvad gør jeg allerede — og hvad har jeg glemt?","Hvad er tegnet på, at det holder?"],skaerpelse:["Hvad dør stille — fordi ingen holder fast?","Hvornår tjekker jeg op — og hvornår ikke?","Hvad er der kun brug for, at jeg gør?"],perspektiv:["Hvad er min forankringsrolle?","Hvad er tegnet på, at strategien lever?","Hvad gør jeg konkret for at holde det levende?"],erkendelse:"Et forpligtende billede af min forankringsrolle."},
+],
+ledelsesteam:[
+{forside:"Hvad er det, vi faktisk står i sammen?",aabning:["Hvad er situationen, vi befinder os i fælles?","Hvornår håndterer vi situationer forskelligt?","Hvornår overlader vi noget uden aftale?"],skaerpelse:["Hvad gør vi, som ikke skaber klarhed?","Hvad undgår vi at tale om?","Hvornår er vi for enige — eller for utydelige?"],perspektiv:["Hvad kalder situationen på af fælles ledelse?","Hvad er vores fælles opgave?","Hvad gør vi anderledes fra næste uge?"],erkendelse:"Et klart billede af teamets fælles opgave."},
+{forside:"Hvad er det, vi ikke får talt om?",aabning:["Hvilke mønstre ser vi gentage sig?","Hvad ligger bag uroen hos medarbejderne?","Hvad ser vi, som vi ikke har delt?"],skaerpelse:["Hvornår nøjes vi med at håndtere?","Hvilken samtale har vi undgået?","Hvad ved vi — men har ikke gjort fælles?"],perspektiv:["Hvad er den fælles opgave, der viser sig?","Hvad kræver det at handle?","Hvad er den første fælles handling?"],erkendelse:"En fælles erkendelse af den egentlige opgave."},
+{forside:"Hvad prioriterer vi — og hvad holder vi op med?",aabning:["Hvad er vores fælles topprioritet?","Hvad ville vi stoppe, hvis vi turde?","Hvad gør vi, fordi det forventes?"],skaerpelse:["Hvornår lader vi alle køre deres eget?","Hvad sker der, når vi ikke er enige?","Hvad undgår vi at vælge fra?"],perspektiv:["Hvad ville medarbejderne mærke?","Hvad kræver det at stå sammen?","Hvad kommunikerer vi — og hvornår?"],erkendelse:"En fælles prioritering, der styrker det hele."},
+{forside:"Hvordan organiserer vi os for det valgte?",aabning:["Hvordan fordeler vi ansvaret?","Hvilke rutiner understøtter retningen?","Hvad skal ledelsesmøderne handle om?"],skaerpelse:["Hvornår arbejder vi i hinandens felter?","Hvilken rutine ville vi droppe?","Hvad sker der, når organiseringen ikke matcher?"],perspektiv:["Hvad ville medarbejderne mærke?","Hvilken aftale laver vi om roller?","Hvad ændrer I fælles først?"],erkendelse:"Klare roller og mønstre for opfølgning."},
+{forside:"Kan vi se vores fælles retning i hverdagen?",aabning:["Kan man se, at vi har en fælles retning?","Hvad ville vi opdage tirsdag kl. 10?","Hvad fortæller medarbejdernes spørgsmål?"],skaerpelse:["Hvornår er planen kun fælles i ledelsesmøderne?","Hvad gør vi forskelligt, som forvirrer?","Hvornår dækker vi over uklarhed?"],perspektiv:["Hvad ville medarbejderne mærke?","Hvad gør vi anderledes fra i morgen?","Hvor justerer vi først?"],erkendelse:"Strategi der lever i hverdagen."},
+{forside:"Hvordan sikrer vi, at beslutningerne lever?",aabning:["Hvad gør vi i næste uge for at følge op?","Hvordan holder vi hinanden fast?","Hvordan kommunikerer vi beslutningerne?"],skaerpelse:["Hvornår har vi besluttet noget, der døde stille?","Hvad sker der, når én falder tilbage?","Hvad er vores største risiko?"],perspektiv:["Hvad mærker medarbejderne om en måned?","Hvornår mødes vi næste gang?","Hvad aftaler vi konkret?"],erkendelse:"Konkrete aftaler og fælles ansvar."},
+],
+bestyrelse:[
+{forside:"Hvad er det, vi faktisk står i som bestyrelse?",aabning:["Hvad hører vi fra forældre og omverden?","Hvornår er vi usikre på vores rolle?","Hvad er vi i tvivl om ift. ledelsen?"],skaerpelse:["Hvad gør vi, som skaber uklarhed?","Hvad reagerer vi på i stedet for at sætte retning?","Hvornår er vi for detaljerede eller for passive?"],perspektiv:["Hvad kalder situationen på?","Hvad er vores opgave — og hvad er det ikke?","Hvad tager vi med herfra?"],erkendelse:"Et klart billede af bestyrelsens opgave."},
+{forside:"Hvad ser vi ikke — som vi burde se?",aabning:["Hvad fortæller tallene os egentlig?","Hvad ved vi for lidt om?","Hvad ville vi opdage bag referaterne?"],skaerpelse:["Hvornår accepterer vi for glatte svar?","Hvad spørger vi aldrig om?","Hvornår er vi for langt fra virkeligheden?"],perspektiv:["Hvad er bestyrelsens opgave her?","Hvad kræver det at spørge ind uden at overtage?","Hvad spørger vi ledelsen om?"],erkendelse:"En skarpere forståelse af skolens situation."},
+{forside:"Hvad beslutter vi — og hvad lader vi ligge?",aabning:["Hvad er det vigtigste, bestyrelsen kan beslutte?","Hvad beder vi ledelsen om, som modarbejder fokus?","Hvad ville vi sige nej til?"],skaerpelse:["Hvad hører til bestyrelsens bord?","Hvornår drøfter vi i stedet for at beslutte?","Hvad koster det, at vi ikke vælger?"],perspektiv:["Hvad ville ledelsen mærke?","Hvad kræver valget af os?","Hvad kommunikerer vi?"],erkendelse:"En tydelig bestyrelsesprioritering."},
+{forside:"Har vi en struktur der skaber værdi?",aabning:["Hvad er vores møder til for?","Hvad handler de om — og hvad burde de?","Hvad savner vi i organiseringen?"],skaerpelse:["Hvornår handler møderne om drift?","Hvad er for meget — og hvad for lidt?","Hvad ville vi ændre forfra?"],perspektiv:["Hvad ville ledelsen mærke?","Hvad ændrer vi i mødestrukturen?","Hvad er den vigtigste ændring?"],erkendelse:"En bestyrelsesstruktur der skaber værdi."},
+{forside:"Kan vi mærke bestyrelsens aftryk?",aabning:["Hvad ville vi se en tirsdag kl. 10?","Hvad ved medarbejderne om vores prioriteringer?","Hvornår satte bestyrelsen sidst aftryk?"],skaerpelse:["Hvad sker der mellem møderne?","Hvornår er vi kun en formalitet?","Hvad ville medarbejderne sige?"],perspektiv:["Hvad kan bestyrelsen gøre uden at overtage?","Hvad er tegnet på, at vi gør forskel?","Hvad gør vi fra næste møde?"],erkendelse:"Bestyrelsesarbejde der mærkes."},
+{forside:"Hvordan forankrer vi bestyrelsens arbejde?",aabning:["Hvad er vores opfølgningsstruktur?","Hvornår evaluerer vi os selv?","Hvad gør vi, når nye medlemmer kommer?"],skaerpelse:["Hvad dør stille, fordi ingen følger op?","Hvad gør vi med gode intentioner?","Hvornår bliver beslutninger til handling?"],perspektiv:["Hvad er tegnet på en velfungerende bestyrelse?","Hvad er vores vigtigste aftale?","Hvem holder os fast?"],erkendelse:"En forpligtende forankring af bestyrelsens rolle."},
+],
 };
-const KD={
-  skoleleder:[{f:"Hvad ser jeg som leder, som teamet ikke ser?",b:["Hvad sker der, når jeg kigger på min skole udefra?","Hvad undgår jeg at adressere?","Hvad er mit næste ledelsesmæssige skridt?"]},{f:"Hvad er den egentlige udfordring — ikke symptomet?",b:["Hvad er det mest forvirrende just nu?","Hvad ville klarhed gøre muligt?","Hvad holder mig fra at skabe klarhed?"]},{f:"Hvad er mit ledelsesmæssige valg?",b:["Hvad siger jeg ja til med min tid og opmærksomhed?","Hvad delegerer jeg?","Hvad er konsekvensen af mit valg for teamet?"]},{f:"Har jeg designet de rigtige rammer?",b:["Er mødestrukturen et spejl af strategien?","Hvad er der for meget af — og hvad mangler?","Hvad ville jeg ændre, hvis jeg begyndte fra scratch?"]},{f:"Er strategien til stede tirsdag kl. 10?",b:["Hvad siger dagsordenen om prioriteringen?","Hvad siger stemningen om kulturen?","Hvad siger beslutningerne om retningen?"]},{f:"Hvad gør jeg, for at det holder?",b:["Hvad er min forankringsrolle?","Hvornår tjekker jeg op?","Hvad er tegnet på, at strategien lever?"]}],
-  ledelsesteam:[{f:"Hvad ser vi samlet — og er vi enige om det?",b:["Har vi det samme billede af virkeligheden?","Hvad taler vi ikke om?","Hvad ville en udefrakommende se?"]},{f:"Er vi klare på problemet — eller arbejder vi med symptomer?",b:["Hvad er vi uenige om?","Hvad er det vi egentlig prøver at løse?","Hvad ville klarhed kræve af os?"]},{f:"Hvad beslutter vi — og hvem ved det?",b:["Er alle med på valget?","Hvad er vi uenige om — og kan vi leve med det?","Hvad følger af dette valg?"]},{f:"Hvem gør hvad hvornår — og tjekker vi op?",b:["Er der tydelige ansvarsområder?","Koordinerer vi det rigtige?","Hvad kører på autopilot — og er det OK?"]},{f:"Kan vi se strategien i vores møder?",b:["Hvad siger vores dagsorden om vores prioriteringer?","Hvad besluttes — hvad udskydes?","Er alle stemmer til stede?"]},{f:"Hvad holder vi hinanden på?",b:["Hvad er vores opfølgningsstruktur?","Hvad sker der, når det er svært?","Hvad fejrer vi?"]}],
-  bestyrelse:[{f:"Hvad ser bestyrelsen — og stiller vi de rigtige spørgsmål?",b:["Har vi et realistisk billede af skolen?","Hvad hører vi ikke om?","Hvad bør vi spørge mere til?"]},{f:"Er vi klare på, hvad vi skal tage stilling til?",b:["Hvad er vores rolle i denne udfordring?","Hvad er strategisk — og hvad er drift?","Hvad kræver bestyrelsens stillingtagen?"]},{f:"Hvad er bestyrelsens strategiske valg?",b:["Hvad siger vi ja til som bestyrelse?","Hvad er ikke vores opgave?","Hvad er konsekvensen af vores valg for skolen?"]},{f:"Har vi de rigtige rammer for samarbejdet med ledelsen?",b:["Er roller og ansvar tydelige?","Hvad er bestyrelsens mødekadence og fokus?","Hvad mangler vi at strukturere?"]},{f:"Er der sammenhæng mellem bestyrelsens fokus og skolens hverdag?",b:["Hvad viser årshjulet?","Hvad beslutter vi — og hvad delegerer vi?","Er strategien synlig i vores dagsorden?"]},{f:"Hvad holder bestyrelsen øje med over tid?",b:["Hvad er vores opfølgningsansvar?","Hvad er tegnene på, at strategien virker?","Hvornår justerer vi?"]}]
+
+const HK={
+skoleleder:[
+{label:"Usikkerhed",forside:"Hvad bærer du med dig — som du ikke siger højt?",aabning:["Hvor føler du dig alene med ansvaret?","Hvad er du usikker på — men lader som om du har styr på?","Hvad ville du sige, hvis du turde?"],skaerpelse:["Hvad koster det at bære usikkerheden alene?","Hvornår bliver du en anden leder, end du vil være?","Hvad sker der, når usikkerheden ikke bliver sagt?"],perspektiv:["Hvad ville ændre sig, hvis usikkerheden fik plads?","Hvad har du brug for fra dem du arbejder med?","Hvad siger du højt her — som du ikke har sagt før?"],erkendelse:"Åbenhed om det der fylder — som grundlag for ærlig dialog."},
+{label:"Sårbarhed",forside:"Hvad koster det at se klart?",aabning:["Hvornår er det lettere ikke at vide?","Hvad risikerer du ved at sige det, du ser?","Hvad sker der, når nogen siger noget ærligt?"],skaerpelse:["Hvem betaler prisen, når vi ikke tør se klart?","Hvornår bliver loyalitet en hindring for ærlighed?","Hvad sker der, når vi undgår de rigtige spørgsmål?"],perspektiv:["Hvad ville det betyde, hvis I turde se klart — sammen?","Hvornår er sårbarhed en forudsætning for god ledelse?","Hvad har I brug for af hinanden?"],erkendelse:"Tillid til at sige det, vi ser — også når det er svært."},
+{label:"Mod",forside:"Hvad koster det at vælge — og hvad koster det ikke at gøre det?",aabning:["Hvem skuffer du, når du vælger tydeligt?","Hvad er du bange for at tabe?","Hvad ville du vælge med opbakning?"],skaerpelse:["Hvem betaler prisen for din manglende beslutning?","Hvornår er 'vi tager den til næste gang' et fravalg?","Hvad sker der med respekten, når valget udebliver?"],perspektiv:["Hvad gør modige valg ved et fællesskab?","Hvad er det valg, du har udsat?","Hvad har du brug for af de andre for at turde?"],erkendelse:"Erkendelse af hvad modet kræver — og hvad det giver."},
+{label:"Tillid",forside:"Hvad bygger vi rammerne på — kontrol eller tillid?",aabning:["Hvornår skaber vi strukturer af tillid — og hvornår af mistillid?","Hvad siger organiseringen om det, vi tror om hinanden?","Hvad sker der, når rammerne er uklare?"],skaerpelse:["Hvornår bruger vi struktur som skjold mod det menneskelige?","Hvad sker der med relationer, når alt bliver processer?","Hvornår er fravær af struktur fravær af omsorg?"],perspektiv:["Hvad ville det betyde, hvis strukturerne var bygget på tillid?","Hvornår har en god ramme givet frihed?","Hvad har I brug for af hinanden?"],erkendelse:"Bevidsthed om hvad rammerne gør ved mennesker."},
+{label:"Ærlighed",forside:"Hvad ser vi — som vi ikke taler om?",aabning:["Hvad ved alle — men ingen siger?","Hvad ville vi se, hvis vi turde?","Hvornår er der forskel på det, vi siger, og det vi gør?"],skaerpelse:["Hvem betaler prisen, når vi ikke er ærlige?","Hvad sker der med tilliden, når afstanden vokser?","Hvornår er vi mere optagede af at beskytte os selv?"],perspektiv:["Hvad ville ændre sig, hvis vi talte om det, vi ser?","Hvad siger I til hinanden nu — som I ikke har sagt før?","Hvad tager du ansvar for at sige?"],erkendelse:"Mod til at tale om virkeligheden."},
+{label:"Udholdenhed",forside:"Hvad kræver det at holde fast — når hverdagen vender tilbage?",aabning:["Hvad er det sværeste ved at holde fast i forandring?","Hvad har du brug for fra andre?","Hvornår er det okay at tvivle?"],skaerpelse:["Hvad sker der med mennesker, der hele tiden skal forandre sig?","Hvornår presser vi mere på — i stedet for at anerkende?","Hvad koster det, når vi ikke giver plads til træthed?"],perspektiv:["Hvad giver dig energi til at fortsætte?","Hvad tager du med herfra?","Hvad gør du anderledes fra i morgen — for at passe på dig selv?"],erkendelse:"En realistisk erkendelse af hvad forandring kræver."},
+],
+ledelsesteam:[
+{label:"Usikkerhed",forside:"Hvad bærer du med dig — som du ikke siger højt?",aabning:["Hvor føler du dig alene med ansvaret?","Hvad er du usikker på?","Hvad ville du sige, hvis du turde?"],skaerpelse:["Hvad koster det at bære usikkerheden alene?","Hvornår bliver du en anden leder?","Hvad sker der, når usikkerheden ikke siges?"],perspektiv:["Hvad ville ændre sig, hvis usikkerheden fik plads?","Hvad har du brug for?","Hvad siger du højt her?"],erkendelse:"Åbenhed som grundlag for ærlig dialog."},
+{label:"Sårbarhed",forside:"Hvad koster det at se klart?",aabning:["Hvornår er det lettere ikke at vide?","Hvad risikerer du ved at sige det?","Hvad sker der, når nogen er ærlig?"],skaerpelse:["Hvem betaler prisen?","Hvornår hindrer loyalitet ærlighed?","Hvad sker der, når vi undgår spørgsmålene?"],perspektiv:["Hvad ville det betyde, hvis I turde se klart?","Hvornår er sårbarhed en forudsætning?","Hvad har I brug for af hinanden?"],erkendelse:"Tillid til at sige det, vi ser."},
+{label:"Mod",forside:"Hvad koster det at vælge?",aabning:["Hvem skuffer du?","Hvad er du bange for at tabe?","Hvad ville du vælge med opbakning?"],skaerpelse:["Hvem betaler prisen?","Hvornår er udsættelse et fravalg?","Hvad sker der med respekten?"],perspektiv:["Hvad gør modige valg?","Hvad har du udsat?","Hvad har du brug for?"],erkendelse:"Hvad modet kræver — og hvad det giver."},
+{label:"Tillid",forside:"Kontrol eller tillid?",aabning:["Hvornår tillid — hvornår mistillid?","Hvad siger organiseringen om hinanden?","Hvad sker der med uklare rammer?"],skaerpelse:["Hvornår er struktur et skjold?","Hvad sker der, når alt er processer?","Hvornår er fravær af struktur fravær af omsorg?"],perspektiv:["Hvad ville tillidsbaserede strukturer betyde?","Hvornår har rammer givet frihed?","Hvad har I brug for?"],erkendelse:"Rammer bygget på tillid — ikke kontrol."},
+{label:"Ærlighed",forside:"Hvad ser vi — som vi ikke taler om?",aabning:["Hvad ved alle?","Hvad ville vi se?","Hvornår er der forskel på ord og handling?"],skaerpelse:["Hvem betaler prisen?","Hvad sker der med tilliden?","Hvornår beskytter vi os selv?"],perspektiv:["Hvad ville ændre sig?","Hvad siger I nu?","Hvad tager du ansvar for?"],erkendelse:"Mod til at tale om virkeligheden."},
+{label:"Udholdenhed",forside:"Hvad kræver det at holde fast?",aabning:["Hvad er det sværeste?","Hvad har du brug for?","Hvornår er det okay at tvivle?"],skaerpelse:["Hvad sker der med mennesker i forandring?","Hvornår presser vi mere?","Hvad koster manglende plads til træthed?"],perspektiv:["Hvad giver energi?","Hvad tager du med?","Hvad gør du for dig selv?"],erkendelse:"Hvad forandring kræver."},
+],
+bestyrelse:[
+{label:"Det menneskelige rum",forside:"Hvad bærer du med dig — som du ikke siger højt?",aabning:["Hvor føler du dig alene?","Hvad er du usikker på?","Hvad ville du sige?"],skaerpelse:["Hvad koster usikkerheden?","Hvornår bliver du en anden?","Hvad sker der, når det ikke siges?"],perspektiv:["Hvad ville ændre sig?","Hvad har du brug for?","Hvad siger du højt her?"],erkendelse:"Åbenhed som grundlag for dialog."},
+{label:"Det menneskelige rum",forside:"Hvad koster det at se klart?",aabning:["Hvornår er det lettere ikke at vide?","Hvad risikerer du?","Hvad sker der med ærlighed?"],skaerpelse:["Hvem betaler prisen?","Hvornår hindrer loyalitet?","Hvad sker der over tid?"],perspektiv:["Hvad ville ærligt samarbejde betyde?","Hvornår er sårbarhed nødvendig?","Hvad har I brug for?"],erkendelse:"Tillid til at sige det, vi ser."},
+{label:"Det menneskelige rum",forside:"Hvad koster det at vælge?",aabning:["Hvem skuffer du?","Hvad er du bange for?","Hvad ville du vælge?"],skaerpelse:["Hvem betaler prisen?","Hvornår er udsættelse fravalg?","Hvad sker der med respekten?"],perspektiv:["Hvad gør modige valg?","Hvad har du udsat?","Hvad har du brug for?"],erkendelse:"Hvad modet kræver."},
+{label:"Det menneskelige rum",forside:"Kontrol eller tillid?",aabning:["Hvornår tillid — hvornår mistillid?","Hvad siger organiseringen?","Hvad med uklare rammer?"],skaerpelse:["Hvornår er struktur et skjold?","Hvad med relationer og processer?","Hvornår er fravær af struktur fravær af omsorg?"],perspektiv:["Hvad ville tillid betyde?","Hvornår har rammer givet frihed?","Hvad har I brug for?"],erkendelse:"Bevidsthed om rammer og mennesker."},
+{label:"Det menneskelige rum",forside:"Hvad ser vi — som vi ikke taler om?",aabning:["Hvad ved alle?","Hvad ville vi se?","Hvornår er der forskel?"],skaerpelse:["Hvem betaler prisen?","Hvad med tilliden?","Hvornår beskytter vi os selv?"],perspektiv:["Hvad ville ændre sig?","Hvad siger I nu?","Hvad tager du ansvar for?"],erkendelse:"Mod til virkeligheden."},
+{label:"Det menneskelige rum",forside:"Hvad kræver det at holde fast?",aabning:["Hvad er det sværeste?","Hvad har du brug for?","Hvornår er tvivl okay?"],skaerpelse:["Hvad sker der med mennesker?","Hvornår presser vi?","Hvad koster manglende plads?"],perspektiv:["Hvad giver energi?","Hvad tager du med?","Hvad gør du for dig selv?"],erkendelse:"Hvad forandring kræver."},
+],
 };
-const RL={skoleleder:"Skoleleder",ledelsesteam:"Ledelsesteam",bestyrelse:"Bestyrelse"};
 
-/* STATE */
-let S={flId:null,rolle:null,trin:0,flipped:false,mode:'forberedelse',noteTav:'privat',dtab:'oversigt'};
-function loadDB(){try{return JSON.parse(localStorage.getItem('tk10v2')||'null')||{forloeb:[]}}catch{return{forloeb:[]}}}
-function saveDB(){localStorage.setItem('tk10v2',JSON.stringify(DB))}
-let DB=loadDB();
-function getFl(id){return DB.forloeb.find(f=>f.id===id)}
-function getTD(id,r,t){const fl=getFl(id);if(!fl)return null;if(!fl.data)fl.data={};if(!fl.data[r])fl.data[r]={};if(!fl.data[r][t])fl.data[r][t]={noter:{privat:'',team:'',bestyrelse:''},beslutninger:[],handlinger:[],moeder:[],auditLog:[],status:'ikke-startet'};const d=fl.data[r][t];if(!d.moeder)d.moeder=[];if(!d.auditLog)d.auditLog=[];return d}
-
-/* SCREENS */
-function showScreen(name){
-  const prev=document.querySelector('.screen.active');
-  if(prev){prev.classList.add('exit');setTimeout(()=>prev.classList.remove('active','exit'),220)}
-  const next=document.getElementById('s-'+name);
-  if(!next)return;
-  requestAnimationFrame(()=>next.classList.add('active'));
-}
-function goForloeb(){renderFlList();showScreen('forloeb')}
-
-/* FORLOEB */
-function calcProg(fl){let d=0;for(let i=0;i<6;i++){let a=false;['skoleleder','ledelsesteam','bestyrelse'].forEach(r=>{if(fl.data?.[r]?.[i]?.status==='afsluttet')a=true});if(a)d++}return d}
-function renderFlList(){
-  const w=document.getElementById('fl-list');let h='';
-  if(!DB.forloeb.length)h+='<div class="empty"><div class="empty-ico">📋</div><p>Du har ingen forløb endnu.<br>Opret dit første forløb herunder.</p></div>';
-  DB.forloeb.forEach(fl=>{const p=calcProg(fl),pct=Math.round(p/6*100);h+=`<div class="fl-card" onclick="openFl('${fl.id}')"><div class="fl-icon">📋</div><div class="fl-body"><div class="fl-name">${esc(fl.navn)}</div><div class="fl-meta">Oprettet ${fmt(fl.oprettet)} · ${p}/6 trin afsluttet</div><div class="fl-prog"><div class="fl-prog-bar"><div class="fl-prog-fill" style="width:${pct}%"></div></div><span class="fl-prog-pct">${pct}%</span></div></div><div class="fl-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M9 18l6-6-6-6"/></svg></div></div>`});
-  h+=`<button class="btn-new" onclick="openOv('fl')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>Opret nyt forløb</button>`;
-  w.innerHTML=h;
-}
-function openFl(id){S.flId=id;const fl=getFl(id);document.getElementById('rolle-fl-name').textContent=fl.navn;showScreen('rolle')}
-function createFl(){
-  const n=document.getElementById('fl-navn').value.trim();if(!n){showToast('Giv forløbet et navn');return}
-  DB.forloeb.unshift({id:'fl_'+Date.now(),navn:n,maal:document.getElementById('fl-maal').value.trim(),oprettet:new Date().toISOString(),data:{}});
-  saveDB();document.getElementById('fl-navn').value='';document.getElementById('fl-maal').value='';
-  closeOv('fl');renderFlList();showToast('Forløb oprettet ✓')
+function getKort(step,rolle){
+  if(step.type==="aabning")return AABNING;
+  if(step.type==="afslutning")return AFSLUTNING;
+  const i=step.nr-1;
+  if(step.type==="model")return MK[rolle]?.[i];
+  if(step.type==="human")return HK[rolle]?.[i];
+  return null;
 }
 
-/* ROLLE */
-function selectRolle(r){S.rolle=r;document.body.className='role-'+r;renderDash();showScreen('dash')}
+// ── INTRO & GUIDE ─────────────────────────────────────────
 
-/* DASHBOARD */
-function renderDash(){
-  const fl=getFl(S.flId),r=S.rolle;
-  document.getElementById('dash-ctx').textContent=RL[r]+' · '+fl.navn;
-  document.getElementById('dash-title').textContent='Tirsdag kl. 10-modellen®';
-  document.getElementById('dash-sub2').textContent='Strategisk procesforløb';
-  let tBsl=0,oHdl=0,done=0;
-  for(let i=0;i<6;i++){const d=getTD(S.flId,r,i);tBsl+=d.beslutninger.length;oHdl+=d.handlinger.filter(h=>h.status!=='udfoert').length;if(d.status==='afsluttet')done++}
-  document.getElementById('dash-stats').innerHTML=`<div class="stat-box"><div class="stat-ico">✅</div><div class="stat-num">${done}</div><div class="stat-lbl">Trin afsluttet</div></div><div class="stat-box"><div class="stat-ico">📋</div><div class="stat-num">${tBsl}</div><div class="stat-lbl">Beslutninger</div></div><div class="stat-box"><div class="stat-ico">⚡</div><div class="stat-num">${oHdl}</div><div class="stat-lbl">Åbne handlinger</div></div>`;
-  let nt=null;for(let i=0;i<6;i++){if(getTD(S.flId,r,i).status!=='afsluttet'){nt=i;break}}
-  document.getElementById('dash-next').innerHTML=nt!==null?`<div class="next-step" onclick="openTrin(${nt})"><div class="ns-ico">🎯</div><div class="ns-txt"><div class="ns-lbl">Anbefalet næste skridt</div><div class="ns-act">Trin ${nt+1} — ${TN[nt]}: ${TS[nt]}</div></div><div class="ns-arr"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M9 18l6-6-6-6"/></svg></div></div>`:`<div class="next-step"><div class="ns-ico">🎉</div><div class="ns-txt"><div class="ns-lbl">Status</div><div class="ns-act">Alle trin afsluttet — klar til næste forløb</div></div></div>`;
-  dashTab('oversigt')
-}
-function dashTab(tab){
-  S.dtab=tab;
-  ['oversigt','beslutninger','handlinger','export'].forEach(t=>{const e=document.getElementById('nav-'+t);if(e)e.classList.toggle('active',t===tab)});
-  const sc=document.getElementById('dash-scroll');
-  if(tab==='oversigt'){
-    sc.innerHTML=`<div class="journey-sec"><div class="sec-hdr"><span class="sec-hdr-lbl">Procesforløb — 6 trin</span></div><div class="jgrid" id="jgrid"></div></div><div style="height:16px"></div>`;
-    renderGrid()
-  }else if(tab==='beslutninger')renderBslOv(sc);
-  else if(tab==='handlinger')renderHdlOv(sc);
-}
-function renderGrid(){
-  const r=S.rolle;let h='';
-  for(let i=0;i<6;i++){const d=getTD(S.flId,r,i),st=d.status,bc=d.beslutninger.length,hc=d.handlinger.filter(h=>h.status!=='udfoert').length;
-    const cls=st==='afsluttet'?'done':st==='i-gang'?'active2':'';
-    h+=`<div class="jtile ${cls}" onclick="openTrin(${i})"><div class="jt-num"><div class="jt-dot"></div>${st==='afsluttet'?'Afsluttet':st==='i-gang'?'I gang':'Trin '+(i+1)}</div><div class="jt-name">${TN[i]}</div><div class="jt-q">${TS[i]}</div><div class="jt-counts"><span class="jt-cnt${bc>0?' has':''}">${bc} bsl.</span><span class="jt-cnt${hc>0?' has':''}">${hc} hdl.</span></div></div>`
-  }
-  const g=document.getElementById('jgrid');if(g)g.innerHTML=h
-}
-function renderBslOv(c){
-  const r=S.rolle;let h='<div class="pad">',any=false;
-  for(let i=0;i<6;i++){const d=getTD(S.flId,r,i);if(!d.beslutninger.length)continue;any=true;h+=`<div class="ov-grp"><div class="ov-lbl">Trin ${i+1} — ${TN[i]}</div>${d.beslutninger.map(b=>`<div class="bsl-ov"><div class="bsl-ov-t">${esc(b.tekst)}</div><div class="bsl-ov-m">${b.af?'<strong>'+esc(b.af)+'</strong> · ':''}${fmt(b.dato)}${b.opf?'<br>Opfølgning: '+esc(b.opf):''}</div></div>`).join('')}</div>`}
-  if(!any)h+='<div class="empty"><div class="empty-ico">📋</div><p>Ingen beslutninger endnu.<br>Gå til et trin og tilføj beslutninger.</p></div>';
-  c.innerHTML=h+'</div>'
-}
-function renderHdlOv(c){
-  const r=S.rolle;let h='<div class="pad">',any=false;
-  for(let i=0;i<6;i++){const d=getTD(S.flId,r,i),open=d.handlinger.filter(h=>h.status!=='udfoert');if(!open.length)continue;any=true;
-    h+=`<div class="ov-grp"><div class="ov-lbl">Trin ${i+1} — ${TN[i]}</div>${open.map(hh=>{const ov=hh.deadline&&new Date(hh.deadline)<new Date();return`<div class="hdl-ov"><div class="hck${hh.status==='udfoert'?' done':''}" onclick="toggleHdlOv(${i},${d.handlinger.indexOf(hh)})"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor"><path d="M2 6l3 3 5-5"/></svg></div><div class="hb"><div class="ht${hh.status==='udfoert'?' done':''}">${esc(hh.opgave)}</div><div class="hm">${hh.ansvar?'<strong>'+esc(hh.ansvar)+'</strong>':''}${hh.deadline?' · <span class="'+(ov?'overdue':'')+'">'+fmt(hh.deadline)+(ov?' ⚠':'')+'</span>':''}</div></div></div>`}).join('')}</div>`
-  }
-  if(!any)h+='<div class="empty"><div class="empty-ico">⚡</div><p>Ingen åbne handlinger.<br>Alle opgaver er udført.</p></div>';
-  c.innerHTML=h+'</div>'
-}
-function toggleHdlOv(t,i){const d=getTD(S.flId,S.rolle,t);if(!d.handlinger[i])return;d.handlinger[i].status=d.handlinger[i].status==='udfoert'?'i-gang':'udfoert';saveDB();dashTab(S.dtab)}
-
-/* TRIN */
-function openTrin(idx){S.trin=idx;S.flipped=false;S.mode='forberedelse';S.noteTav='privat';renderTrin();showScreen('trin')}
-function renderTrin(){
-  const r=S.rolle,i=S.trin,d=getTD(S.flId,r,i),fl=getFl(S.flId),k=KD[r][i];
-  document.getElementById('trin-ttl').textContent=`Trin ${i+1} — ${TN[i]}`;
-  document.getElementById('trin-sub').textContent=fl.navn;
-  const chip=document.getElementById('trin-chip');chip.textContent=RL[r];chip.className='role-chip '+r;
-  document.getElementById('ph-t').textContent=`${fl.navn} · Trin ${i+1} — ${TN[i]}`;
-  document.getElementById('ph-m').textContent=`${RL[r]} · Udskrevet ${fmt(new Date().toISOString())}`;
-  let dots='';for(let j=0;j<6;j++)dots+=`<div class="tdot${j===i?' active':j<i?' done':''}" onclick="openTrin(${j})"></div>`;
-  document.getElementById('trin-dots').innerHTML=dots;
-  let prevH='';
-  if(i>0){const pd=getTD(S.flId,r,i-1),pb=pd.beslutninger.slice(0,2);if(pb.length){prevH=`<div class="cp-prev-lbl">Beslutninger fra Trin ${i} — ${TN[i-1]}</div>`;pb.forEach(b=>prevH+=`<div class="cp-prev">${esc(b.tekst)}</div>`)}}
-  const guides=TGUIDE[S.mode][i];
-  const bslH=d.beslutninger.length?d.beslutninger.map((b,bi)=>`<div class="bsl-item"><button class="bsl-del" onclick="delBsl(${bi})"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg></button><div class="bsl-t">${esc(b.tekst)}</div><div class="bsl-m">${b.af?'<strong>'+esc(b.af)+'</strong> · ':''}${fmt(b.dato)}${b.opf?'<br>Opfølgning: '+esc(b.opf):''}</div></div>`).join(''):'<div class="empty"><div class="empty-ico">📋</div><p>Ingen beslutninger endnu</p></div>';
-  const hdlH=d.handlinger.length?d.handlinger.map((h,hi)=>{const ov=h.deadline&&new Date(h.deadline)<new Date()&&h.status!=='udfoert';return`<div class="hdl-item"><div class="hck2${h.status==='udfoert'?' done':''}" onclick="toggleHdl(${hi})"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor"><path d="M2 6l3 3 5-5"/></svg></div><div class="hb2"><div class="ht2${h.status==='udfoert'?' done':''}">${esc(h.opgave)}</div><div class="hm2">${h.ansvar?'<strong>'+esc(h.ansvar)+'</strong>':''}${h.deadline?' · <span class="'+(ov?'overdue':'')+'">'+fmt(h.deadline)+(ov?' ⚠':'')+'</span>':''}</div></div></div>`}).join(''):'<div class="empty"><div class="empty-ico">⚡</div><p>Ingen handlinger endnu</p></div>';
-  const stBtns=['ikke-startet','i-gang','afsluttet'].map(st=>{const a=d.status===st;return`<button class="st-btn${a?(st==='afsluttet'?' active-done':' active'):''}" onclick="setStatus('${st}')">${st==='ikke-startet'?'Ikke startet':st==='i-gang'?'I gang':'Afsluttet ✓'}</button>`}).join('');
-  document.getElementById('trin-content').innerHTML=`
-<div class="ctx-panel"><div class="cp-lbl">Om dette trin</div><div class="cp-txt">${TC[i]}</div>${prevH}</div>
-<div class="kort-wrap"><div class="kort-inner${S.flipped?' flipped':''}" id="kort-inner" onclick="flipKort()">
-  <div class="kort-face"><div class="kf-brow"><span class="kf-tag">Trin ${i+1} — ${TN[i]}</span><span class="kf-side">Forside</span></div><div class="kf-q">${k.f}</div><div class="kf-hint"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 12v-2a8 8 0 0114.93-4M20 12v2a8 8 0 01-14.93 4" stroke-linecap="round"/><path d="M16 6l2-2 2 2M6 20l-2-2-2 2" stroke-linecap="round"/></svg>Tryk for at se bagsiden</div></div>
-  <div class="kort-face kort-back"><div class="kb-brow"><span class="kf-tag">Trin ${i+1} — ${TN[i]}</span><span class="kb-lbl">Skærpende spørgsmål</span></div><ul class="kb-qs">${k.b.map(q=>`<li>${q}</li>`).join('')}</ul><button class="btn-flip-back" onclick="event.stopPropagation();flipKort()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 12v-2a8 8 0 0114.93-4M20 12v2a8 8 0 01-14.93 4" stroke-linecap="round"/></svg>Tilbage til forside</button>
-<button class="gpt-panel-btn" onclick="event.stopPropagation();openGptPanel()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/><path d="M8 10h8M8 14h5"/></svg>Reflektér med AI-refleksionspartner</button></div>
-</div></div>
-<div class="sec-t">Møde-mode</div>
-<div class="mode-strip">
-  <button class="mpill${S.mode==='forberedelse'?' active':''}" onclick="setMode('forberedelse')"><span class="mpi">📋</span>Forberedelse</button>
-  <button class="mpill${S.mode==='beslutning'?' active':''}" onclick="setMode('beslutning')"><span class="mpi">✅</span>Beslutning</button>
-  <button class="mpill${S.mode==='opfolgning'?' active':''}" onclick="setMode('opfolgning')"><span class="mpi">🔁</span>Opfølgning</button>
-</div>
-<div class="mode-box">
-  <div class="mb-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>${S.mode==='forberedelse'?'Forbered dig til mødet':S.mode==='beslutning'?'Strukturér beslutningerne':'Følg op på handlingerne'}</div>
-  <ul class="mb-pts">${guides.map(g=>`<li>${g}</li>`).join('')}</ul>
-  ${S.mode==='beslutning'?`<button class="mste-log-btn" onclick="openMsteOv()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>Log dette møde</button>`:''}
-</div>
-<div class="notes-sec">
-  <div class="sec-t">Noter</div>
-  <div class="note-tabs">
-    <button class="ntab${S.noteTav==='privat'?' active':''}" onclick="setNtav('privat')">🔒 Privat<small>kun mig</small></button>
-    <button class="ntab${S.noteTav==='team'?' active':''}" onclick="setNtav('team')">👥 Team</button>
-    <button class="ntab${S.noteTav==='bestyrelse'?' active':''}" onclick="setNtav('bestyrelse')">🏛 Bestyrelse</button>
-  </div>
-  <textarea id="note-fld" class="note-fld" placeholder="${S.noteTav==='privat'?'Mine refleksioner — kun mig...':S.noteTav==='team'?'Teamnoter — synlige for ledelsesteamet...':'Notat til bestyrelsesniveauet...'}">${d.noter[S.noteTav]||''}</textarea>
-  <div class="note-save-row"><button class="btn-save-n" onclick="saveNote()">Gem noter</button></div>
-  <div class="save-ind" id="save-ind">Gemt ✓</div>
-</div>
-<div class="divider"></div>
-<div class="sec-t">Beslutninger fra dette trin</div>
-<div id="bsl-list">${bslH}</div>
-<button class="btn-add" onclick="openOv('bsl')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>Tilføj beslutning</button>
-<div class="divider"></div>
-<div class="sec-t">Handlinger fra dette trin</div>
-<div id="hdl-list">${hdlH}</div>
-<button class="btn-add" onclick="openOv('hdl')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>Tilføj handling</button>
-${d.moeder&&d.moeder.length?`<div class="divider"></div>
-<div class="sec-t">Møder på dette trin (${d.moeder.length})</div>
-<div id="mste-list">${d.moeder.map((m,mi)=>`<div class="mste-item"><div class="mste-item-hdr"><div class="mste-item-t">📅 ${fmt(m.dato)} — ${m.type==='forberedelse'?'Forberedelsesmøde':m.type==='beslutning'?'Beslutningsøde':'Opfølgningsmøde'}</div><button class="mste-exp-btn" onclick="openMsteExp(${mi})">Se referat</button></div><div class="mste-item-m">${m.deltagere?'<strong>Deltagere:</strong> '+esc(m.deltagere)+'<br>':''}${m.bslCount||0} beslutninger · ${m.hdlCount||0} handlinger${m.opsummering?'<br><em>'+esc(m.opsummering)+'</em>':''}</div></div>`).join('')}</div>`:''}
-${d.auditLog&&d.auditLog.length?`<button class="audit-toggle" onclick="toggleAudit(this)">📜 Ændringslog (${d.auditLog.length} handlinger)</button><div class="audit-list" style="display:none">${d.auditLog.slice().reverse().map(e=>`<div class="audit-item ${e.type}"><div class="audit-dot"></div><div><strong>${e.tekst}</strong>${e.detaljer?' — '+esc(e.detaljer.substring(0,60)):''}<br><span style="opacity:.65">${fmt(e.dato)}</span></div></div>`).join('')}</div>`:''}
-<div class="divider"></div>
-<div class="sec-t">Status for Trin ${i+1}</div>
-<div class="status-row">${stBtns}</div>
-${i<5?`<button class="btn-next" onclick="goNext()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M9 18l6-6-6-6"/></svg>Gå til Trin ${i+2} — ${TN[i+1]}</button>`:''}
-<div class="bsp"></div>`;
-}
-function flipKort(){S.flipped=!S.flipped;const e=document.getElementById('kort-inner');if(e)e.classList.toggle('flipped',S.flipped)}
-function setMode(m){S.mode=m;const tc=document.getElementById('trin-content');const scrollY=tc.scrollTop;renderTrin();tc.scrollTop=scrollY}
-function setNtav(t){const f=document.getElementById('note-fld');if(f){const d=getTD(S.flId,S.rolle,S.trin);d.noter[S.noteTav]=f.value;saveDB()}S.noteTav=t;const d=getTD(S.flId,S.rolle,S.trin);if(document.getElementById('note-fld'))document.getElementById('note-fld').value=d.noter[t]||'';document.querySelectorAll('.ntab').forEach((b,j)=>b.classList.toggle('active',j===['privat','team','bestyrelse'].indexOf(t)))}
-function saveNote(){const f=document.getElementById('note-fld');if(!f)return;const d=getTD(S.flId,S.rolle,S.trin);d.noter[S.noteTav]=f.value;saveDB();const ind=document.getElementById('save-ind');if(ind){ind.classList.add('show');setTimeout(()=>ind.classList.remove('show'),1800)}}
-function setStatus(st){const d=getTD(S.flId,S.rolle,S.trin);d.status=st;saveDB();renderTrin();if(st==='afsluttet')showToast('Trin '+(S.trin+1)+' afsluttet ✓')}
-function goNext(){const d=getTD(S.flId,S.rolle,S.trin);if(d.status==='ikke-startet')d.status='i-gang';saveDB();openTrin(S.trin+1)}
-function delBsl(i){const d=getTD(S.flId,S.rolle,S.trin);const b=d.beslutninger[i];if(b)d.auditLog.push({dato:new Date().toISOString(),type:'del',tekst:'Beslutning slettet',detaljer:b.tekst});d.beslutninger.splice(i,1);saveDB();renderTrin()}
-function toggleHdl(i){const d=getTD(S.flId,S.rolle,S.trin);const ny=d.handlinger[i].status==='udfoert'?'i-gang':'udfoert';d.handlinger[i].status=ny;d.auditLog.push({dato:new Date().toISOString(),type:'hdl',tekst:'Handling markeret som '+(ny==='udfoert'?'udført':'i gang'),detaljer:d.handlinger[i].opgave});saveDB();const e=document.getElementById('hdl-list');if(e){const h=d.handlinger;e.innerHTML=h.length?h.map((hh,hi)=>{const ov=hh.deadline&&new Date(hh.deadline)<new Date()&&hh.status!=='udfoert';return`<div class="hdl-item"><div class="hck2${hh.status==='udfoert'?' done':''}" onclick="toggleHdl(${hi})"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor"><path d="M2 6l3 3 5-5"/></svg></div><div class="hb2"><div class="ht2${hh.status==='udfoert'?' done':''}">${esc(hh.opgave)}</div><div class="hm2">${hh.ansvar?'<strong>'+esc(hh.ansvar)+'</strong>':''}${hh.deadline?' · <span class="'+(ov?'overdue':'')+'">'+fmt(hh.deadline)+(ov?' ⚠':'')+'</span>':''}</div></div></div>`}).join(''):'<div class="empty"><div class="empty-ico">⚡</div><p>Ingen handlinger endnu</p></div>'}}
-
-/* OVERLAYS */
-function openOv(t){document.getElementById('ov-'+t).classList.add('show')}
-function closeOv(t){document.getElementById('ov-'+t).classList.remove('show')}
-function saveBsl(){const t=document.getElementById('bsl-t').value.trim();if(!t){showToast('Beskriv beslutningen');return}const d=getTD(S.flId,S.rolle,S.trin);const af=document.getElementById('bsl-af').value.trim();d.beslutninger.push({id:Date.now()+'',tekst:t,af:af,opf:document.getElementById('bsl-opf').value.trim(),dato:new Date().toISOString()});d.auditLog.push({dato:new Date().toISOString(),type:'bsl',tekst:'Beslutning tilføjet'+(af?' af '+af:''),detaljer:t});if(d.status==='ikke-startet')d.status='i-gang';saveDB();['bsl-t','bsl-af','bsl-opf'].forEach(id=>document.getElementById(id).value='');closeOv('bsl');renderTrin();showToast('Beslutning gemt ✓')}
-function saveHdl(){const o=document.getElementById('hdl-o').value.trim();if(!o){showToast('Beskriv opgaven');return}const d=getTD(S.flId,S.rolle,S.trin);const a=document.getElementById('hdl-a').value.trim();d.handlinger.push({id:Date.now()+'',opgave:o,ansvar:a,deadline:document.getElementById('hdl-d').value,status:'ikke-startet'});d.auditLog.push({dato:new Date().toISOString(),type:'hdl',tekst:'Handling tilføjet'+(a?' (ansvarlig: '+a+')':''),detaljer:o});if(d.status==='ikke-startet')d.status='i-gang';saveDB();['hdl-o','hdl-a'].forEach(id=>document.getElementById(id).value='');closeOv('hdl');renderTrin();showToast('Handling tilføjet ✓')}
-
-/* MØDE */
-function openMsteOv(){const d=new Date();const iso=d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');const f=document.getElementById('mste-dato');if(f)f.value=iso;openOv('mste')}
-function saveMste(){
-  const dato=document.getElementById('mste-dato').value;
-  if(!dato){showToast('Vælg en dato');return}
-  const d=getTD(S.flId,S.rolle,S.trin);
-  const deltagere=document.getElementById('mste-del').value.trim();
-  const type=document.getElementById('mste-type').value;
-  const ops=document.getElementById('mste-ops').value.trim();
-  const mste={id:Date.now()+'',dato,deltagere,type,opsummering:ops,bslCount:d.beslutninger.length,hdlCount:d.handlinger.filter(h=>h.status!=='udfoert').length,oprettet:new Date().toISOString()};
-  d.moeder.push(mste);
-  d.auditLog.push({dato:new Date().toISOString(),type:'bsl',tekst:'Møde logget'+(deltagere?' — '+deltagere:''),detaljer:ops||type});
-  saveDB();
-  ['mste-del','mste-ops'].forEach(id=>{const e=document.getElementById(id);if(e)e.value=''});
-  closeOv('mste');renderTrin();showToast('Møde gemt ✓');
-  setTimeout(()=>openMsteExp(d.moeder.length-1),400);
-}
-function openMsteExp(mi){
-  const d=getTD(S.flId,S.rolle,S.trin);
-  const m=d.moeder[mi];if(!m)return;
-  const fl=getFl(S.flId);
-  const typeLabel=m.type==='forberedelse'?'Forberedelsesmøde':m.type==='beslutning'?'Beslutningsøde':'Opfølgningsmøde';
-  document.getElementById('mste-exp-ttl').textContent=typeLabel+' — '+fmt(m.dato);
-  let h='';
-  h+=`<div class="exp-sec"><div class="exp-sec-lbl">Mødeoplysninger</div><div class="exp-content"><strong>Forløb:</strong> ${esc(fl.navn)}<br><strong>Trin:</strong> ${S.trin+1} — ${TN[S.trin]}<br><strong>Dato:</strong> ${fmt(m.dato)}<br>${m.deltagere?'<strong>Deltagere:</strong> '+esc(m.deltagere)+'<br>':''}</div></div>`;
-  if(m.opsummering)h+=`<div class="exp-sec"><div class="exp-sec-lbl">Opsummering</div><div class="exp-content">${esc(m.opsummering)}</div></div>`;
-  if(d.beslutninger.length){h+=`<div class="exp-sec"><div class="exp-sec-lbl">Beslutningslog (${d.beslutninger.length})</div>${d.beslutninger.map(b=>`<div class="exp-item"><div>${esc(b.tekst)}${b.af?' <span style="opacity:.7;font-size:11px">— '+esc(b.af)+'</span>':''}</div></div>`).join('')}</div>`}
-  const aabne=d.handlinger.filter(h=>h.status!=='udfoert');
-  if(aabne.length){h+=`<div class="exp-sec"><div class="exp-sec-lbl">Åbne handlinger (${aabne.length})</div>${aabne.map(hh=>`<div class="exp-item"><div>${esc(hh.opgave)}${hh.ansvar?' <span style="opacity:.7;font-size:11px">— '+esc(hh.ansvar)+'</span>':''}${hh.deadline?' · '+fmt(hh.deadline):''}</div></div>`).join('')}</div>`}
-  document.getElementById('mste-exp-body').innerHTML=h;
-  openOv('mste-exp');
+function ModelDiagram(){
+  const steps=[
+    {nr:1,model:"Spejling",human:"Usikkerhed"},
+    {nr:2,model:"Klarhed",human:"Sårbarhed"},
+    {nr:3,model:"Valg",human:"Mod"},
+    {nr:4,model:"Struktur",human:"Tillid"},
+    {nr:5,model:"Kernen",human:"Ærlighed"},
+    {nr:6,model:"Forankring",human:"Udholdenhed"},
+  ];
+  return(
+    <div style={{padding:"4px 0"}}>
+      <div style={{textAlign:"center",marginBottom:10}}>
+        <span style={{fontSize:9,fontWeight:700,color:C.navy,background:C.light,padding:"3px 10px",borderRadius:8}}>Åbning →</span>
+      </div>
+      <div style={{display:"flex",gap:6,marginBottom:8}}>
+        <div style={{width:24}}/>
+        <div style={{flex:1,fontSize:9,fontWeight:700,color:C.blue,textAlign:"center",textTransform:"uppercase",letterSpacing:"0.8px"}}>Strategi</div>
+        <div style={{flex:1,fontSize:9,fontWeight:700,color:C.gold,textAlign:"center",textTransform:"uppercase",letterSpacing:"0.8px"}}>Menneske</div>
+      </div>
+      {steps.map((s,i)=>(
+        <div key={i} style={{display:"flex",alignItems:"center",gap:6,marginBottom:6}}>
+          <div style={{width:24,height:24,borderRadius:"50%",background:C.navy,color:"white",fontSize:10,fontWeight:700,display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0}}>{s.nr}</div>
+          <div style={{flex:1,background:`${C.blue}12`,borderRadius:8,padding:"6px 10px",borderLeft:`3px solid ${C.blue}`}}>
+            <div style={{fontSize:11,fontWeight:600,color:C.blue}}>{s.model}</div>
+          </div>
+          <div style={{flex:1,background:`${C.gold}15`,borderRadius:8,padding:"6px 10px",borderLeft:`3px solid ${C.gold}`}}>
+            <div style={{fontSize:11,fontWeight:600,color:C.gold}}>{s.human}</div>
+          </div>
+        </div>
+      ))}
+      <div style={{textAlign:"center",marginTop:10}}>
+        <span style={{fontSize:9,fontWeight:700,color:C.navy,background:C.light,padding:"3px 10px",borderRadius:8}}>→ Afslutning</span>
+      </div>
+    </div>
+  );
 }
 
-/* GPT */
-function openGptPanel(){
-  const r=S.rolle,i=S.trin,k=KD[r][i];
-  const prompt=`Jeg arbejder med Tirsdag kl. 10-modellen® — Trin ${i+1}: ${TN[i]}
-
-Kernespørgsmål: "${k.f}"
-
-Skærpende spørgsmål:
-${k.b.map((q,j)=>`${j+1}. ${q}`).join('\n')}
-
-Kontekst: ${TC[i]}
-
-Min rolle: ${RL[r]}
-
-Hjælp mig at reflektere over dette trin. Stil mig uddybende spørgsmål, og hjælp mig finde klarhed.`;
-  document.getElementById('gpt-prompt-txt').textContent=prompt;
-  document.getElementById('gpt-copy-ind').classList.remove('show');
-  openOv('gpt');
+function VisualGuide({onClose}){
+  return(
+    <div style={{position:"fixed",inset:0,background:"rgba(0,0,0,0.88)",zIndex:200,overflowY:"auto",WebkitOverflowScrolling:"touch"}}>
+      <div style={{maxWidth:400,margin:"0 auto",padding:"20px 16px"}}>
+        <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:20}}>
+          <div style={{color:"white",fontSize:15,fontWeight:700,fontFamily:"'Merriweather',serif"}}>Visuel guide</div>
+          <button onClick={onClose} style={{background:"rgba(255,255,255,0.15)",border:"none",color:"white",width:36,height:36,borderRadius:"50%",fontSize:18,cursor:"pointer"}}>✕</button>
+        </div>
+        <div style={{background:"#f7f9fb",borderRadius:16,overflow:"hidden",boxShadow:"0 8px 32px rgba(0,0,0,0.3)"}}>
+          <div style={{background:C.navy,padding:"10px 14px",display:"flex",justifyContent:"space-between",alignItems:"center"}}>
+            <div>
+              <div style={{color:"white",fontSize:12,fontWeight:700,fontFamily:"'Merriweather',serif"}}>Tirsdag kl. 10<sup style={{fontSize:7}}>®</sup></div>
+              <div style={{color:"rgba(255,255,255,0.5)",fontSize:8}}>Strategi, der kan mærkes i praksis</div>
+            </div>
+            <div style={{background:"rgba(255,255,255,0.12)",padding:"4px 8px",borderRadius:6,color:"white",fontSize:8}}>🏫 Skoleleder</div>
+          </div>
+          <div style={{background:"white",padding:"6px 8px",display:"flex",gap:2,borderBottom:`1px solid ${C.light}`,overflowX:"hidden"}}>
+            {["Åbning","1. Spejling","♡","2.","♡","3."].map((t,i)=>(
+              <span key={i} style={{fontSize:7,padding:"4px 5px",color:i===1?C.blue:i===2?C.gold:C.gray,fontWeight:i===1?700:400,borderBottom:i===1?`2px solid ${C.blue}`:"2px solid transparent",whiteSpace:"nowrap",fontStyle:i===2?"italic":"normal"}}>{t}</span>
+            ))}
+            <span style={{fontSize:7,color:C.gray,padding:"4px 5px"}}>…</span>
+          </div>
+          <div style={{background:`linear-gradient(135deg,${C.blue},${C.navy})`,padding:"10px 14px",display:"flex",justifyContent:"space-between",alignItems:"center"}}>
+            <div>
+              <div style={{fontSize:7,color:"rgba(255,255,255,0.7)",fontWeight:700,textTransform:"uppercase",letterSpacing:"1px"}}>Trin 1 — Spejling</div>
+              <div style={{fontSize:10,color:"white",fontWeight:600,fontFamily:"'Merriweather',serif"}}>Hvad er det vi egentlig står i?</div>
+            </div>
+            <div style={{background:"rgba(255,255,255,0.15)",border:"1px solid rgba(255,255,255,0.3)",padding:"5px 10px",borderRadius:8,color:"white",fontSize:9,fontWeight:600}}>Kort</div>
+          </div>
+          <div style={{padding:12,minHeight:100}}>
+            <div style={{display:"flex",justifyContent:"flex-end",marginBottom:8}}>
+              <div style={{background:C.navy,color:"white",padding:"6px 10px",borderRadius:"12px 12px 2px 12px",fontSize:9,maxWidth:"75%"}}>Jeg oplever at vi mangler fælles retning…</div>
+            </div>
+            <div style={{display:"flex",justifyContent:"flex-start"}}>
+              <div style={{background:"white",color:"#333",padding:"6px 10px",borderRadius:"12px 12px 12px 2px",fontSize:9,maxWidth:"75%",boxShadow:"0 1px 4px rgba(0,0,0,0.06)"}}>Hvad gør du i dag — som ikke skaber den retning, du ønsker?</div>
+            </div>
+          </div>
+          <div style={{padding:"8px 12px",borderTop:`1px solid ${C.light}`,display:"flex",gap:6,background:"white"}}>
+            <div style={{flex:1,border:"1px solid #d1d5db",borderRadius:8,padding:"6px 10px",fontSize:8,color:"#bbb"}}>Skriv din refleksion…</div>
+            <div style={{background:C.navy,color:"white",padding:"6px 12px",borderRadius:8,fontSize:8,fontWeight:700}}>Send</div>
+          </div>
+        </div>
+        <div style={{marginTop:24}}>
+          {[
+            {color:"white",label:"Header",text:"Viser dit rollevalg. Her kan du skifte rolle og starte forfra."},
+            {color:C.blue,label:"Trin-tabs",text:"Naviger mellem de 14 trin. Blå = strategiske trin. Guld (♡) = menneskelige trin. Et flueben viser at du har arbejdet med trinnet."},
+            {color:C.gold,label:"Kort-knappen",text:"Åbner et vejledningskort med strukturerede spørgsmål. Kortet glider ind fra højre. Luk det med ✕ eller tryk ved siden af. Kortet og chatten kan ikke ses samtidig — skift frit mellem dem."},
+            {color:"#f7f9fb",label:"Chat-området",text:"Dit refleksionsrum. Skriv frit — AI'en svarer med spørgsmål der skærper din tænkning."},
+            {color:C.navy,label:"Trin-header",text:"Viser trinnets tema og det centrale spørgsmål. Farven skifter mellem blå (strategi) og guld (det menneskelige)."},
+          ].map((a,i)=>(
+            <div key={i} style={{display:"flex",gap:10,marginBottom:14,alignItems:"flex-start"}}>
+              <div style={{width:12,height:12,borderRadius:"50%",background:a.color,border:"2px solid rgba(255,255,255,0.3)",flexShrink:0,marginTop:2}}/>
+              <div>
+                <div style={{fontSize:12,fontWeight:700,color:"white"}}>{a.label}</div>
+                <div style={{fontSize:11,color:"rgba(255,255,255,0.7)",lineHeight:1.5}}>{a.text}</div>
+              </div>
+            </div>
+          ))}
+        </div>
+        <div style={{textAlign:"center",marginTop:24,paddingBottom:24}}>
+          <button onClick={onClose} style={{background:"white",color:C.navy,border:"none",padding:"12px 32px",borderRadius:12,fontSize:14,fontWeight:700,cursor:"pointer"}}>Luk guide</button>
+        </div>
+      </div>
+    </div>
+  );
 }
-function copyGptPrompt(){
-  const txt=document.getElementById('gpt-prompt-txt').textContent;
-  navigator.clipboard.writeText(txt).then(()=>{
-    const ind=document.getElementById('gpt-copy-ind');
-    ind.classList.add('show');setTimeout(()=>ind.classList.remove('show'),2000);
-  }).catch(()=>showToast('Kopiér teksten manuelt'));
-}
-function toggleAudit(btn){
-  const list=btn.nextElementSibling;
-  if(!list)return;
-  const hidden=list.style.display==='none';
-  list.style.display=hidden?'block':'none';
-  btn.textContent=hidden?btn.textContent.replace('Vis','Skjul'):btn.textContent.replace('Skjul','Vis');
+
+function IntroPage({onStart}){
+  const[guideOpen,setGuideOpen]=useState(false);
+  return(
+    <div style={{minHeight:"100vh",minHeight:"100dvh",background:`linear-gradient(170deg,${C.navy} 0%,${C.blue} 40%,${C.light} 100%)`,overflowY:"auto",WebkitOverflowScrolling:"touch"}}>
+      <div style={{maxWidth:480,margin:"0 auto",padding:"48px 20px 40px"}}>
+
+        <div style={{textAlign:"center",marginBottom:36}}>
+          <div style={{fontSize:11,color:"rgba(255,255,255,0.55)",fontWeight:700,letterSpacing:"2.5px",textTransform:"uppercase",marginBottom:12}}>Strategiskskole.dk</div>
+          <h1 style={{fontFamily:"'Merriweather',serif",fontSize:26,color:"white",margin:"0 0 8px",fontWeight:700,lineHeight:1.3}}>
+            Tirsdag kl. 10-modellen<sup style={{fontSize:11}}>®</sup>
+          </h1>
+          <p style={{color:"rgba(255,255,255,0.7)",fontSize:15,lineHeight:1.6,margin:"0 0 16px"}}>Strategi, der kan mærkes i praksis</p>
+          <div style={{width:48,height:2,background:C.gold,margin:"0 auto",borderRadius:1}}/>
+        </div>
+
+        <div style={{background:"rgba(255,255,255,0.95)",borderRadius:20,padding:"24px 22px",marginBottom:14,boxShadow:"0 12px 40px rgba(26,58,92,0.15)"}}>
+          <p style={{fontSize:14,color:C.navy,lineHeight:1.75,margin:0}}>
+            Dette er dit personlige refleksionsværktøj. Du arbejder dig igennem en strategisk proces — trin for trin — med AI som samtalepartner. Ikke for at finde svar, men for at tænke skarpere om din ledelsesopgave.
+          </p>
+        </div>
+
+        <div style={{background:"rgba(255,255,255,0.95)",borderRadius:20,padding:"24px 22px",marginBottom:14,boxShadow:"0 12px 40px rgba(26,58,92,0.15)"}}>
+          <div style={{fontSize:10,fontWeight:700,color:C.blue,letterSpacing:"1.5px",textTransform:"uppercase",marginBottom:14}}>Modellen — 6 trin, to spor</div>
+          <ModelDiagram/>
+          <p style={{fontSize:12,color:C.gray,lineHeight:1.6,margin:"14px 0 0"}}>
+            Hvert trin veksler mellem et <span style={{color:C.blue,fontWeight:600}}>strategisk processpor</span> og et <span style={{color:C.gold,fontWeight:600}}>menneskeligt reflektionsspor</span>. Det strategiske handler om organisationen. Det menneskelige handler om dig.
+          </p>
+        </div>
+
+        <div style={{background:"rgba(255,255,255,0.95)",borderRadius:20,padding:"24px 22px",marginBottom:14,boxShadow:"0 12px 40px rgba(26,58,92,0.15)"}}>
+          <div style={{fontSize:10,fontWeight:700,color:C.blue,letterSpacing:"1.5px",textTransform:"uppercase",marginBottom:16}}>Sådan bruger du appen</div>
+          {[
+            {icon:"🎯",title:"Vælg din rolle",text:"Skoleleder, ledelsesteam eller bestyrelse. Spørgsmålene er tilpasset din position og de dilemmaer, der hører til. Du kan prøve en anden rolle for at forstå andre perspektiver."},
+            {icon:"💬",title:"Skriv dine refleksioner",text:"Hvert trin er en samtale. Du skriver frit, og AI'en stiller opfølgende spørgsmål der skærper din tænkning. Der er ingen rigtige svar — kun skarpere spørgsmål."},
+            {icon:"🂠",title:"Brug kortene som inspiration",text:"Hvert trin har et vejledningskort med strukturerede spørgsmål. Tryk \"Kort\" for at åbne det. Kortet glider ind fra siden — luk det og vend tilbage til samtalen, når du er klar."},
+            {icon:"↗",title:"Arbejd dig igennem",text:"Start med Åbning, arbejd dig trin for trin, og afslut med Afslutning. Tag den i dit tempo — 20 minutter eller 2 timer."},
+          ].map((item,i)=>(
+            <div key={i} style={{display:"flex",gap:12,marginBottom:i<3?16:0}}>
+              <span style={{fontSize:18,flexShrink:0,width:32,height:32,borderRadius:"50%",background:C.light,display:"inline-flex",alignItems:"center",justifyContent:"center"}}>{item.icon}</span>
+              <div>
+                <div style={{fontSize:13,fontWeight:700,color:C.navy,marginBottom:2}}>{item.title}</div>
+                <div style={{fontSize:12,color:C.gray,lineHeight:1.6}}>{item.text}</div>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        <div style={{background:"rgba(255,255,255,0.95)",borderRadius:20,padding:"24px 22px",marginBottom:14,boxShadow:"0 12px 40px rgba(26,58,92,0.15)"}}>
+          <div style={{fontSize:10,fontWeight:700,color:C.blue,letterSpacing:"1.5px",textTransform:"uppercase",marginBottom:12}}>Om AI'en</div>
+          <p style={{fontSize:13,color:C.gray,lineHeight:1.7,margin:"0 0 10px"}}>
+            AI'en er ikke en rådgiver — den giver ikke strategiske anbefalinger. Den er en <strong style={{color:C.navy}}>refleksionspartner</strong> der lytter og stiller spørgsmål, som hjælper dig med at tænke dybere.
+          </p>
+          <p style={{fontSize:13,color:C.gray,lineHeight:1.7,margin:0}}>
+            Spørgsmålene følger det aktuelle trins tema. I "Spejling" spørger den ind til din situation. I "Mod" spørger den ind til de valg, du udskyder. AI'en tilpasser sig det, du skriver.
+          </p>
+        </div>
+
+        <div style={{background:C.warm,borderRadius:20,padding:"24px 22px",marginBottom:14,boxShadow:"0 12px 40px rgba(26,58,92,0.15)",borderLeft:`4px solid ${C.gold}`}}>
+          <div style={{fontSize:10,fontWeight:700,color:C.gold,letterSpacing:"1.5px",textTransform:"uppercase",marginBottom:10}}>Dine refleksioner</div>
+          <p style={{fontSize:13,color:C.navy,lineHeight:1.7,margin:0}}>
+            Din samtale gemmes ikke og deles ikke med andre. Det er et refleksionsrum — ikke et referat. Når du lukker appen, er dine ord væk. Hvis du vil fastholde en erkendelse, så skriv den ned undervejs.
+          </p>
+        </div>
+
+        <div style={{textAlign:"center",marginBottom:28}}>
+          <button onClick={()=>setGuideOpen(true)} style={{background:"rgba(255,255,255,0.15)",border:"1px solid rgba(255,255,255,0.3)",color:"white",padding:"10px 20px",borderRadius:12,fontSize:13,cursor:"pointer",fontWeight:600}}>
+            📱 Se visuel guide til appen
+          </button>
+        </div>
+
+        <div style={{textAlign:"center",paddingBottom:20}}>
+          <button onClick={onStart} style={{background:"white",color:C.navy,border:"none",padding:"16px 40px",borderRadius:14,fontSize:16,fontWeight:700,cursor:"pointer",boxShadow:"0 8px 32px rgba(26,58,92,0.25)",fontFamily:"'Merriweather',serif"}}>
+            Begynd din proces
+          </button>
+          <p style={{color:"rgba(255,255,255,0.45)",fontSize:11,marginTop:12}}>Du vælger din rolle på næste side</p>
+        </div>
+      </div>
+      {guideOpen&&<VisualGuide onClose={()=>setGuideOpen(false)}/>}
+    </div>
+  );
 }
 
-/* HELPERS */
-function esc(s){return(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
-function fmt(d){if(!d)return'';try{return new Date(d).toLocaleDateString('da-DK',{day:'numeric',month:'short',year:'numeric'})}catch{return''}}
-function showToast(m){const t=document.getElementById('toast');t.textContent=m;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2200)}
+// ── COMPONENTS ────────────────────────────────────────────
 
-if('serviceWorker' in navigator)window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').catch(()=>{}));
+function RollePicker({onSelect}){
+  const[hover,setHover]=useState(null);
+  return(
+    <div style={{minHeight:"100vh",minHeight:"100dvh",background:`linear-gradient(170deg,${C.navy} 0%,${C.blue} 50%,${C.light} 100%)`,display:"flex",alignItems:"center",justifyContent:"center",padding:24}}>
+      <div style={{background:"white",borderRadius:24,padding:"48px 28px",maxWidth:440,width:"100%",textAlign:"center",boxShadow:"0 24px 64px rgba(26,58,92,0.3)"}}>
+        <div style={{fontSize:12,color:C.blue,fontWeight:700,letterSpacing:"2.5px",textTransform:"uppercase",marginBottom:12}}>Strategiskskole.dk</div>
+        <h1 style={{fontFamily:"'Merriweather',serif",fontSize:24,color:C.navy,margin:"0 0 6px",fontWeight:700,lineHeight:1.3}}>
+          Tirsdag kl. 10-modellen<sup style={{fontSize:12}}>®</sup>
+        </h1>
+        <p style={{color:C.gray,fontSize:14,margin:"0 0 40px",lineHeight:1.5}}>Strategi, der kan mærkes i praksis</p>
+        <p style={{color:C.navy,fontSize:13,fontWeight:600,marginBottom:16}}>Vælg din rolle:</p>
+        <div style={{display:"flex",flexDirection:"column",gap:10}}>
+          {ROLLER.map((r,i)=>(
+            <button key={r.key} onClick={()=>onSelect(r.key)}
+              onMouseEnter={()=>setHover(i)} onMouseLeave={()=>setHover(null)}
+              onTouchStart={()=>setHover(i)} onTouchEnd={()=>setTimeout(()=>setHover(null),200)}
+              style={{display:"flex",alignItems:"center",gap:14,padding:"16px 18px",background:hover===i?C.navy:"white",color:hover===i?"white":C.navy,border:`1.5px solid ${C.navy}20`,borderRadius:14,cursor:"pointer",transition:"all 0.2s",textAlign:"left"}}>
+              <span style={{fontSize:26,flexShrink:0}}>{r.icon}</span>
+              <div>
+                <div style={{fontWeight:700,fontSize:15}}>{r.label}</div>
+                <div style={{fontSize:12,opacity:0.65,marginTop:2}}>{r.desc}</div>
+              </div>
+            </button>
+          ))}
+        </div>
+        <p style={{marginTop:36,color:"#c0c0c0",fontSize:11}}>Strategi, der kan mærkes i praksis</p>
+      </div>
+    </div>
+  );
+}
+
+function TrinTabs({aktivt,setAktivt,beskedCount}){
+  const ref=useRef(null);
+  useEffect(()=>{
+    const el=ref.current?.children[aktivt];
+    if(el)el.scrollIntoView({behavior:"smooth",inline:"center",block:"nearest"});
+  },[aktivt]);
+  return(
+    <div ref={ref} className="tabs-scroll" style={{display:"flex",gap:1,padding:"0 8px",overflowX:"auto",background:"white",borderBottom:`1px solid ${C.light}`,flexShrink:0}}>
+      {STEPS.map((s,i)=>{
+        const er=aktivt===i,done=(beskedCount[s.id]||0)>=4,isH=s.type==="human";
+        return(
+          <button key={s.id} onClick={()=>setAktivt(i)} style={{
+            padding:"10px 8px",border:"none",cursor:"pointer",background:"transparent",
+            borderBottom:er?`3px solid ${s.farve}`:"3px solid transparent",
+            color:er?s.farve:C.gray,fontWeight:er?700:500,fontSize:10,
+            whiteSpace:"nowrap",display:"flex",alignItems:"center",gap:3,
+            fontStyle:isH?"italic":"normal",opacity:er?1:isH?0.65:0.8,flexShrink:0,
+          }}>
+            {isH?(
+              <span style={{width:16,height:16,borderRadius:"50%",fontSize:9,display:"inline-flex",alignItems:"center",justifyContent:"center",background:done?C.gold:er?`${C.gold}30`:"#f0ebe4",color:done?"white":C.gold}}>♡</span>
+            ):(
+              <span style={{width:16,height:16,borderRadius:"50%",fontSize:9,fontWeight:700,display:"inline-flex",alignItems:"center",justifyContent:"center",background:done?s.farve:er?s.farve:"#e5e7eb",color:done||er?"white":C.gray}}>
+                {s.type==="aabning"?"→":s.type==="afslutning"?"←":done?"✓":s.nr}
+              </span>
+            )}
+            {s.label}
+          </button>
+        );
+      })}
+    </div>
+  );
+}
+
+function KortDrawer({open,onClose,kort,step}){
+  if(!kort)return null;
+  const isH=step.type==="human",acc=isH?C.gold:C.blue;
+  return(
+    <>
+      {open&&<div className="drawer-overlay" onClick={onClose} style={{position:"fixed",inset:0,background:"rgba(0,0,0,0.35)",zIndex:90}}/>}
+      <div style={{position:"fixed",top:0,right:open?0:"-100%",width:"min(360px,90vw)",height:"100vh",height:"100dvh",background:isH?C.warm:"white",zIndex:100,boxShadow:open?"-8px 0 30px rgba(0,0,0,0.15)":"none",transition:"right 0.3s ease",overflowY:"auto",padding:open?"24px 20px":0,WebkitOverflowScrolling:"touch"}}>
+        <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:20}}>
+          <div style={{fontSize:11,fontWeight:700,color:acc,letterSpacing:"1.5px",textTransform:"uppercase"}}>
+            {isH?"Det menneskelige rum":step.type==="aabning"?"Åbningskort":step.type==="afslutning"?"Afslutningskort":`Proceskort — Trin ${step.nr}`}
+          </div>
+          <button onClick={onClose} style={{background:"none",border:"none",fontSize:22,cursor:"pointer",color:C.gray,padding:8}}>✕</button>
+        </div>
+        <div style={{fontFamily:"'Merriweather',serif",fontSize:16,color:C.navy,fontWeight:700,lineHeight:1.4,marginBottom:24,paddingBottom:16,borderBottom:`2px solid ${acc}`}}>
+          {kort.forside}
+        </div>
+        <Sec label="Åbning" items={kort.aabning} color={acc}/>
+        {kort.skaerpelse&&<Sec label="Skærpelse" items={kort.skaerpelse} color={acc}/>}
+        {kort.perspektiv&&<Sec label="Perspektiv" items={kort.perspektiv} color={acc}/>}
+        {kort.ramme&&<Sec label="Ramme" items={kort.ramme} color={acc}/>}
+        <div style={{background:isH?"rgba(255,255,255,0.6)":C.light,borderRadius:12,padding:16,marginTop:20}}>
+          <div style={{fontSize:10,fontWeight:700,color:C.navy,textTransform:"uppercase",letterSpacing:"1px",marginBottom:6}}>Erkendelse</div>
+          <div style={{fontSize:13,color:C.navy,fontStyle:"italic",lineHeight:1.5}}>{kort.erkendelse}</div>
+        </div>
+      </div>
+    </>
+  );
+}
+
+function Sec({label,items,color}){
+  return(
+    <div style={{marginBottom:18}}>
+      <div style={{fontSize:10,fontWeight:700,color,textTransform:"uppercase",letterSpacing:"1.2px",marginBottom:8}}>{label}</div>
+      {items.map((q,i)=><div key={i} style={{fontSize:13,color:C.gray,lineHeight:1.6,marginBottom:7,paddingLeft:12,borderLeft:`2px solid ${color}40`}}>{q}</div>)}
+    </div>
+  );
+}
+
+function Boble({rolle,content}){
+  const ai=rolle==="assistant";
+  return(
+    <div className="bubble-enter" style={{display:"flex",justifyContent:ai?"flex-start":"flex-end",marginBottom:12}}>
+      <div style={{maxWidth:"85%",padding:"12px 16px",borderRadius:ai?"18px 18px 18px 4px":"18px 18px 4px 18px",background:ai?"white":C.navy,color:ai?"#333":"white",fontSize:14,lineHeight:1.7,boxShadow:"0 1px 8px rgba(0,0,0,0.06)",whiteSpace:"pre-wrap",wordBreak:"break-word"}}>{content}</div>
+    </div>
+  );
+}
+
+function KortPanel({kort,step}){
+  if(!kort)return <div className="split-kort" style={{display:"flex",alignItems:"center",justifyContent:"center",padding:32,color:C.gray,fontSize:14,textAlign:"center"}}><div><div style={{fontSize:40,marginBottom:12,opacity:0.3}}>📋</div>Intet kort for dette trin</div></div>;
+  const isH=step.type==="human",acc=isH?C.gold:C.blue;
+  return(
+    <div className="split-kort" style={{"--kort-bg":isH?C.warm:"#fff",background:isH?C.warm:"white",padding:"28px 24px",overflowY:"auto"}}>
+      <div style={{fontSize:10,fontWeight:700,color:acc,letterSpacing:"1.5px",textTransform:"uppercase",marginBottom:16}}>
+        {isH?"Det menneskelige rum":step.type==="aabning"?"Åbningskort":step.type==="afslutning"?"Afslutningskort":`Proceskort — Trin ${step.nr}`}
+      </div>
+      <div style={{fontFamily:"'Merriweather',serif",fontSize:17,color:C.navy,fontWeight:700,lineHeight:1.4,marginBottom:24,paddingBottom:16,borderBottom:`2px solid ${acc}`}}>
+        {kort.forside}
+      </div>
+      <Sec label="Åbning" items={kort.aabning} color={acc}/>
+      {kort.skaerpelse&&<Sec label="Skærpelse" items={kort.skaerpelse} color={acc}/>}
+      {kort.perspektiv&&<Sec label="Perspektiv" items={kort.perspektiv} color={acc}/>}
+      {kort.ramme&&<Sec label="Ramme" items={kort.ramme} color={acc}/>}
+      <div style={{background:isH?"rgba(255,255,255,0.6)":C.light,borderRadius:12,padding:16,marginTop:20}}>
+        <div style={{fontSize:10,fontWeight:700,color:C.navy,textTransform:"uppercase",letterSpacing:"1px",marginBottom:6}}>Erkendelse</div>
+        <div style={{fontSize:13,color:C.navy,fontStyle:"italic",lineHeight:1.5}}>{kort.erkendelse}</div>
+      </div>
+    </div>
+  );
+}
+
+function Thinking(){
+  return(
+    <div style={{display:"flex",marginBottom:12}}>
+      <div style={{background:"white",padding:"14px 22px",borderRadius:"18px 18px 18px 4px",boxShadow:"0 1px 8px rgba(0,0,0,0.06)"}}>
+        <div className="thinking-dots" style={{display:"flex",gap:4}}>
+          <span style={{width:8,height:8,borderRadius:"50%",background:C.blue,display:"inline-block"}}/>
+          <span style={{width:8,height:8,borderRadius:"50%",background:C.blue,display:"inline-block"}}/>
+          <span style={{width:8,height:8,borderRadius:"50%",background:C.blue,display:"inline-block"}}/>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ── MAIN APP ──────────────────────────────────────────────
+
+function App(){
+  const[showIntro,setShowIntro]=useState(true);
+  const[rolle,setRolle]=useState(null);
+  const[aktivt,setAktivt]=useState(0);
+  const[chats,setChats]=useState({});
+  const[loading,setLoading]=useState(false);
+  const[sessions,setSessions]=useState({});
+  const[input,setInput]=useState("");
+  const[kortOpen,setKortOpen]=useState(false);
+  const[forloebId]=useState(()=>"fl-"+crypto.randomUUID());
+  const scrollRef=useRef(null);
+
+  useEffect(()=>{scrollRef.current?.scrollTo({top:scrollRef.current.scrollHeight,behavior:"smooth"});},[chats,loading]);
+
+  if(showIntro)return <IntroPage onStart={()=>setShowIntro(false)}/>;
+  if(!rolle)return <RollePicker onSelect={setRolle}/>;
+
+  const step=STEPS[aktivt];
+  const key=`${rolle}-${step.id}`;
+  const msgs=chats[key]||[];
+  const beskedCount={};
+  STEPS.forEach(s=>{beskedCount[s.id]=(chats[`${rolle}-${s.id}`]||[]).length;});
+  const rolleInfo=ROLLER.find(r=>r.key===rolle);
+  const kort=getKort(step,rolle);
+  const isHuman=step.type==="human";
+
+  const getDemoReply=(msg,msgCount)=>{
+    const k=kort;
+    if(!k)return "Kan du fortælle mere?";
+    if(msgCount<=1){const q=k.skaerpelse?.[0]||k.ramme?.[0]||"Hvad ser du, når du kigger på din situation?";return `Det er et godt udgangspunkt.\n\n${isHuman?"Lad mig spørge ind til det, der fylder:":"Lad mig skærpe det:"} ${q}\n\nTag dig tid.`;}
+    if(msgCount<=3){const q=k.skaerpelse?.[1]||k.perspektiv?.[0]||"Hvad kræver det af dig?";return `Tak for den refleksion.\n\n${q}\n\nHvad dukker op, når du tænker over det?`;}
+    if(msgCount<=5){const q=k.perspektiv?.[1]||k.perspektiv?.[0]||"Hvad vil du gøre anderledes?";return `Nu tegner der sig et billede.\n\n${q}\n\nFormuler det som en konkret handling.`;}
+    return `Du har arbejdet dig godt ind i dette.\n\nDin erkendelse: ${k.erkendelse}\n\nDu er klar til næste trin, eller du kan blive og uddybe.`;
+  };
+
+  const send=async()=>{
+    if(!input.trim()||loading)return;
+    const msg=input.trim();
+    setInput("");
+    const cur=chats[key]||[];
+    setChats(p=>({...p,[key]:[...(p[key]||[]),{role:"user",content:msg}]}));
+    setLoading(true);
+    let reply;
+    try{
+      const kort=getKort(step,rolle);
+      const kortData={forside:kort?.forside||"",aabning:kort?.aabning||[],skaerpelse:kort?.skaerpelse||[],perspektiv:kort?.perspektiv||[],erkendelse:kort?.erkendelse||"",label:kort?.label||""};
+      const resp=await fetch(API_URL,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({message:msg,source:"forloeb",session_id:sessions[key]||null,forloeb_id:forloebId,trin:step.nr,rolle,mode:"forberedelse",kort:kortData,kort_type:step.type||"model"})});
+      const data=await resp.json();
+      reply=data.reply||data.answer;
+      if(data.session_id)setSessions(p=>({...p,[key]:data.session_id}));
+    }catch{}
+    if(!reply){
+      await new Promise(r=>setTimeout(r,600+Math.random()*800));
+      reply=getDemoReply(msg,cur.length);
+    }
+    setChats(p=>({...p,[key]:[...(p[key]||[]),{role:"assistant",content:reply}]}));
+    setLoading(false);
+  };
+
+  return(
+    <div style={{fontFamily:"'Open Sans',sans-serif",background:isHuman?`linear-gradient(170deg,${C.gold}15 0%,${C.warm} 100%)`:`linear-gradient(170deg,${C.navy}12 0%,${C.bg} 100%)`,height:"100vh",height:"100dvh",display:"flex",flexDirection:"column",transition:"background 0.3s",overflow:"hidden",padding:"0 clamp(0px,3vw,40px) clamp(0px,1vw,12px)"}}>
+      <header className="app-header" style={{background:C.navy,padding:"12px 16px",display:"flex",alignItems:"center",justifyContent:"space-between",color:"white",flexShrink:0,borderRadius:"0 0 12px 12px"}}>
+        <a href="https://www.strategiskskole.dk" target="_blank" rel="noopener noreferrer" style={{textDecoration:"none",color:"white",display:"flex",alignItems:"center",cursor:"pointer"}}>
+          <span style={{fontFamily:"'Merriweather',serif",fontSize:16,fontWeight:700,letterSpacing:"0.3px"}}>Strategisk<span style={{color:"#4EAAB5"}}>skole.dk</span></span>
+        </a>
+        <div style={{display:"flex",alignItems:"center",gap:10}}>
+          <span style={{fontSize:12,opacity:0.7}}>{rolleInfo.icon} {rolleInfo.label}</span>
+          <button onClick={()=>setRolle(null)} style={{background:"rgba(255,255,255,0.12)",border:"none",color:"white",padding:"6px 12px",borderRadius:8,fontSize:11,cursor:"pointer"}}>Skift</button>
+        </div>
+      </header>
+
+      <TrinTabs aktivt={aktivt} setAktivt={setAktivt} beskedCount={beskedCount}/>
+
+      <div style={{background:isHuman?`linear-gradient(135deg,${C.gold},${C.gold}dd)`:`linear-gradient(135deg,${step.farve},${C.navy})`,padding:"14px 16px",color:"white",display:"flex",justifyContent:"space-between",alignItems:"center",gap:12,flexShrink:0}}>
+        <div style={{minWidth:0}}>
+          <div style={{fontSize:10,fontWeight:700,textTransform:"uppercase",letterSpacing:"1.5px",opacity:0.8,marginBottom:2}}>
+            {isHuman?`Det menneskelige rum — ${step.navn}`:step.type==="aabning"?"Åbning":step.type==="afslutning"?"Afslutning":`Trin ${step.nr} — ${step.navn}`}
+          </div>
+          <div style={{fontFamily:"'Merriweather',serif",fontSize:14,fontWeight:600,lineHeight:1.3}}>{step.sp}</div>
+        </div>
+        {kort&&(
+          <button className="mobile-kort-btn" onClick={()=>setKortOpen(true)} style={{background:"rgba(255,255,255,0.15)",border:"1px solid rgba(255,255,255,0.3)",color:"white",padding:"8px 12px",borderRadius:10,fontSize:11,cursor:"pointer",fontWeight:600,whiteSpace:"nowrap",flexShrink:0}}>
+            {isHuman?"♡ Kort":"Kort"}
+          </button>
+        )}
+      </div>
+
+      <div className="split-main" style={{flex:1,overflow:"hidden",display:"flex",borderRadius:"0 0 12px 12px",boxShadow:"0 4px 24px rgba(26,58,92,0.08)"}}>
+        <div className="split-chat" style={{flex:1,display:"flex",flexDirection:"column",minHeight:0}}>
+          <div ref={scrollRef} className="chat-scroll" style={{flex:1,overflowY:"auto",padding:"16px 16px 8px"}}>
+            {msgs.length===0&&(
+              <div style={{textAlign:"center",padding:"32px 16px"}}>
+                <div style={{width:48,height:48,borderRadius:"50%",background:isHuman?`${C.gold}20`:C.light,display:"inline-flex",alignItems:"center",justifyContent:"center",fontSize:20,marginBottom:12,color:isHuman?C.gold:C.navy}}>
+                  {isHuman?"♡":step.type==="aabning"?"→":step.type==="afslutning"?"←":step.nr}
+                </div>
+                <div style={{fontFamily:"'Merriweather',serif",fontSize:16,color:C.navy,fontWeight:700,marginBottom:8}}>{step.navn}</div>
+                <div style={{fontSize:13,color:C.gray,lineHeight:1.6,maxWidth:360,margin:"0 auto"}}>{step.kont}</div>
+                <div style={{marginTop:16,fontSize:12,color:"#bbb"}}>Skriv dit første svar for at begynde.</div>
+              </div>
+            )}
+            {msgs.map((m,i)=><Boble key={i} rolle={m.role} content={m.content}/>)}
+            {loading&&<Thinking/>}
+          </div>
+
+          <div className="app-input" style={{padding:"10px 12px 6px",background:"white",borderTop:`1px solid ${C.light}`,display:"flex",gap:8,flexShrink:0}}>
+            <input value={input} onChange={e=>setInput(e.target.value)} onKeyDown={e=>{if(e.key==="Enter"&&!e.shiftKey){e.preventDefault();send();}}} placeholder={kort?.aabning?.[0]||"Skriv din refleksion..."}
+              style={{flex:1,padding:"12px 14px",borderRadius:12,border:"1.5px solid #d1d5db",fontSize:16,outline:"none",fontFamily:"'Open Sans',sans-serif",WebkitAppearance:"none"}}/>
+            <button onClick={send} disabled={loading||!input.trim()} style={{background:input.trim()&&!loading?(isHuman?C.gold:C.navy):"#d1d5db",color:"white",border:"none",borderRadius:12,padding:"12px 20px",fontWeight:700,fontSize:15,cursor:input.trim()&&!loading?"pointer":"default",flexShrink:0}}>Send</button>
+          </div>
+          <div style={{padding:"4px 12px 10px",background:"white",display:"flex",justifyContent:"space-between",alignItems:"center",flexShrink:0,borderRadius:"0 0 12px 12px"}}>
+            <button onClick={()=>setAktivt(Math.max(0,aktivt-1))} disabled={aktivt===0}
+              style={{display:"flex",alignItems:"center",gap:6,background:"none",border:`1.5px solid ${aktivt===0?"#e2e8f0":C.blue}`,color:aktivt===0?"#bbb":C.blue,padding:"7px 14px",borderRadius:10,fontSize:12,fontWeight:600,cursor:aktivt===0?"default":"pointer",transition:"all 0.2s"}}>
+              <span style={{fontSize:14}}>&#8592;</span> Forrige
+            </button>
+            <span style={{fontSize:11,color:C.gray,fontWeight:600}}>{aktivt+1} / {STEPS.length}</span>
+            <button onClick={()=>setAktivt(Math.min(STEPS.length-1,aktivt+1))} disabled={aktivt===STEPS.length-1}
+              style={{display:"flex",alignItems:"center",gap:6,background:aktivt===STEPS.length-1?"none":(isHuman?C.gold:C.navy),border:`1.5px solid ${aktivt===STEPS.length-1?"#e2e8f0":(isHuman?C.gold:C.navy)}`,color:aktivt===STEPS.length-1?"#bbb":"white",padding:"7px 14px",borderRadius:10,fontSize:12,fontWeight:600,cursor:aktivt===STEPS.length-1?"default":"pointer",transition:"all 0.2s"}}>
+              Næste <span style={{fontSize:14}}>&#8594;</span>
+            </button>
+          </div>
+        </div>
+
+        <KortPanel kort={kort} step={step}/>
+      </div>
+
+      <KortDrawer open={kortOpen} onClose={()=>setKortOpen(false)} kort={kort} step={step}/>
+    </div>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById("root")).render(<App/>);
 </script>
 </body>
 </html>

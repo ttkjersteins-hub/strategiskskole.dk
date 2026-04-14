@@ -6,14 +6,31 @@
 <meta name="theme-color" content="#1A3A5C"/>
 <meta name="apple-mobile-web-app-capable" content="yes"/>
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
-<meta name="description" content="Strategiskskole App — Tirsdag kl. 10-modellen®. Strategi, der kan mærkes i praksis."/>
-<title>Strategiskskole App</title>
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' rx='14' fill='%231A3A5C'/><text x='32' y='42' text-anchor='middle' font-family='serif' font-size='28' font-weight='bold' fill='white'>10</text></svg>"/>
+<meta name="description" content="Digitalt procesforløb med Tirsdag kl. 10-modellen® — strategisk refleksion for skoleledere, ledelsesteams og bestyrelser. Strategi, der kan mærkes i praksis."/>
+<title>Tirsdag kl. 10-modellen® — Digitalt procesforløb | Strategiskskole.dk</title>
+<link rel="canonical" href="https://strategiskskole.dk/app/"/>
+<meta property="og:type" content="website"/>
+<meta property="og:url" content="https://strategiskskole.dk/app/"/>
+<meta property="og:title" content="Tirsdag kl. 10-modellen® — Digitalt procesforløb"/>
+<meta property="og:description" content="Strategisk refleksion for skoleledere, ledelsesteams og bestyrelser. Kan vi se strategien i det, der sker tirsdag kl. 10?"/>
+<meta property="og:image" content="https://strategiskskole.dk/images/og-app.png"/>
+<meta property="og:image:width" content="1200"/>
+<meta property="og:image:height" content="630"/>
+<meta property="og:locale" content="da_DK"/>
+<meta property="og:site_name" content="Strategiskskole.dk"/>
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:title" content="Tirsdag kl. 10-modellen® — Digitalt procesforløb"/>
+<meta name="twitter:description" content="Strategisk refleksion for skoleledere, ledelsesteams og bestyrelser. Kan vi se strategien i det, der sker tirsdag kl. 10?"/>
+<meta name="twitter:image" content="https://strategiskskole.dk/images/og-app.png"/>
+<meta name="robots" content="index, follow"/>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' rx='14' fill='%231A3A5C'/><text x='32' y='44' text-anchor='middle' font-family='serif' font-size='36' font-weight='bold' fill='white'>S</text></svg>"/>
+<link rel="apple-touch-icon" sizes="192x192" href="https://strategiskskole.dk/app/icon-192.png"/>
 <link rel="manifest" href="/manifest.json"/>
 <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700&family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet"/>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-html,body,#root{height:100%;width:100%;overflow:hidden;-webkit-font-smoothing:antialiased}
+html,body,#root{height:100%;width:100%;-webkit-font-smoothing:antialiased}
+#root{overflow:auto}
 html{overscroll-behavior:none}
 body{font-family:'Open Sans',sans-serif;background:#f7f9fb;color:#333}
 .chat-scroll{-webkit-overflow-scrolling:touch;scroll-behavior:smooth}
@@ -499,6 +516,7 @@ function App(){
   const[sessions,setSessions]=useState({});
   const[input,setInput]=useState("");
   const[kortOpen,setKortOpen]=useState(false);
+  const[forloebId]=useState(()=>"fl-"+crypto.randomUUID());
   const scrollRef=useRef(null);
 
   useEffect(()=>{scrollRef.current?.scrollTo({top:scrollRef.current.scrollHeight,behavior:"smooth"});},[chats,loading]);
@@ -533,7 +551,9 @@ function App(){
     setLoading(true);
     let reply;
     try{
-      const resp=await fetch(API_URL,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({message:msg,source:"forloeb",session_id:sessions[key]||null,trin:step.nr,rolle,mode:"forberedelse"})});
+      const kort=getKort(step,rolle);
+      const kortData={forside:kort?.forside||"",aabning:kort?.aabning||[],skaerpelse:kort?.skaerpelse||[],perspektiv:kort?.perspektiv||[],erkendelse:kort?.erkendelse||"",label:kort?.label||""};
+      const resp=await fetch(API_URL,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({message:msg,source:"forloeb",session_id:sessions[key]||null,forloeb_id:forloebId,trin:step.nr,rolle,mode:"forberedelse",kort:kortData,kort_type:step.type||"model"})});
       const data=await resp.json();
       reply=data.reply||data.answer;
       if(data.session_id)setSessions(p=>({...p,[key]:data.session_id}));
@@ -547,12 +567,11 @@ function App(){
   };
 
   return(
-    <div style={{fontFamily:"'Open Sans',sans-serif",background:isHuman?C.warm:C.bg,height:"100vh",height:"100dvh",display:"flex",flexDirection:"column",transition:"background 0.3s"}}>
-      <header className="app-header" style={{background:C.navy,padding:"12px 16px",display:"flex",alignItems:"center",justifyContent:"space-between",color:"white",flexShrink:0}}>
-        <div>
-          <div style={{fontFamily:"'Merriweather',serif",fontSize:15,fontWeight:700}}>Tirsdag kl. 10<sup style={{fontSize:8}}>®</sup></div>
-          <div style={{fontSize:10,opacity:0.55}}>Strategi, der kan mærkes i praksis</div>
-        </div>
+    <div style={{fontFamily:"'Open Sans',sans-serif",background:isHuman?`linear-gradient(170deg,${C.gold}15 0%,${C.warm} 100%)`:`linear-gradient(170deg,${C.navy}12 0%,${C.bg} 100%)`,height:"100vh",height:"100dvh",display:"flex",flexDirection:"column",transition:"background 0.3s",overflow:"hidden",padding:"0 clamp(0px,3vw,40px) clamp(0px,1vw,12px)"}}>
+      <header className="app-header" style={{background:C.navy,padding:"12px 16px",display:"flex",alignItems:"center",justifyContent:"space-between",color:"white",flexShrink:0,borderRadius:"0 0 12px 12px"}}>
+        <a href="https://www.strategiskskole.dk" target="_blank" rel="noopener noreferrer" style={{textDecoration:"none",color:"white",display:"flex",alignItems:"center",cursor:"pointer"}}>
+          <span style={{fontFamily:"'Merriweather',serif",fontSize:16,fontWeight:700,letterSpacing:"0.3px"}}>Strategisk<span style={{color:"#4EAAB5"}}>skole.dk</span></span>
+        </a>
         <div style={{display:"flex",alignItems:"center",gap:10}}>
           <span style={{fontSize:12,opacity:0.7}}>{rolleInfo.icon} {rolleInfo.label}</span>
           <button onClick={()=>setRolle(null)} style={{background:"rgba(255,255,255,0.12)",border:"none",color:"white",padding:"6px 12px",borderRadius:8,fontSize:11,cursor:"pointer"}}>Skift</button>
@@ -575,7 +594,7 @@ function App(){
         )}
       </div>
 
-      <div className="split-main" style={{flex:1,overflow:"hidden",display:"flex"}}>
+      <div className="split-main" style={{flex:1,overflow:"hidden",display:"flex",borderRadius:"0 0 12px 12px",boxShadow:"0 4px 24px rgba(26,58,92,0.08)"}}>
         <div className="split-chat" style={{flex:1,display:"flex",flexDirection:"column",minHeight:0}}>
           <div ref={scrollRef} className="chat-scroll" style={{flex:1,overflowY:"auto",padding:"16px 16px 8px"}}>
             {msgs.length===0&&(
@@ -592,10 +611,21 @@ function App(){
             {loading&&<Thinking/>}
           </div>
 
-          <div className="app-input" style={{padding:"10px 12px 14px",background:"white",borderTop:`1px solid ${C.light}`,display:"flex",gap:8,flexShrink:0}}>
-            <input value={input} onChange={e=>setInput(e.target.value)} onKeyDown={e=>{if(e.key==="Enter"&&!e.shiftKey){e.preventDefault();send();}}} placeholder="Skriv din refleksion..."
+          <div className="app-input" style={{padding:"10px 12px 6px",background:"white",borderTop:`1px solid ${C.light}`,display:"flex",gap:8,flexShrink:0}}>
+            <input value={input} onChange={e=>setInput(e.target.value)} onKeyDown={e=>{if(e.key==="Enter"&&!e.shiftKey){e.preventDefault();send();}}} placeholder={kort?.aabning?.[0]||"Skriv din refleksion..."}
               style={{flex:1,padding:"12px 14px",borderRadius:12,border:"1.5px solid #d1d5db",fontSize:16,outline:"none",fontFamily:"'Open Sans',sans-serif",WebkitAppearance:"none"}}/>
             <button onClick={send} disabled={loading||!input.trim()} style={{background:input.trim()&&!loading?(isHuman?C.gold:C.navy):"#d1d5db",color:"white",border:"none",borderRadius:12,padding:"12px 20px",fontWeight:700,fontSize:15,cursor:input.trim()&&!loading?"pointer":"default",flexShrink:0}}>Send</button>
+          </div>
+          <div style={{padding:"4px 12px 10px",background:"white",display:"flex",justifyContent:"space-between",alignItems:"center",flexShrink:0,borderRadius:"0 0 12px 12px"}}>
+            <button onClick={()=>setAktivt(Math.max(0,aktivt-1))} disabled={aktivt===0}
+              style={{display:"flex",alignItems:"center",gap:6,background:"none",border:`1.5px solid ${aktivt===0?"#e2e8f0":C.blue}`,color:aktivt===0?"#bbb":C.blue,padding:"7px 14px",borderRadius:10,fontSize:12,fontWeight:600,cursor:aktivt===0?"default":"pointer",transition:"all 0.2s"}}>
+              <span style={{fontSize:14}}>&#8592;</span> Forrige
+            </button>
+            <span style={{fontSize:11,color:C.gray,fontWeight:600}}>{aktivt+1} / {STEPS.length}</span>
+            <button onClick={()=>setAktivt(Math.min(STEPS.length-1,aktivt+1))} disabled={aktivt===STEPS.length-1}
+              style={{display:"flex",alignItems:"center",gap:6,background:aktivt===STEPS.length-1?"none":(isHuman?C.gold:C.navy),border:`1.5px solid ${aktivt===STEPS.length-1?"#e2e8f0":(isHuman?C.gold:C.navy)}`,color:aktivt===STEPS.length-1?"#bbb":"white",padding:"7px 14px",borderRadius:10,fontSize:12,fontWeight:600,cursor:aktivt===STEPS.length-1?"default":"pointer",transition:"all 0.2s"}}>
+              Næste <span style={{fontSize:14}}>&#8594;</span>
+            </button>
           </div>
         </div>
 

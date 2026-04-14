@@ -166,6 +166,66 @@ export async function countSessions(db, forloebId) {
   return row?.cnt || 0
 }
 
+// ── Shared Knowledge ─────────────────────────────────────────
+
+export async function getSharedKnowledge(db, { tema, trin, rolle, limit = 5 }) {
+  // Hent relevant delt viden baseret på tema, trin og rolle
+  let sql = `SELECT tema, type, indhold, kontekst, kvalitet FROM shared_knowledge WHERE 1=1`
+  const params = []
+
+  if (tema) {
+    sql += ` AND tema = ?`
+    params.push(tema)
+  }
+  if (trin !== undefined && trin !== null) {
+    sql += ` AND (trin = ? OR trin IS NULL)`
+    params.push(trin)
+  }
+  if (rolle) {
+    sql += ` AND (rolle = ? OR rolle IS NULL)`
+    params.push(rolle)
+  }
+
+  sql += ` ORDER BY kvalitet DESC, brugt_antal ASC LIMIT ?`
+  params.push(limit)
+
+  const { results } = await db.prepare(sql).bind(...params).all()
+  return results || []
+}
+
+export async function searchSharedKnowledge(db, searchTerms, limit = 5) {
+  // Simpel tekstsøgning i indhold og kontekst
+  const pattern = `%${searchTerms}%`
+  const { results } = await db.prepare(
+    `SELECT tema, type, indhold, kontekst, kvalitet FROM shared_knowledge
+     WHERE indhold LIKE ? OR kontekst LIKE ?
+     ORDER BY kvalitet DESC LIMIT ?`
+  ).bind(pattern, pattern, limit).all()
+  return results || []
+}
+
+export async function insertSharedKnowledge(db, entries) {
+  if (!entries.length) return
+  const stmts = entries.map(e =>
+    db.prepare(
+      `INSERT INTO shared_knowledge (id, tema, trin, rolle, type, indhold, kontekst, kilde, kvalitet)
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`
+    ).bind(
+      crypto.randomUUID(), e.tema, e.trin || null, e.rolle || null,
+      e.type, e.indhold, e.kontekst || '', e.kilde || 'simulering', e.kvalitet || 1.0
+    )
+  )
+  await db.batch(stmts)
+}
+
+export async function incrementKnowledgeUsage(db, ids) {
+  if (!ids.length) return
+  const stmts = ids.map(id =>
+    db.prepare(`UPDATE shared_knowledge SET brugt_antal = brugt_antal + 1 WHERE id = ?`).bind(id)
+  )
+  await db.batch(stmts)
+}
+
 // ── Helper ────────────────────────────────────────────────────
 
 function safeJSON(str, fallback) {
