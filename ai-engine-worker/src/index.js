@@ -91,7 +91,13 @@ export default {
       const cleanMessage = (body.message || '').replace(/<[^>]*>/g, '').trim()
       body.message = cleanMessage
 
-      const result = await handleChat(body, env, ctx)
+      let result
+      try {
+        result = await handleChat(body, env, ctx)
+      } catch (e) {
+        console.error('handleChat crash:', e.message, e.stack)
+        return jsonResponse({ error: 'Internal: ' + e.message }, 500, origin, env)
+      }
       return jsonResponse(result.data || { error: result.error }, result.status, origin, env)
     }
 

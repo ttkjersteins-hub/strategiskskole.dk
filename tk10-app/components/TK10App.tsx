@@ -5,6 +5,7 @@ import type { Forloeb, Rolle, TrinData, ModeType, NoteTav } from '@/types'
 import { TRIN_NAVNE, TRIN_SPØRGSMÅL, TRIN_KONTEKST, TGUIDE, ROLLE_LABELS } from '@/lib/data/model'
 import { getKort, getAabningKort, getMenneskeligRumKort, getAfslutningKort } from '@/lib/data/kort'
 import ProcesKort from '@/components/cards/ProcesKort'
+import MinRejse from '@/components/MinRejse'
 import {
   loadDB, saveDB, getFl, getTD, calcProgress,
   addBeslutning, deleteBeslutning, addHandling, toggleHandling, addMoede, fmtDate
@@ -47,6 +48,7 @@ export default function TK10App() {
   const [showAudit, setShowAudit] = useState(false)
   const [gptPrompt, setGptPrompt] = useState('')
   const [copied, setCopied] = useState(false)
+  const [showRejse, setShowRejse] = useState(false)
 
   // Formlæder
   const [flNavn, setFlNavn] = useState('')
@@ -431,6 +433,10 @@ export default function TK10App() {
     const { done, bsl, hdl } = getStats()
     const nextTrin = getNextTrin()
 
+    if (showRejse) {
+      return <MinRejse forloebId={fl.id} rolle={rolle} accentColor={accentColor} onClose={() => setShowRejse(false)} />
+    }
+
     return (
       <div className="h-full flex flex-col" style={{ background: 'var(--bg-app)' }}>
         {/* Hero */}
@@ -471,6 +477,20 @@ export default function TK10App() {
               </div>
             ))}
           </div>
+
+          {/* Min rejse-knap */}
+          <button className="mt-3 w-full flex items-center gap-3 rounded-xl p-3 text-left transition-opacity active:opacity-80"
+            style={{ background: 'rgba(255,255,255,.05)', border: '1px solid rgba(255,255,255,.1)' }}
+            onClick={() => setShowRejse(true)}>
+            <span className="text-lg">🗺️</span>
+            <div className="flex-1">
+              <div className="text-xs font-bold tracking-wider uppercase mb-0.5" style={{ color: 'rgba(255,255,255,.5)' }}>Min rejse</div>
+              <div className="text-sm" style={{ color: 'rgba(255,255,255,.7)' }}>
+                Se dine erkendelser og beslutninger samlet
+              </div>
+            </div>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.3)" strokeWidth="2.5" strokeLinecap="round"><path d="M9 18l6-6-6-6"/></svg>
+          </button>
 
           {nextTrin !== null && (
             <button className="mt-3 w-full flex items-center gap-3 rounded-xl p-3 text-left transition-opacity active:opacity-80"
