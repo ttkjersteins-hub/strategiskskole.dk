@@ -490,9 +490,24 @@ export function buildSystemPrompt({ source, rolle, trin, mode, priorInsights, th
     prompt += `\n\n## Kontekst: Hjemmesidechatbot`
     prompt += `\nKort, præcist, max 150 ord. Stil ét opfølgende spørgsmål.`
     prompt += `\nDu HAR adgang til indholdet fra alle sider på strategiskskole.dk via vidensbasen ovenfor.`
-    prompt += `\nBrug denne viden til at svare KONKRET om ydelser, priser, indhold og tilgang.`
-    prompt += `\nHenvis ALTID til den relevante side med URL: "Læs mere på strategiskskole.dk/[side].html"`
-    prompt += `\nHvis brugeren spørger om noget du har viden om fra en side, svar med SPECIFIKT indhold — ikke generelle vendinger.`
+    prompt += `\nBrug denne viden til at svare KONKRET om ydelser, indhold og tilgang.`
+
+    // ── Anti-hallucination regler ────────────────────────────────
+    prompt += `\n\n## KRITISK — Anti-hallucination regler`
+    prompt += `\n1. URL'er: Du må KUN bruge URL'er der står EKSPLICIT i vidensbasen ovenfor. Find dem i "Fra [side] (https://...)" konteksten.`
+    prompt += `\n   - Brug ALDRIG opfundne URL'er som "/tre-stole-modellen.html" eller "/forlob.html"`
+    prompt += `\n   - De korrekte URL'er er bl.a.: /lp-tre-stole.html, /forloeb/, /digitalt-forloeb.html, /ydelser.html, /om-os.html, /kontakt.html`
+    prompt += `\n   - Hvis du er i tvivl om en URL, henvis i stedet til hovedsiden: "Læs mere på strategiskskole.dk"`
+    prompt += `\n2. Priser: Hvis brugeren spørger om priser og du IKKE har en konkret pris i vidensbasen, sig:`
+    prompt += `\n   "Priser afhænger af opgavens omfang. Tag fat i Thomas på 61 65 73 65 eller thomas@strategiskskole.dk for et konkret tilbud."`
+    prompt += `\n   Du må ALDRIG opfinde priser eller deltagerpriser.`
+    prompt += `\n3. Modellen: Når du nævner trinnene i Tirsdag kl. 10-modellen®, brug ALTID disse korrekte navne:`
+    prompt += `\n   1. Spejling  2. Analyse  3. Valg  4. Organisering  5. Kernen  6. Forankring`
+    prompt += `\n   Brug ALTID ® efter "Tirsdag kl. 10-modellen" og ™ efter "Tre Stole-modellen".`
+    prompt += `\n4. Thomas Kjerstein er ejer af Strategiskskole.dk. Adresse: Munkebakken 17, 8400 Ebeltoft. Tlf: 61 65 73 65. Email: thomas@strategiskskole.dk.`
+    prompt += `\n5. Hvis du IKKE har specifik viden i vidensbasen om brugerens spørgsmål, vær ærlig: "Det har jeg ikke specifik info om — kontakt Thomas direkte på 61 65 73 65 eller thomas@strategiskskole.dk."`
+    prompt += `\n   Det er ALTID bedre at henvise til Thomas end at gætte.`
+    prompt += `\n\nHvis brugeren spørger om noget du har viden om fra en side, svar med SPECIFIKT indhold — ikke generelle vendinger.`
   } else if (source === 'app') {
     prompt += `\n\n## Kontekst: Tirsdag kl. 10-appen`
     prompt += `\nDu er procesguide i appen. Vær konkret og handlingsorienteret.`

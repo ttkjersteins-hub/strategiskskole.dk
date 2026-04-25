@@ -251,7 +251,7 @@
       <h2>Skriv til os</h2>
       <p style="color:var(--muted); margin-bottom:28px;">Fortæl kort om jeres situation — så vender Thomas tilbage med et forslag til, hvordan vi bedst kommer videre.</p>
 
-      <form action="https://formspree.io/f/xlgadeyb" method="POST" style="display:grid; gap:18px;">
+      <form id="kontakt-form" onsubmit="return sendKontakt(event)" style="display:grid; gap:18px;">
         <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px;">
           <div>
             <label style="display:block; font-size:.82rem; font-weight:600; color:var(--navy); margin-bottom:6px;">Navn *</label>
@@ -284,8 +284,38 @@
           <textarea name="message" rows="5" placeholder="Beskriv kort jeres situation eller sp&oslash;rgsm&aring;l..." style="width:100%; padding:12px 14px; border:1px solid var(--border); border-radius:6px; font-size:.95rem; font-family:'Open Sans',sans-serif; resize:vertical; transition:.2s;" onfocus="this.style.borderColor='var(--teal)'" onblur="this.style.borderColor='var(--border)'"></textarea>
         </div>
         <button type="submit" style="background:var(--teal); color:#fff; border:none; padding:16px 36px; border-radius:6px; font-size:1.05rem; font-weight:600; font-family:'Open Sans',sans-serif; cursor:pointer; justify-self:start; transition:.2s; box-shadow:0 2px 8px rgba(46,125,140,.3);" onmouseover="this.style.background='#3a9db0'" onmouseout="this.style.background='var(--teal)'">Send besked</button>
-        <p style="font-size:.78rem; color:var(--muted); margin-top:-6px;">Alle henvendelser behandles med absolut fortrolighed.</p>
+        <p style="font-size:.78rem; color:var(--muted); margin-top:-6px;">Når du sender, åbnes dit email-program med beskeden klar. Alle henvendelser behandles fortroligt.</p>
       </form>
+      <script>
+        function sendKontakt(e) {
+          e.preventDefault();
+          var f = e.target;
+          var navn = (f.name.value || '').trim();
+          var skole = (f.school.value || '').trim();
+          var email = (f.email.value || '').trim();
+          var emne = (f.topic.value || '').trim();
+          var besked = (f.message.value || '').trim();
+          var emneTekst = {
+            'ny-leder':'Ny i lederrollen',
+            'strategi':'Strategi i hverdagen',
+            'bestyrelse':'Bestyrelsessamarbejde',
+            'forandring':'Forandringsledelse',
+            'workshop':'Intro-workshop',
+            'lederskifte':'Lederskifte',
+            'andet':'Andet'
+          }[emne] || 'Henvendelse fra strategiskskole.dk';
+          var subject = 'Henvendelse: ' + emneTekst + (navn ? ' — ' + navn : '');
+          var body = 'Navn: ' + navn + '\n' +
+                     'Skole/organisation: ' + skole + '\n' +
+                     'Email: ' + email + '\n' +
+                     'Emne: ' + emneTekst + '\n\n' +
+                     'Besked:\n' + besked + '\n\n' +
+                     '— Sendt via strategiskskole.dk/kontakt';
+          window.location.href = 'mailto:thomas@strategiskskole.dk?subject=' +
+            encodeURIComponent(subject) + '&body=' + encodeURIComponent(body);
+          return false;
+        }
+      </script>
     </div>
   </div>
 </section>

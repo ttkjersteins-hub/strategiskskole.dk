@@ -7,12 +7,22 @@
 
 import { searchSharedKnowledge, insertSharedKnowledge } from '../data/db.js'
 import { handleClarityIngest } from './clarity-ingest.js'
+import { ingestWebsite } from './website-ingest.js'
 
 export async function handleScheduled(env) {
   const db = env.DB
-  const stats = { promoted: 0, cleaned: 0, deduplicated: 0, clarity_records: 0 }
+  const stats = { promoted: 0, cleaned: 0, deduplicated: 0, clarity_records: 0, website_sider: 0, website_chunks: 0 }
 
-  // ── FASE 0: Clarity ingest (hvis token er sat) ────────────────
+  // ── FASE 0a: Website ingest — scrape alle sider på strategiskskole.dk ──
+  try {
+    const w = await ingestWebsite(env)
+    stats.website_sider = w.sider
+    stats.website_chunks = w.chunks
+  } catch (e) {
+    console.error('Website ingest fejl:', e.message)
+  }
+
+  // ── FASE 0b: Clarity ingest (hvis token er sat) ────────────────
   try {
     if (env.CLARITY_API_TOKEN) {
       const result = await handleClarityIngest(env)
@@ -106,7 +116,7 @@ export async function handleScheduled(env) {
   ).all()
   const total = countResult?.[0]?.cnt || 0
 
-  console.log(`Nightly job færdig: +${stats.promoted} promoted, +${stats.clarity_records} clarity, -${stats.cleaned} cleaned, -${stats.deduplicated} deduped. Total: ${total}`)
+  console.log(`Nightly job færdig: +${stats.website_sider} website-sider (${stats.website_chunks} chunks), +${stats.promoted} promoted, +${stats.clarity_records} clarity, -${stats.cleaned} cleaned, -${stats.deduplicated} deduped. Total: ${total}`)
 
   return stats
 }
