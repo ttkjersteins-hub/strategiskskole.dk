@@ -82,6 +82,18 @@ export default {
       return jsonResponse(result, result.ok ? 200 : 500, origin, env)
     }
 
+    // ── POST /api/refresh-knowledge (manuel trigger, admin-token beskyttet) ──
+    // Bruges når nye sider er publiceret — udløser øjeblikkelig genscraping
+    if (path === '/api/refresh-knowledge' && request.method === 'POST') {
+      const adminToken = request.headers.get('X-Admin-Token')
+      if (!env.ADMIN_TOKEN || adminToken !== env.ADMIN_TOKEN) {
+        return jsonResponse({ error: 'Unauthorized' }, 401, origin, env)
+      }
+      const { ingestWebsite } = await import('./handlers/website-ingest.js')
+      const result = await ingestWebsite(env)
+      return jsonResponse({ ok: true, ...result }, 200, origin, env)
+    }
+
     // D1 database via env.DB binding
     const db = env.DB
 
